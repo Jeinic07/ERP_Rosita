@@ -16,19 +16,35 @@ public class Controller implements ActionListener {
 
 	public void addListeners() {
 
-		// Botones Ventana Principal
-		mw.getBtnInventario().addActionListener(this);
-		mw.getBtnInventario().setActionCommand("mwInventario");
+		// Botones OptionPanel
+		mw.getOp().getBtnInventario().addActionListener(this);
+		mw.getOp().getBtnInventario().setActionCommand("Inventario");
 
-		mw.getBtnCompras().addActionListener(this);
-		mw.getBtnCompras().setActionCommand("mwCompras");
+		mw.getOp().getBtnCompras().addActionListener(this);
+		mw.getOp().getBtnCompras().setActionCommand("Compras");
 
-		mw.getBtnVentas().addActionListener(this);
-		mw.getBtnVentas().setActionCommand("mwVentas");
+		mw.getOp().getBtnVentas().addActionListener(this);
+		mw.getOp().getBtnVentas().setActionCommand("Ventas");
 
-		mw.getBtnGastos().addActionListener(this);
-		mw.getBtnGastos().setActionCommand("mwGastos");
+		mw.getOp().getBtnGastos().addActionListener(this);
+		mw.getOp().getBtnGastos().setActionCommand("Gastos");
 
+		// Botones InventarioPanel
+		mw.getIp().getBtnBack().addActionListener(this);
+		mw.getIp().getBtnBack().setActionCommand("invBack");
+		
+		//Botones VentasPanel
+		mw.getVp().getBtnBack().addActionListener(this);
+		mw.getVp().getBtnBack().setActionCommand("venBack");
+		
+		
+		//Botones ComprasPanel
+		mw.getCp().getBtnBack().addActionListener(this);
+		mw.getCp().getBtnBack().setActionCommand("comBack");
+		
+		//Botones GastosPanel
+		mw.getGp().getBtnBack().addActionListener(this);
+		mw.getGp().getBtnBack().setActionCommand("gasBack");
 	}
 
 	@Override
@@ -37,25 +53,59 @@ public class Controller implements ActionListener {
 
 		switch (e.getActionCommand()) {
 
-		case "mwInventario": {
-
+		// Botones OptionPanel
+		case "Inventario": {
+			mw.getOp().setVisible(false);
+			mw.getIp().setVisible(true);
 			break;
 		}
 
-		case "mwVentas": {
-
-		}
-
-		case "mwCompras": {
-
+		case "Ventas": {
+			mw.getOp().setVisible(false);
+			mw.getVp().setVisible(true);
 			break;
 		}
 
-		case "mwGastos": {
-
+		case "Compras": {
+			mw.getOp().setVisible(false);
+			mw.getCp().setVisible(true);
 			break;
 		}
 
+		case "Gastos": {
+			mw.getOp().setVisible(false);
+			mw.getGp().setVisible(true);
+			break;
+		}
+
+		// Botones InventarioPanel
+		case "invBack": {
+			mw.getOp().setVisible(true);
+			mw.getIp().setVisible(false);
+			break;
+		}
+		
+		
+		// Botones VentasPanel
+		case "venBack": {
+			mw.getOp().setVisible(true);
+			mw.getVp().setVisible(false);
+			break;
+		}
+		
+		//Botones ComprasPanel
+		case "comBack": {
+			mw.getOp().setVisible(true);
+			mw.getCp().setVisible(false);
+			break;
+		}
+		
+		//Botones GastosPanel
+		case "gasBack": {
+			mw.getOp().setVisible(true);
+			mw.getGp().setVisible(false);
+			break;
+		}
 		}
 	}
 

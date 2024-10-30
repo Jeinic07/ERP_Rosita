@@ -5,9 +5,22 @@ import javax.swing.JFrame;
 
 public class MainWindow extends JFrame{
 
-	private JButton btnInventario, btnVentas, btnCompras, btnGastos;
+	private OptionPanel op;
+	private InventarioPanel ip;
+	private VentasPanel vp;
+	private ComprasPanel cp;
+	private GastosPanel gp;
+	
 	
 	public MainWindow() {
+		
+		op = new OptionPanel();
+		ip = new InventarioPanel();
+		vp = new VentasPanel();
+		cp = new ComprasPanel();
+		gp = new GastosPanel();
+				
+		
 		setTitle("sisas");
 		setBounds(0, 0, 800, 600);
 		setLayout(null);
@@ -15,64 +28,56 @@ public class MainWindow extends JFrame{
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		btnInventario = new JButton("Inventario");
-		btnInventario.setBounds(242,231, 120,40);
-		btnInventario.setVisible(true);
-		
-		btnVentas = new JButton("Ventas");
-		btnVentas.setBounds(457,231, 120,40);
-		btnVentas.setVisible(true);
-		
-		btnCompras = new JButton("Compras");
-		btnCompras.setBounds(242,317, 120,40);
-		btnCompras.setVisible(true);
-		
-		btnGastos = new JButton("Gastos");
-		btnGastos.setBounds(457,317, 120,40);
-		btnGastos.setVisible(true);
-		
-		
-		add(btnInventario);
-		add(btnVentas);
-		add(btnCompras);
-		add(btnGastos);
+		add(op);
+		add(ip);
+		add(vp);
+		add(cp);
+		add(gp);
 		
 		setVisible(true);
-
 	}
 
-	public JButton getBtnInventario() {
-		return btnInventario;
+	public OptionPanel getOp() {
+		return op;
 	}
 
-	public void setBtnInventario(JButton btnInventario) {
-		this.btnInventario = btnInventario;
+	public void setOp(OptionPanel op) {
+		this.op = op;
 	}
 
-	public JButton getBtnVentas() {
-		return btnVentas;
+	public InventarioPanel getIp() {
+		return ip;
 	}
 
-	public void setBtnVentas(JButton btnVentas) {
-		this.btnVentas = btnVentas;
+	public void setIp(InventarioPanel ip) {
+		this.ip = ip;
 	}
 
-	public JButton getBtnCompras() {
-		return btnCompras;
+	public VentasPanel getVp() {
+		return vp;
 	}
 
-	public void setBtnCompras(JButton btnCompras) {
-		this.btnCompras = btnCompras;
+	public void setVp(VentasPanel vp) {
+		this.vp = vp;
 	}
 
-	public JButton getBtnGastos() {
-		return btnGastos;
+	public ComprasPanel getCp() {
+		return cp;
 	}
 
-	public void setBtnGastos(JButton btnGastos) {
-		this.btnGastos = btnGastos;
+	public void setCp(ComprasPanel cp) {
+		this.cp = cp;
+	}
+
+	public GastosPanel getGp() {
+		return gp;
+	}
+
+	public void setGp(GastosPanel gp) {
+		this.gp = gp;
 	}
 	
+
 	
 	
 }
