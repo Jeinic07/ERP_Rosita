@@ -10,6 +10,7 @@ public class MainWindow extends JFrame{
 	private VentasPanel vp;
 	private ComprasPanel cp;
 	private GastosPanel gp;
+	private ProveedoresPanel pp;
 	
 	
 	public MainWindow() {
@@ -19,6 +20,7 @@ public class MainWindow extends JFrame{
 		vp = new VentasPanel();
 		cp = new ComprasPanel();
 		gp = new GastosPanel();
+		pp = new ProveedoresPanel();
 				
 		
 		setTitle("sisas");
@@ -33,6 +35,7 @@ public class MainWindow extends JFrame{
 		add(vp);
 		add(cp);
 		add(gp);
+		add(pp);
 		
 		setVisible(true);
 	}
@@ -75,6 +78,14 @@ public class MainWindow extends JFrame{
 
 	public void setGp(GastosPanel gp) {
 		this.gp = gp;
+	}
+
+	public ProveedoresPanel getPp() {
+		return pp;
+	}
+
+	public void setPp(ProveedoresPanel pp) {
+		this.pp = pp;
 	}
 	
 

@@ -77,5 +77,38 @@ public class InventarioPanel extends JPanel {
 	public void setBtnBack(JButton btnBack) {
 		this.btnBack = btnBack;
 	}
+
+	public JButton getBtnProveedores() {
+		return btnProveedores;
+	}
+
+	public void setBtnProveedores(JButton btnProveedores) {
+		this.btnProveedores = btnProveedores;
+	}
+
+	public JTable getTableInventario() {
+		return tableInventario;
+	}
+
+	public void setTableInventario(JTable tableInventario) {
+		this.tableInventario = tableInventario;
+	}
+
+	public JScrollPane getScroll() {
+		return scroll;
+	}
+
+	public void setScroll(JScrollPane scroll) {
+		this.scroll = scroll;
+	}
+
+	public DefaultTableModel getModel() {
+		return model;
+	}
+
+	public void setModel(DefaultTableModel model) {
+		this.model = model;
+	}
+	
 	
 }

@@ -33,6 +33,20 @@ public class Controller implements ActionListener {
 		mw.getIp().getBtnBack().addActionListener(this);
 		mw.getIp().getBtnBack().setActionCommand("invBack");
 		
+		mw.getIp().getBtnProveedores().addActionListener(this);
+		mw.getIp().getBtnProveedores().setActionCommand("invProveedores");
+		
+		//BOtones ProveedoresPanel
+		mw.getPp().getBtnBack().addActionListener(this);
+		mw.getPp().getBtnBack().setActionCommand("provBack");
+		
+		mw.getPp().getBtnAdd().addActionListener(this);
+		mw.getPp().getBtnAdd().setActionCommand("provAdd");
+		
+		mw.getPp().getBtnEdit().addActionListener(this);
+		mw.getPp().getBtnEdit().setActionCommand("provEdit");
+		
+		
 		//Botones VentasPanel
 		mw.getVp().getBtnBack().addActionListener(this);
 		mw.getVp().getBtnBack().setActionCommand("venBack");
@@ -85,7 +99,28 @@ public class Controller implements ActionListener {
 			break;
 		}
 		
+		case "invProveedores":{
+			mw.getIp().setVisible(false);
+			mw.getPp().setVisible(true);
+			break;
+		}
 		
+		//Botones ProveedoresPanel
+		
+		case "provBack":{
+			mw.getPp().setVisible(false);
+			mw.getIp().setVisible(true);
+			break;
+		}
+		case "provAdd":{
+			
+			break;
+		}
+		
+		case "provEdit":{
+			
+			break;
+		}
 		// Botones VentasPanel
 		case "venBack": {
 			mw.getOp().setVisible(true);
