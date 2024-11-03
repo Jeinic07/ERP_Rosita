@@ -28,6 +28,37 @@ public class ProveedoresPanel extends JPanel {
         Object[][] data = {
             {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
             {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
+            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
+            
         };
 
 		model = new DefaultTableModel(data, columnNames);
@@ -52,11 +83,10 @@ public class ProveedoresPanel extends JPanel {
 		btnEdit.setBounds(395, 474, 84, 40);
 		
 		add(si);
-		add(tableProveedores);
 		add(scroll);
-		add(btnAdd);
 		add(btnEdit);
 		add(btnBack);
+		add(btnAdd);
 		
 		setVisible(false);
 

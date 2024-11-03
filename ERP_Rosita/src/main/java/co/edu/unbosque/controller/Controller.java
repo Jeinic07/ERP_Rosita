@@ -46,6 +46,12 @@ public class Controller implements ActionListener {
 		mw.getPp().getBtnEdit().addActionListener(this);
 		mw.getPp().getBtnEdit().setActionCommand("provEdit");
 		
+		//Botones ProveedorNuevoWindow
+		mw.getPw().getBtnAdd().addActionListener(this);
+		mw.getPw().getBtnAdd().setActionCommand("newProvAdd");
+		
+		mw.getPw().getBtnBack().addActionListener(this);
+		mw.getPw().getBtnBack().setActionCommand("newProvBack");
 		
 		//Botones VentasPanel
 		mw.getVp().getBtnBack().addActionListener(this);
@@ -113,12 +119,24 @@ public class Controller implements ActionListener {
 			break;
 		}
 		case "provAdd":{
-			
+			mw.getPw().setVisible(true);
 			break;
 		}
 		
 		case "provEdit":{
 			
+			break;
+		}
+		
+		//Botones ProveedorNuevoAdd
+		
+		case "newProvAdd":{
+
+			break;
+		}
+		
+		case "newProvBack":{
+			mw.getPw().setVisible(false);
 			break;
 		}
 		// Botones VentasPanel

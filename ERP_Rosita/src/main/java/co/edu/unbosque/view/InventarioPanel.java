@@ -55,7 +55,6 @@ public class InventarioPanel extends JPanel {
 		add(si);
 		add(btnBack);
 		add(btnProveedores);
-		add(tableInventario);
 		add(scroll);
 		
 

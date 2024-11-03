@@ -11,6 +11,8 @@ public class MainWindow extends JFrame{
 	private ComprasPanel cp;
 	private GastosPanel gp;
 	private ProveedoresPanel pp;
+	private ProveedorNuevoWindow pw;
+	
 	
 	
 	public MainWindow() {
@@ -21,6 +23,7 @@ public class MainWindow extends JFrame{
 		cp = new ComprasPanel();
 		gp = new GastosPanel();
 		pp = new ProveedoresPanel();
+		pw = new ProveedorNuevoWindow();
 				
 		
 		setTitle("sisas");
@@ -86,6 +89,14 @@ public class MainWindow extends JFrame{
 
 	public void setPp(ProveedoresPanel pp) {
 		this.pp = pp;
+	}
+
+	public ProveedorNuevoWindow getPw() {
+		return pw;
+	}
+
+	public void setPw(ProveedorNuevoWindow pw) {
+		this.pw = pw;
 	}
 	
 
