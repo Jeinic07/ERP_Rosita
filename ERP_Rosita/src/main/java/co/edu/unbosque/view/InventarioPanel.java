@@ -24,7 +24,7 @@ public class InventarioPanel extends JPanel {
 		setLayout(null);
 		setVisible(false);
 		
-        String[] columnNames = {"ID", "Producto", "Marca" ,"Cantidad", "Costo", "Precio","Proveedor"};
+        String[] columnNames = { "Producto", "Cantidad" ,"Precio", "SubTotal"};
 
 		model = new DefaultTableModel(columnNames, 0);
 		

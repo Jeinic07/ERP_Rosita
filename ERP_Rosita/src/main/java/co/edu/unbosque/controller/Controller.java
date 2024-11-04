@@ -3,6 +3,8 @@ package co.edu.unbosque.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
+
 import co.edu.unbosque.model.ProductoDTO;
 import co.edu.unbosque.model.ProveedorDTO;
 import co.edu.unbosque.model.persistence.ProductoDAO;
@@ -65,7 +67,19 @@ public class Controller implements ActionListener {
 		// Botones VentasPanel
 		mw.getVp().getBtnBack().addActionListener(this);
 		mw.getVp().getBtnBack().setActionCommand("venBack");
-
+		
+		mw.getVp().getBtnNuevaVenta().addActionListener(this);
+		mw.getVp().getBtnNuevaVenta().setActionCommand("venAdd");
+		
+		
+		//Botones VentaNuevaWindow
+		mw.getVw().getBtnAdd().addActionListener(this);
+		mw.getVw().getBtnAdd().setActionCommand("newVenAdd");
+		
+		mw.getVw().getBtnBack().addActionListener(this);
+		mw.getVw().getBtnBack().setActionCommand("newVenBack");
+		
+		
 		// Botones ComprasPanel
 		mw.getCp().getBtnBack().addActionListener(this);
 		mw.getCp().getBtnBack().setActionCommand("comBack");
@@ -211,6 +225,33 @@ public class Controller implements ActionListener {
 		case "venBack": {
 			mw.getOp().setVisible(true);
 			mw.getVp().setVisible(false);
+			break;
+		}
+		case "venAdd":{
+			mw.getVw().setVisible(true);
+			break;
+		}
+		
+		//Botones NuevaVentaWindow
+		case "newVenBack":{
+			mw.getVw().setVisible(false);
+			break;
+		}
+		
+		case "newVenAdd":{
+			String producto = mw.getVw().getTxtProducto().getText();
+	        int cantidad;
+	        double precio;
+
+	        try {
+	            cantidad = Integer.parseInt(mw.getVw().getTxtCantidad().getText());
+	            precio = Double.parseDouble(mw.getVw().getTxtPrecio().getText());
+	        } catch (NumberFormatException i) {
+	            JOptionPane.showMessageDialog(null, "Ingrese una cantidad y precio válidos.");
+	            return;
+	        }
+	        double subTotal = cantidad * precio;
+	        mw.getVw().getModel().addRow(new Object[]{producto, cantidad, precio, subTotal});
 			break;
 		}
 
