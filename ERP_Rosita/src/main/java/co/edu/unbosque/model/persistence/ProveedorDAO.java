@@ -1,5 +1,6 @@
 package co.edu.unbosque.model.persistence;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import co.edu.unbosque.controller.DBConnection;
@@ -7,20 +8,20 @@ import co.edu.unbosque.model.ProveedorDTO;
 
 public class ProveedorDAO implements OperationsDAO {
 
-	DBConnection db;
+	DBConnection dbcon;
 	private ArrayList<ProveedorDTO> proveedores;
 
 	public ProveedorDAO() {
-		db = new DBConnection();
+		dbcon = new DBConnection();
 		proveedores = new ArrayList<ProveedorDTO>();
 	}
 
-	public DBConnection getDb() {
-		return db;
+	public DBConnection getDbcon() {
+		return dbcon;
 	}
 
-	public void setDb(DBConnection db) {
-		this.db = db;
+	public void setDbcon(DBConnection dbcon) {
+		this.dbcon = dbcon;
 	}
 
 	public ArrayList<ProveedorDTO> getProveedores() {
@@ -36,15 +37,56 @@ public class ProveedorDAO implements OperationsDAO {
 		proveedores.add((ProveedorDTO) o);
 	}
 
+	// hay que manejar las excepciones con el int
 	@Override
-	public void create(String... args) {
-		
+	public int create(String... args) {
+		ProveedorDTO newProveedor = new ProveedorDTO(args[0], args[1], args[2], args[3], args[4]);
+		dbcon.initConnection();
+		try {
+			dbcon.setPrepareStatement(
+					dbcon.getConnect().prepareStatement("INSERT INTO Proveedor(nombreProveedor, tipoDocumentoProveedor,"
+							+ "documentoProveedor, telefonoProveedor, direccionProveedor) VALUES(?,?,?,?,?)"));
+			dbcon.getPrepareStatement().setString(1, newProveedor.getNombreProveedor());
+			dbcon.getPrepareStatement().setString(2, newProveedor.getTipoDocumentoProveedor());
+			dbcon.getPrepareStatement().setString(3, newProveedor.getDocumentoProveedor());
+			dbcon.getPrepareStatement().setString(4, newProveedor.getTelefonoProveedor());
+			dbcon.getPrepareStatement().setString(5, newProveedor.getDireccionProveedor());
 
+			dbcon.getPrepareStatement().executeUpdate();
+			dbcon.closeConnection();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		proveedores.add(newProveedor);
+
+		return 0;
 	}
 
 	@Override
 	public String readAll() {
-		// TODO Auto-generated method stub
+		proveedores.clear();
+
+		dbcon.initConnection();
+
+		try {
+			dbcon.setStatement(dbcon.getConnect().createStatement());
+			dbcon.setResultSet(dbcon.getStatement().executeQuery("SELECT * FROM Proveedor"));
+			while (dbcon.getResultSet().next()) {
+				int id = dbcon.getResultSet().getInt("idProveedor");
+				String nombre = dbcon.getResultSet().getString("nombreProveedor");
+				String tipoDocumento = dbcon.getResultSet().getString("tipoDocumentoProveedor");
+				String documento = dbcon.getResultSet().getString("documentoProveedor");
+				String telefono = dbcon.getResultSet().getString("telefonoProveedor");
+				String direccion = dbcon.getResultSet().getString("direccionProveedor");
+
+				proveedores.add(new ProveedorDTO(id, nombre, tipoDocumento, documento, telefono, direccion));
+			}
+			dbcon.closeConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return null;
 	}
 
@@ -65,5 +107,7 @@ public class ProveedorDAO implements OperationsDAO {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	
 
 }

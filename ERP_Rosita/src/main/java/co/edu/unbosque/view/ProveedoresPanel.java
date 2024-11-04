@@ -25,43 +25,9 @@ public class ProveedoresPanel extends JPanel {
 
 		
         String[] columnNames = {"ID", "Nombre", "Tipo Documento", "Documento", "Direccion", "Telefono"};
-        Object[][] data = {
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            {"60", "si", "CC", "1052836658", "caracas con 19", "3209054024"},
-            {"70", "no", "NIT", "1052836659", "caracas con 20", "3209054024"},
-            
-        };
+ 
 
-		model = new DefaultTableModel(data, columnNames);
+		model = new DefaultTableModel(columnNames, 0);
 		
 		tableProveedores = new JTable(model);
 		tableProveedores.setBounds(66, 169, 668, 263);

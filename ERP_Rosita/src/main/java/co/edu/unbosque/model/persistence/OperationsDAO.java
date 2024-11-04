@@ -4,7 +4,7 @@ public interface OperationsDAO {
 	
 	public void create(Object o);
 
-	public void create(String... args);
+	public int create(String... args);
 
 	public String readAll();
 

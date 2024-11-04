@@ -24,21 +24,15 @@ public class InventarioPanel extends JPanel {
 		setLayout(null);
 		setVisible(false);
 		
-        String[] columnNames = {"ID", "Producto", "Cantidad", "Precio"};
-        Object[][] data = {
-            {"1", "Lápiz", "100", "$0.50"},
-            {"2", "Cuaderno", "50", "$1.00"},
-            {"3", "Borrador", "30", "$0.20"}
-        };
+        String[] columnNames = {"ID", "Producto", "Marca" ,"Cantidad", "Costo", "Precio","Proveedor"};
 
-		model = new DefaultTableModel(data, columnNames);
+		model = new DefaultTableModel(columnNames, 0);
 		
 		tableInventario = new JTable(model);
 		tableInventario.setBounds(66, 169, 668, 263);
 		
         scroll= new JScrollPane(tableInventario);
         scroll.setBounds(66, 169, 668, 263);
-		
 		
 		si = new JLabel("Inventario");
 		si.setFont(new Font("Arial", Font.PLAIN, 18));

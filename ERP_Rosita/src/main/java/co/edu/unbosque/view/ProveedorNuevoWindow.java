@@ -23,22 +23,22 @@ public class ProveedorNuevoWindow extends JFrame {
 
 		si = new JLabel("Añadir Proveedor");
 		si.setFont(new Font("Arial", Font.PLAIN, 15));
-		si.setBounds(42, 50, 171, 35);
+		si.setBounds(60, 40, 171, 35);
 
-		txtNombre = new JTextField();
+		txtNombre = new JTextField("");
 		txtNombre.setBounds(124, 90, 103, 29);
 
 		String[] opcionesDocs = { "CC", "NIT" };
 		txtTipoDocumento = new JComboBox<String>(opcionesDocs);
 		txtTipoDocumento.setBounds(124, 131, 105, 28);
 
-		txtDocumento = new JTextField();
+		txtDocumento = new JTextField("");
 		txtDocumento.setBounds(124, 171, 103, 29);
 
-		txtTelefono = new JTextField();
+		txtTelefono = new JTextField("");
 		txtTelefono.setBounds(124, 212, 103, 29);
 
-		txtDireccion = new JTextField();
+		txtDireccion = new JTextField("");
 		txtDireccion.setBounds(124, 253, 103, 29);
 
 		btnAdd = new JButton("Añadir");
