@@ -1,69 +1,98 @@
 package co.edu.unbosque.view;
 
-import java.awt.Font;
+import java.awt.*;
+import javax.swing.*;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 
 public class ProveedorNuevoWindow extends JFrame {
 
-	private JLabel si;
 	private JTextField txtNombre, txtDocumento, txtTelefono, txtDireccion;
 	private JComboBox<String> txtTipoDocumento;
+	private Image imageBg;
+	private JPanel panel;
 	private JButton btnAdd, btnBack;
 
 	public ProveedorNuevoWindow() {
 
-		setBounds(650, 250, 253, 450);
+		setSize(253, 412);
 		setLayout(null);
+		setLayout(null);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setUndecorated(true);
+		setVisible(false);
 		setVisible(false);
 
-		si = new JLabel("Añadir Proveedor");
-		si.setFont(new Font("Arial", Font.PLAIN, 15));
-		si.setBounds(60, 40, 171, 35);
+		
+		imageBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/AddProveedor.png").getImage();
+        panel = new PanelConFondo();
+        panel.setBounds(0, 0, 253, 412);
+        panel.setLayout(null);
 
 		txtNombre = new JTextField("");
-		txtNombre.setBounds(124, 90, 103, 29);
+		txtNombre.setBounds(116, 97, 99, 25);
 
 		String[] opcionesDocs = { "CC", "NIT" };
 		txtTipoDocumento = new JComboBox<String>(opcionesDocs);
-		txtTipoDocumento.setBounds(124, 131, 105, 28);
+		txtTipoDocumento.setBounds(116, 137, 99, 25);
 
 		txtDocumento = new JTextField("");
-		txtDocumento.setBounds(124, 171, 103, 29);
+		txtDocumento.setBounds(116, 177, 99, 25);
 
 		txtTelefono = new JTextField("");
-		txtTelefono.setBounds(124, 212, 103, 29);
+		txtTelefono.setBounds(116, 217, 99, 25);
 
 		txtDireccion = new JTextField("");
-		txtDireccion.setBounds(124, 253, 103, 29);
+		txtDireccion.setBounds(116, 257, 99, 25);
 
-		btnAdd = new JButton("Añadir");
-		btnAdd.setBounds(84, 356, 79, 29);
+		btnAdd = new JButton();
+		btnAdd.setBounds(84, 312, 84, 40);
+		btnAdd.setContentAreaFilled(false);
+		btnAdd.setBorderPainted(false);
+		btnAdd.setFocusPainted(false);
 
-		btnBack = new JButton("<-");
-		btnBack.setBounds(10, 5, 50, 32);
+		btnBack = new JButton();
+		btnBack.setBounds(8, 5, 30, 27);
+		btnBack.setContentAreaFilled(false);
+		btnBack.setBorderPainted(false);
+		btnBack.setFocusPainted(false);
 
-		add(si);
-		add(txtNombre);
-		add(txtTipoDocumento);
-		add(txtDireccion);
-		add(txtDocumento);
-		add(txtTelefono);
-		add(btnAdd);
-		add(btnBack);
+		panel.add(txtNombre);
+		panel.add(txtTipoDocumento);
+		panel.add(txtDireccion);
+		panel.add(txtDocumento);
+		panel.add(txtTelefono);
+		panel.add(btnAdd);
+		panel.add(btnBack);
+		add(panel);
 
 	}
+	
+	private class PanelConFondo extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            // Dibujar la imagen de fondo
+            g.drawImage(imageBg, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
 
-	public JLabel getSi() {
-		return si;
+	
+	
+	public Image getImageBg() {
+		return imageBg;
 	}
 
-	public void setSi(JLabel si) {
-		this.si = si;
+	public void setImageBg(Image imageBg) {
+		this.imageBg = imageBg;
+	}
+
+	public JPanel getPanel() {
+		return panel;
+	}
+
+	public void setPanel(JPanel panel) {
+		this.panel = panel;
 	}
 
 	public JTextField getTxtNombre() {

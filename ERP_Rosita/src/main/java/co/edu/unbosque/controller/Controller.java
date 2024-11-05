@@ -3,6 +3,7 @@ package co.edu.unbosque.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import co.edu.unbosque.model.ProductoDTO;
@@ -39,7 +40,23 @@ public class Controller implements ActionListener {
 
 		mw.getOp().getBtnGastos().addActionListener(this);
 		mw.getOp().getBtnGastos().setActionCommand("Gastos");
-
+		
+		mw.getOp().getBtnX().addActionListener(this);
+		mw.getOp().getBtnX().setActionCommand("Cerrar");
+		
+		mw.getOp().getBtnMinus().addActionListener(this);
+		mw.getOp().getBtnMinus().setActionCommand("Minus");
+		
+		mw.getOp().getBtnPreg().addActionListener(this);
+		mw.getOp().getBtnPreg().setActionCommand("Consulta");
+		
+		
+		//NUEVO, boton OptionPaneinfo
+		
+		mw.getOpi().getBtnOk().addActionListener(this);
+		mw.getOpi().getBtnOk().setActionCommand("OptOk");
+		
+		
 		// Botones InventarioPanel
 		mw.getIp().getBtnBack().addActionListener(this);
 		mw.getIp().getBtnBack().setActionCommand("invBack");
@@ -118,6 +135,7 @@ public class Controller implements ActionListener {
 			break;
 		}
 
+		//cambios
 		case "Ventas": {
 			mw.getOp().setVisible(false);
 			mw.getVp().setVisible(true);
@@ -133,6 +151,27 @@ public class Controller implements ActionListener {
 		case "Gastos": {
 			mw.getOp().setVisible(false);
 			mw.getGp().setVisible(true);
+			break;
+		}
+		
+		case "Consulta": {
+			mw.getOpi().setVisible(true);
+			break;
+			
+		}
+		
+		case "OptOk":{
+			mw.getOpi().setVisible(false);
+			break;
+		}
+		
+		case "Cerrar":{
+			System.exit(0);
+			break;
+		}
+		
+		case "Minus":{
+			mw.setState(JFrame.ICONIFIED);
 			break;
 		}
 

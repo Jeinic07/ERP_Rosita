@@ -1,107 +1,141 @@
 package co.edu.unbosque.view;
 
-import java.awt.Font;
+import java.awt.*;
 
-import javax.swing.DefaultButtonModel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class InventarioPanel extends JPanel {
 
-	private JLabel si;
-	private JButton btnBack, btnProveedores;
-	private JTable tableInventario;
-	private JScrollPane scroll;
-	private DefaultTableModel model;
+    private Image imageBg;
+    private JPanel panel;
+    private JButton btnBack, btnProveedores, btnX, btnMinus, btnPreg;
+    private JTable tableInventario;
+    private JScrollPane scroll;
+    private NonEditableTableModel model;
 
-	public InventarioPanel() {
-		
-		setBounds(0, 0, 800, 600);
-		setLayout(null);
-		setVisible(false);
-		
-        String[] columnNames = { "Producto", "Cantidad" ,"Precio", "SubTotal"};
+    public InventarioPanel() {
 
-		model = new DefaultTableModel(columnNames, 0);
-		
-		tableInventario = new JTable(model);
-		tableInventario.setBounds(66, 169, 668, 263);
-		
-        scroll= new JScrollPane(tableInventario);
+        setBounds(0, 0, 800, 600);
+        setLayout(null);
+        setVisible(false);
+
+        imageBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/Inventario.png").getImage();
+
+        panel = new PanelConFondo();
+        panel.setBounds(0, 0, 800, 600);  
+        panel.setLayout(null);
+
+        String[] columnNames = {"id", "Producto", "Marca", "Cantidad", "Costo", "Precio", "Proveedor"};
+
+        model = new NonEditableTableModel(columnNames, 0);
+
+        tableInventario = new JTable(model);
+        tableInventario.setBounds(66, 169, 668, 263);
+        tableInventario.setGridColor(Color.decode("#FFC581"));
+        tableInventario.setColumnSelectionAllowed(false);
+
+        scroll = new JScrollPane(tableInventario);
         scroll.setBounds(66, 169, 668, 263);
-		
-		si = new JLabel("Inventario");
-		si.setFont(new Font("Arial", Font.PLAIN, 18));
-		si.setBounds(323, 46, 161, 50);
-		
-		btnBack= new JButton("<-");
-		btnBack.setBounds(47, 30, 77, 32);	
-		
-		btnProveedores = new JButton("Proveedores");
-		btnProveedores.setBounds(605, 455, 118, 29);
-		
-		
-		
-		add(si);
-		add(btnBack);
-		add(btnProveedores);
-		add(scroll);
-		
+
+        btnBack = new JButton();
+        btnBack.setBounds(27, 17, 36, 36);
+        btnBack.setContentAreaFilled(false);
+        btnBack.setBorderPainted(false);
+        btnBack.setFocusPainted(false);
+        
+        btnPreg = new JButton();
+		btnPreg.setBounds(734, 550, 36, 36);
+		btnPreg.setContentAreaFilled(false);
+		btnPreg.setBorderPainted(false);
+		btnPreg.setFocusPainted(false);
+
+		btnX = new JButton();
+		btnX.setBounds(734, 16, 36, 36);
+		btnX.setContentAreaFilled(false);
+		btnX.setBorderPainted(false);
+		btnX.setFocusPainted(false);
+
+		btnMinus = new JButton();
+		btnMinus.setBounds(681, 16, 36, 36);
+		btnMinus.setContentAreaFilled(false);
+		btnMinus.setBorderPainted(false);
+		btnMinus.setFocusPainted(false);
 
 
-	}
+        btnProveedores = new JButton();
+        btnProveedores.setBounds(606, 443, 133, 38);
+        btnProveedores.setContentAreaFilled(false);
+        btnProveedores.setBorderPainted(false);
+        btnProveedores.setFocusPainted(false);
 
-	public JLabel getSi() {
-		return si;
-	}
+        panel.add(btnPreg);
+        panel.add(btnMinus);
+        panel.add(btnX);
+        panel.add(btnBack);
+        panel.add(btnProveedores);
+        panel.add(scroll);
+        add(panel);
+    }
 
-	public void setSi(JLabel si) {
-		this.si = si;
-	}
+    // Modelo de tabla no editable
+    private class NonEditableTableModel extends DefaultTableModel {
+        public NonEditableTableModel(Object[] columnNames, int rowCount) {
+            super(columnNames, rowCount);
+        }
 
-	public JButton getBtnBack() {
-		return btnBack;
-	}
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; 
+        }
+    }
 
-	public void setBtnBack(JButton btnBack) {
-		this.btnBack = btnBack;
-	}
+    // Dibujar la imagen de fondo
+    private class PanelConFondo extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(imageBg, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
 
-	public JButton getBtnProveedores() {
-		return btnProveedores;
-	}
+    public JButton getBtnBack() {
+        return btnBack;
+    }
 
-	public void setBtnProveedores(JButton btnProveedores) {
-		this.btnProveedores = btnProveedores;
-	}
+    public void setBtnBack(JButton btnBack) {
+        this.btnBack = btnBack;
+    }
 
-	public JTable getTableInventario() {
-		return tableInventario;
-	}
+    public JButton getBtnProveedores() {
+        return btnProveedores;
+    }
 
-	public void setTableInventario(JTable tableInventario) {
-		this.tableInventario = tableInventario;
-	}
+    public void setBtnProveedores(JButton btnProveedores) {
+        this.btnProveedores = btnProveedores;
+    }
 
-	public JScrollPane getScroll() {
-		return scroll;
-	}
+    public JTable getTableInventario() {
+        return tableInventario;
+    }
 
-	public void setScroll(JScrollPane scroll) {
-		this.scroll = scroll;
-	}
+    public void setTableInventario(JTable tableInventario) {
+        this.tableInventario = tableInventario;
+    }
 
-	public DefaultTableModel getModel() {
-		return model;
-	}
+    public JScrollPane getScroll() {
+        return scroll;
+    }
 
-	public void setModel(DefaultTableModel model) {
-		this.model = model;
-	}
-	
-	
+    public void setScroll(JScrollPane scroll) {
+        this.scroll = scroll;
+    }
+
+    public DefaultTableModel getModel() {
+        return model;
+    }
+
+    public void setModel(NonEditableTableModel model) {
+        this.model = model;
+    }
 }

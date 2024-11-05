@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 public class MainWindow extends JFrame{
 
 	private OptionPanel op;
+	private OptionPanelInfo opi;
 	private InventarioPanel ip;
 	private VentasPanel vp;
 	private ComprasPanel cp;
@@ -20,16 +21,19 @@ public class MainWindow extends JFrame{
 		
 		op = new OptionPanel();
 		ip = new InventarioPanel();
+		opi = new OptionPanelInfo();
 		vp = new VentasPanel();
 		cp = new ComprasPanel();
 		gp = new GastosPanel();
 		pp = new ProveedoresPanel();
 		pw = new ProveedorNuevoWindow();
-		vw = new VentaNuevaWindow();		
+		vw = new VentaNuevaWindow();	
+		
 		
 		setTitle("sisas");
-		setBounds(0, 0, 800, 600);
+		setSize(800, 600);
 		setLayout(null);
+		setUndecorated(true);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -50,6 +54,14 @@ public class MainWindow extends JFrame{
 
 	public void setOp(OptionPanel op) {
 		this.op = op;
+	}
+
+	public OptionPanelInfo getOpi() {
+		return opi;
+	}
+
+	public void setOpi(OptionPanelInfo opi) {
+		this.opi = opi;
 	}
 
 	public InventarioPanel getIp() {
