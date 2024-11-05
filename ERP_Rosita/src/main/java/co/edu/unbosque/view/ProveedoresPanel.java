@@ -44,20 +44,37 @@ public class ProveedoresPanel extends JPanel {
         btnBack.setFocusPainted(false);
 
 		btnAdd = new JButton();
-		btnAdd.setBounds(259, 443, 133, 40);
+		btnAdd.setBounds(179, 443, 133, 40);
 		btnAdd.setContentAreaFilled(false);
 		btnAdd.setBorderPainted(false);
 		btnAdd.setFocusPainted(false);
 
 		btnEdit = new JButton();
-		btnEdit.setBounds(420, 443, 133, 40);
+		btnEdit.setBounds(340, 443, 133, 40);
 		btnEdit.setContentAreaFilled(false);
 		btnEdit.setBorderPainted(false);
 		btnEdit.setFocusPainted(false);
 		
-		btnDelete = new JButton("Delete");
-		btnDelete.setBounds(320, 500, 133, 40);
+		btnDelete = new JButton();
+		btnDelete.setBounds(501, 443, 133, 40);
+		btnDelete.setContentAreaFilled(false);
+		btnDelete.setBorderPainted(false);
+		btnDelete.setFocusPainted(false);
+		
+		btnX = new JButton();
+		btnX.setBounds(734, 16, 36, 36);
+		btnX.setContentAreaFilled(false);
+		btnX.setBorderPainted(false);
+		btnX.setFocusPainted(false);
 
+		btnMinus = new JButton();
+		btnMinus.setBounds(681, 16, 36, 36);
+		btnMinus.setContentAreaFilled(false);
+		btnMinus.setBorderPainted(false);
+		btnMinus.setFocusPainted(false);
+        
+		panel.add(btnMinus);
+		panel.add(btnX);
 		panel.add(scroll);
 		panel.add(btnEdit);
 		panel.add(btnBack);

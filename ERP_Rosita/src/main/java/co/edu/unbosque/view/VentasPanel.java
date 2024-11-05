@@ -7,7 +7,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class VentasPanel extends JPanel {
 
-	private JButton btnBack, btnNuevaVenta;
+	private JButton btnBack, btnNuevaVenta, btnX, btnMinus;
 	private DefaultTableModel model;
 	private JScrollPane scroll;
 	private JPanel panel;
@@ -46,7 +46,21 @@ public class VentasPanel extends JPanel {
 		btnNuevaVenta.setBounds(319, 444, 172, 42);
 		btnNuevaVenta.setContentAreaFilled(false);
 		btnNuevaVenta.setBorderPainted(false);
+		
+		btnX = new JButton();
+		btnX.setBounds(734, 16, 36, 36);
+		btnX.setContentAreaFilled(false);
+		btnX.setBorderPainted(false);
+		btnX.setFocusPainted(false);
 
+		btnMinus = new JButton();
+		btnMinus.setBounds(681, 16, 36, 36);
+		btnMinus.setContentAreaFilled(false);
+		btnMinus.setBorderPainted(false);
+		btnMinus.setFocusPainted(false);
+        
+		panel.add(btnX);
+		panel.add(btnMinus);
 		panel.add(btnBack);
 		panel.add(scroll);
 		panel.add(btnNuevaVenta);
@@ -63,6 +77,39 @@ public class VentasPanel extends JPanel {
 	        }
 	    }
 	
+
+	 
+	public JButton getBtnX() {
+		return btnX;
+	}
+
+	public void setBtnX(JButton btnX) {
+		this.btnX = btnX;
+	}
+
+	public JButton getBtnMinus() {
+		return btnMinus;
+	}
+
+	public void setBtnMinus(JButton btnMinus) {
+		this.btnMinus = btnMinus;
+	}
+
+	public JPanel getPanel() {
+		return panel;
+	}
+
+	public void setPanel(JPanel panel) {
+		this.panel = panel;
+	}
+
+	public Image getImagenBg() {
+		return imagenBg;
+	}
+
+	public void setImagenBg(Image imagenBg) {
+		this.imagenBg = imagenBg;
+	}
 
 	public JButton getBtnBack() {
 		return btnBack;
