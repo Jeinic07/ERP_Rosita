@@ -127,7 +127,47 @@ public class InventarioPanel extends JPanel {
         return scroll;
     }
 
-    public void setScroll(JScrollPane scroll) {
+    public Image getImageBg() {
+		return imageBg;
+	}
+
+	public void setImageBg(Image imageBg) {
+		this.imageBg = imageBg;
+	}
+
+	public JPanel getPanel() {
+		return panel;
+	}
+
+	public void setPanel(JPanel panel) {
+		this.panel = panel;
+	}
+
+	public JButton getBtnX() {
+		return btnX;
+	}
+
+	public void setBtnX(JButton btnX) {
+		this.btnX = btnX;
+	}
+
+	public JButton getBtnMinus() {
+		return btnMinus;
+	}
+
+	public void setBtnMinus(JButton btnMinus) {
+		this.btnMinus = btnMinus;
+	}
+
+	public JButton getBtnPreg() {
+		return btnPreg;
+	}
+
+	public void setBtnPreg(JButton btnPreg) {
+		this.btnPreg = btnPreg;
+	}
+
+	public void setScroll(JScrollPane scroll) {
         this.scroll = scroll;
     }
 

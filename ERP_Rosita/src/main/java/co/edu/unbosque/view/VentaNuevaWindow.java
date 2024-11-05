@@ -41,7 +41,7 @@ public class VentaNuevaWindow extends JFrame {
         scroll = new JScrollPane(tableNuevaVenta);
         scroll.setBounds(49, 153, 605, 215);
 
-        btnBack = new JButton("<-");
+        btnBack = new JButton();
         btnBack.setBounds(10, 5, 50, 32);
         btnBack.setContentAreaFilled(false);
         btnBack.setBorderPainted(false);
