@@ -1,21 +1,17 @@
 package co.edu.unbosque.view;
 
-import java.awt.Font;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class VentasPanel extends JPanel {
 
-	private JLabel si;
 	private JButton btnBack, btnNuevaVenta;
 	private DefaultTableModel model;
 	private JScrollPane scroll;
+	private JPanel panel;
+	private Image imagenBg;
 	private JTable tableVentas;
 
 
@@ -23,6 +19,12 @@ public class VentasPanel extends JPanel {
 		setBounds(0, 0, 800, 600);
 		setLayout(null);
 		setVisible(false);
+		
+        imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/Ventas.png").getImage();
+
+        panel = new PanelConFondo();
+        panel.setBounds(0, 0, 800, 600);  // Ajustar tamaño del panel
+        panel.setLayout(null);
 		
         String[] columnNames = {"N. Factura", "Fecha", "Total"};
         
@@ -34,30 +36,33 @@ public class VentasPanel extends JPanel {
         scroll= new JScrollPane(tableVentas);
         scroll.setBounds(66, 169, 668, 263);
 
-		si = new JLabel("Ventas");
-		si.setFont(new Font("Arial", Font.PLAIN, 18));
-		si.setBounds(323, 46, 161, 50);
 
-		btnBack = new JButton("<-");
-		btnBack.setBounds(47, 30, 77, 32);
+		btnBack = new JButton();
+		btnBack.setBounds(27, 17, 36, 36);
+		btnBack.setContentAreaFilled(false);
+		btnBack.setBorderPainted(false);
 		
-		btnNuevaVenta= new JButton("Nueva Venta");
-		btnNuevaVenta.setBounds(300, 470, 180, 40);
+		btnNuevaVenta= new JButton();
+		btnNuevaVenta.setBounds(319, 444, 172, 42);
+		btnNuevaVenta.setContentAreaFilled(false);
+		btnNuevaVenta.setBorderPainted(false);
 
-		add(si);
-		add(btnBack);
-		add(scroll);
-		add(btnNuevaVenta);
+		panel.add(btnBack);
+		panel.add(scroll);
+		panel.add(btnNuevaVenta);
+		add(panel);
 
 	}
 
-	public JLabel getSi() {
-		return si;
-	}
-
-	public void setSi(JLabel si) {
-		this.si = si;
-	}
+	 private class PanelConFondo extends JPanel {
+	        @Override
+	        protected void paintComponent(Graphics g) {
+	            super.paintComponent(g);
+	            // Dibujar la imagen de fondo
+	            g.drawImage(imagenBg, 0, 0, getWidth(), getHeight(), this);
+	        }
+	    }
+	
 
 	public JButton getBtnBack() {
 		return btnBack;

@@ -1,13 +1,7 @@
 package co.edu.unbosque.view;
 
-import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class VentaNuevaWindow extends JFrame {
@@ -15,6 +9,8 @@ public class VentaNuevaWindow extends JFrame {
     private JButton btnBack;
     private JButton btnAdd, btnDone;
     private JLabel titleLabel;
+    private Image imagenBg;
+    private JPanel panel;
     private JTable tableNuevaVenta;
     private JScrollPane scroll;
     private DefaultTableModel model;
@@ -23,48 +19,73 @@ public class VentaNuevaWindow extends JFrame {
     private JTextField txtPrecio;
 
     public VentaNuevaWindow() {
-        setBounds(369, 250, 800, 450);
+        setBounds(369, 250, 700, 450);
         setLayout(null);
         setVisible(false);
+		setUndecorated(true);
+		setResizable(false);
+		setLocationRelativeTo(null);
+        
+        imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/VentasAgregar.png").getImage();
+
+        panel = new PanelConFondo();
+        panel.setBounds(0, 0, 700, 450);  // Ajustar tamaño del panel
+        panel.setLayout(null);
 
         String[] columnNames = {"Producto", "Cantidad", "Precio", "SubTotal"};
         model = new DefaultTableModel(columnNames, 0);
 
         tableNuevaVenta = new JTable(model);
-        tableNuevaVenta.setBounds(66, 86, 668, 263);
+        tableNuevaVenta.setBounds(49, 153, 605, 215);
 
         scroll = new JScrollPane(tableNuevaVenta);
-        scroll.setBounds(66, 86, 668, 263);
+        scroll.setBounds(49, 153, 605, 215);
 
         btnBack = new JButton("<-");
         btnBack.setBounds(10, 5, 50, 32);
+        btnBack.setContentAreaFilled(false);
+        btnBack.setBorderPainted(false);
+
         
-        btnAdd = new JButton("Agregar Producto");
-        btnAdd.setBounds(560, 35, 150, 32);
-        
-        btnDone = new JButton("Hecho");
-        btnDone.setBounds(320, 360, 150, 32);
-        
-        
+        btnAdd = new JButton();
+        btnAdd.setBounds(567, 69, 87, 34);
+        btnAdd.setContentAreaFilled(false);
+        btnAdd.setBorderPainted(false);
+ 
+        btnDone = new JButton();
+        btnDone.setBounds(306, 375, 87, 34);
+        btnDone.setContentAreaFilled(false);
+        btnDone.setBorderPainted(false);
+
+
         txtProducto = new JTextField("Producto");
-        txtProducto.setBounds(80, 35, 150, 32);
+        txtProducto.setBounds(49, 69, 153, 34);
 
         txtCantidad = new JTextField("Cantidad");
-        txtCantidad.setBounds(240, 35, 150, 32);
+        txtCantidad.setBounds(221, 69, 153, 34);
 
         txtPrecio = new JTextField("Precio");
-        txtPrecio.setBounds(400, 35, 150, 32);
+        txtPrecio.setBounds(393, 69, 153, 34);
         
-        add(btnBack);
-        add(scroll);
-        add(btnAdd);
-        add(txtProducto);
-        add(txtCantidad);
-        add(txtPrecio);
-        add(btnDone);
+        panel.add(btnBack);
+        panel.add(scroll);
+        panel.add(btnAdd);
+        panel.add(txtProducto);
+        panel.add(txtCantidad);
+        panel.add(txtPrecio);
+        panel.add(btnDone);
+        add(panel);
     }
 
 
+    private class PanelConFondo extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            // Dibujar la imagen de fondo
+            g.drawImage(imagenBg, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
 
 	public JButton getBtnBack() {
 		return btnBack;
