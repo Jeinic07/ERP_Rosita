@@ -13,6 +13,7 @@ public class MainWindow extends JFrame{
 	private GastosPanel gp;
 	private ProveedoresPanel pp;
 	private ProveedorNuevoWindow pw;
+	private ProveedorEditarWindow pew;
 	private VentaNuevaWindow vw;
 	
 	
@@ -27,7 +28,8 @@ public class MainWindow extends JFrame{
 		gp = new GastosPanel();
 		pp = new ProveedoresPanel();
 		pw = new ProveedorNuevoWindow();
-		vw = new VentaNuevaWindow();	
+		vw = new VentaNuevaWindow();
+		pew = new ProveedorEditarWindow();
 		
 		
 		setTitle("sisas");
@@ -118,6 +120,14 @@ public class MainWindow extends JFrame{
 
 	public void setVw(VentaNuevaWindow vw) {
 		this.vw = vw;
+	}
+
+	public ProveedorEditarWindow getPew() {
+		return pew;
+	}
+
+	public void setPew(ProveedorEditarWindow pew) {
+		this.pew = pew;
 	}
 	
 

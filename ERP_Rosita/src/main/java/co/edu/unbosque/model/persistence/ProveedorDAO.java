@@ -1,5 +1,6 @@
 package co.edu.unbosque.model.persistence;
 
+import java.awt.dnd.DnDConstants;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -98,16 +99,43 @@ public class ProveedorDAO implements OperationsDAO {
 
 	@Override
 	public int updateById(int id, String... args) {
-		// TODO Auto-generated method stub
+		ProveedorDTO prov = new ProveedorDTO(args[0], args[1], args[2], args[3], args[4]);
+		dbcon.initConnection();
+		try {
+			dbcon.setPrepareStatement(dbcon.getConnect()
+					.prepareStatement("UPDATE Proveedor SET nombreProveedor=?, tipoDocumentoProveedor=?, "
+							+ "documentoProveedor=?, telefonoProveedor=?, direccionProveedor=? " + "WHERE idProveedor="
+							+ id));
+
+			dbcon.getPrepareStatement().setString(1, prov.getNombreProveedor());
+			dbcon.getPrepareStatement().setString(2, prov.getTipoDocumentoProveedor());
+			dbcon.getPrepareStatement().setString(3, prov.getDocumentoProveedor());
+			dbcon.getPrepareStatement().setString(4, prov.getTelefonoProveedor());
+			dbcon.getPrepareStatement().setString(5, prov.getDireccionProveedor());
+			dbcon.getPrepareStatement().executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		dbcon.closeConnection();
 		return 0;
 	}
 
 	@Override
 	public int deleteById(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		dbcon.initConnection();
+		try {
+			dbcon.setPrepareStatement(
+					dbcon.getConnect().prepareStatement("DELETE FROM Proveedor WHERE idProveedor = ?"));
+			dbcon.getPrepareStatement().setInt(1, id);
+			dbcon.getPrepareStatement().executeUpdate();
+			dbcon.closeConnection();
+			return 0;
+		} catch (Exception e) {
+			return 1;
+		}
+
 	}
-	
-	
 
 }
