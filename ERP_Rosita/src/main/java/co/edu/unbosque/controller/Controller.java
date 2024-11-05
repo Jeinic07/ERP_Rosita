@@ -40,23 +40,21 @@ public class Controller implements ActionListener {
 
 		mw.getOp().getBtnGastos().addActionListener(this);
 		mw.getOp().getBtnGastos().setActionCommand("Gastos");
-		
+
 		mw.getOp().getBtnX().addActionListener(this);
 		mw.getOp().getBtnX().setActionCommand("Cerrar");
-		
+
 		mw.getOp().getBtnMinus().addActionListener(this);
 		mw.getOp().getBtnMinus().setActionCommand("Minus");
-		
+
 		mw.getOp().getBtnPreg().addActionListener(this);
 		mw.getOp().getBtnPreg().setActionCommand("Consulta");
-		
-		
-		//NUEVO, boton OptionPaneinfo
-		
+
+		// NUEVO, boton OptionPaneinfo
+
 		mw.getOpi().getBtnOk().addActionListener(this);
 		mw.getOpi().getBtnOk().setActionCommand("OptOk");
-		
-		
+
 		// Botones InventarioPanel
 		mw.getIp().getBtnBack().addActionListener(this);
 		mw.getIp().getBtnBack().setActionCommand("invBack");
@@ -74,29 +72,37 @@ public class Controller implements ActionListener {
 		mw.getPp().getBtnEdit().addActionListener(this);
 		mw.getPp().getBtnEdit().setActionCommand("provEdit");
 
+		mw.getPp().getBtnDelete().addActionListener(this);
+		mw.getPp().getBtnDelete().setActionCommand("provDelete");
+
 		// Botones ProveedorNuevoWindow
 		mw.getPw().getBtnAdd().addActionListener(this);
 		mw.getPw().getBtnAdd().setActionCommand("newProvAdd");
 
 		mw.getPw().getBtnBack().addActionListener(this);
 		mw.getPw().getBtnBack().setActionCommand("newProvBack");
+		
+		//Botones ProveedorEditarWindow
+		mw.getPew().getBtnConfirm().addActionListener(this);
+		mw.getPew().getBtnConfirm().setActionCommand("editProvConfirm");
+
+		mw.getPew().getBtnBack().addActionListener(this);
+		mw.getPew().getBtnBack().setActionCommand("editProvBack");
 
 		// Botones VentasPanel
 		mw.getVp().getBtnBack().addActionListener(this);
 		mw.getVp().getBtnBack().setActionCommand("venBack");
-		
+
 		mw.getVp().getBtnNuevaVenta().addActionListener(this);
 		mw.getVp().getBtnNuevaVenta().setActionCommand("venAdd");
-		
-		
-		//Botones VentaNuevaWindow
+
+		// Botones VentaNuevaWindow
 		mw.getVw().getBtnAdd().addActionListener(this);
 		mw.getVw().getBtnAdd().setActionCommand("newVenAdd");
-		
+
 		mw.getVw().getBtnBack().addActionListener(this);
 		mw.getVw().getBtnBack().setActionCommand("newVenBack");
-		
-		
+
 		// Botones ComprasPanel
 		mw.getCp().getBtnBack().addActionListener(this);
 		mw.getCp().getBtnBack().setActionCommand("comBack");
@@ -220,9 +226,33 @@ public class Controller implements ActionListener {
 		}
 
 		case "provEdit": {
-
+			mw.getPew().setVisible(true);
+			
+			int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
+			int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
+			
+			mw.getPew().getTxtNombre().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 1));
+			mw.getPew().getTxtDocumento().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 3));
+			mw.getPew().getTxtTelefono().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 4));
+			mw.getPew().getTxtDireccion().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 5));
+			
 			break;
 		}
+		
+		case "provDelete":{
+			int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
+		
+			int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
+			
+			provDao.deleteById(id);
+			if(JOptionPane.showConfirmDialog(mw, "Seguro que desea eliminarlo?")== 0) {
+				mw.getPp().getModel().removeRow(selectedRow);
+				System.out.println("Empleado eliminado correctamente");
+			}
+			
+			break;
+		}
+		
 
 		// Botones ProveedorNuevoAdd
 
@@ -258,6 +288,44 @@ public class Controller implements ActionListener {
 
 		case "newProvBack": {
 			mw.getPw().setVisible(false);
+			break;
+		}
+		
+		//Botones ProveedorEditarWindow
+		case "editProvConfirm": {
+		    int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
+
+		    // Verificar si hay una fila seleccionada
+		    if (selectedRow == -1) {
+		        JOptionPane.showMessageDialog(null, "Por favor, selecciona un proveedor para editar.");
+		        break;
+		    }
+
+		    int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
+		    
+		    String nombre = mw.getPew().getTxtNombre().getText();
+		    String tipoDocumento = (String) mw.getPew().getTxtTipoDocumento().getSelectedItem();
+		    String documento = mw.getPew().getTxtDocumento().getText();
+		    String telefono = mw.getPew().getTxtTelefono().getText();
+		    String direccion = mw.getPew().getTxtDireccion().getText();
+		    
+		    
+		    provDao.updateById(id, nombre, tipoDocumento, documento, telefono, direccion);
+		    
+		    mw.getPp().getModel().setValueAt(nombre, selectedRow, 1);
+		    mw.getPp().getModel().setValueAt(tipoDocumento, selectedRow, 2);
+		    mw.getPp().getModel().setValueAt(documento, selectedRow, 3);
+		    mw.getPp().getModel().setValueAt(telefono, selectedRow, 4);
+		    mw.getPp().getModel().setValueAt(direccion, selectedRow, 5);
+		    
+		    JOptionPane.showMessageDialog(mw, "Empleado Editado correctamente");
+			mw.getPew().setVisible(false);
+
+		    break;
+		}
+
+		case "editProvBack":{
+			mw.getPew().setVisible(false);
 			break;
 		}
 		// Botones VentasPanel

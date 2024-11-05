@@ -12,7 +12,7 @@ public class ProveedoresPanel extends JPanel {
 	private JPanel panel;
 	private NonEditableTableModel model;
 	private Image imageBg;
-	private JButton btnAdd, btnEdit, btnBack, btnX, btnMinus, btnPreg;
+	private JButton btnAdd, btnEdit, btnBack,btnDelete, btnX, btnMinus, btnPreg;
 
 	public ProveedoresPanel() {
 
@@ -35,7 +35,8 @@ public class ProveedoresPanel extends JPanel {
 
 		scroll = new JScrollPane(tableProveedores);
 		scroll.setBounds(66, 169, 668, 263);
-
+		
+		 
 		btnBack = new JButton();
 		btnBack.setBounds(27, 17, 36, 36);
 		btnBack.setContentAreaFilled(false);
@@ -53,11 +54,15 @@ public class ProveedoresPanel extends JPanel {
 		btnEdit.setContentAreaFilled(false);
 		btnEdit.setBorderPainted(false);
 		btnEdit.setFocusPainted(false);
+		
+		btnDelete = new JButton("Delete");
+		btnDelete.setBounds(320, 500, 133, 40);
 
 		panel.add(scroll);
 		panel.add(btnEdit);
 		panel.add(btnBack);
 		panel.add(btnAdd);
+		panel.add(btnDelete);
 		add(panel);
 
 		setVisible(false);
@@ -133,4 +138,52 @@ public class ProveedoresPanel extends JPanel {
 		this.btnBack = btnBack;
 	}
 
+	public JPanel getPanel() {
+		return panel;
+	}
+
+	public void setPanel(JPanel panel) {
+		this.panel = panel;
+	}
+
+	public Image getImageBg() {
+		return imageBg;
+	}
+
+	public void setImageBg(Image imageBg) {
+		this.imageBg = imageBg;
+	}
+
+	public JButton getBtnDelete() {
+		return btnDelete;
+	}
+
+	public void setBtnDelete(JButton btnDelete) {
+		this.btnDelete = btnDelete;
+	}
+
+	public JButton getBtnX() {
+		return btnX;
+	}
+
+	public void setBtnX(JButton btnX) {
+		this.btnX = btnX;
+	}
+
+	public JButton getBtnMinus() {
+		return btnMinus;
+	}
+
+	public void setBtnMinus(JButton btnMinus) {
+		this.btnMinus = btnMinus;
+	}
+
+	public JButton getBtnPreg() {
+		return btnPreg;
+	}
+
+	public void setBtnPreg(JButton btnPreg) {
+		this.btnPreg = btnPreg;
+	}
+	
 }
