@@ -244,35 +244,30 @@ public class Controller implements ActionListener {
 			break;
 		}
 
-		case "provEdit": {
-			mw.getPew().setVisible(true);
-			
-			int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
-			int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
-			
-			mw.getPew().getTxtNombre().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 1));
-			mw.getPew().getTxtDocumento().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 3));
-			mw.getPew().getTxtTelefono().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 4));
-			mw.getPew().getTxtDireccion().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 5));
-			
-			break;
-		}
-		
-		case "provDelete":{
-			int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
-		
-			int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
-			
-			provDao.deleteById(id);
-			if(JOptionPane.showConfirmDialog(mw, "Seguro que desea eliminarlo?")== 0) {
-				mw.getPp().getModel().removeRow(selectedRow);
-				System.out.println("Empleado eliminado correctamente");
-			}
-			
-			break;
-		}
-		
+		case "provEdit":
+		    try {
+		        int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
 
+		        // Verifica si se ha seleccionado alguna fila
+		        if (selectedRow == -1) {
+		            throw new Exception("No se ha seleccionado ningún proveedor para editar.");
+		        }
+
+		        // Obtiene el ID y los datos del proveedor seleccionado
+		        int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
+
+		        // Carga los datos en los campos de edición en el panel 'Pew'
+		        mw.getPew().getTxtNombre().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 1));
+		        mw.getPew().getTxtDocumento().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 3));
+		        mw.getPew().getTxtTelefono().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 4));
+		        mw.getPew().getTxtDireccion().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 5));
+
+		        // Muestra el panel de edición
+		        mw.getPew().setVisible(true);
+		    } catch (Exception ex) {
+		        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error de edición", JOptionPane.ERROR_MESSAGE);
+		    }
+		    break;
 		// Botones ProveedorNuevoAdd
 
 		case "newProvAdd": {
@@ -282,7 +277,30 @@ public class Controller implements ActionListener {
 			String documento = mw.getPw().getTxtDocumento().getText();
 			String telefono = mw.getPw().getTxtTelefono().getText();
 			String direccion = mw.getPw().getTxtDireccion().getText();
+			//Verificar si no hay algun campo vacio
+			if (nombre.isEmpty() || tipoDocumento == null || tipoDocumento.isEmpty() ||
+			        documento.isEmpty() || telefono.isEmpty() || direccion.isEmpty()) {
+			        JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos", "Error", JOptionPane.ERROR_MESSAGE);
+			        break; 
+			    }
+			 // Excepción para que el nombre solo contenga letras
+		    if (!nombre.matches("[a-zA-Z\\s]+")) {
+		        JOptionPane.showMessageDialog(null, "El nombre solo debe contener letras", "Error", JOptionPane.ERROR_MESSAGE);
+		        break;
+		    }
+		    
+		 // Excepción para que el teléfono solo contenga números
+		    if (!telefono.matches("\\d+")) {
+		        JOptionPane.showMessageDialog(null, "El teléfono solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
+		        break;
+		    }
 
+		    // Excepción para que el documento solo contenga números
+		    if (!documento.matches("\\d+")) {
+		        JOptionPane.showMessageDialog(null, "El documento solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
+		        break;
+		    }
+		    
 			provDao.create(nombre, tipoDocumento, documento, telefono, direccion);
 			
 			provDao.readAll();
@@ -328,6 +346,28 @@ public class Controller implements ActionListener {
 		    String telefono = mw.getPew().getTxtTelefono().getText();
 		    String direccion = mw.getPew().getTxtDireccion().getText();
 		    
+		    if (nombre.isEmpty() || tipoDocumento == null || tipoDocumento.isEmpty() ||
+			        documento.isEmpty() || telefono.isEmpty() || direccion.isEmpty()) {
+			        JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos", "Error", JOptionPane.ERROR_MESSAGE);
+			        break; 
+			}
+		    // Excepción para que el nombre solo contenga letras
+		    if (!nombre.matches("[a-zA-Z\\s]+")) {
+		        JOptionPane.showMessageDialog(null, "El nombre solo debe contener letras", "Error", JOptionPane.ERROR_MESSAGE);
+		        break;
+		    }
+		    
+		 // Excepción para que el teléfono solo contenga números
+		    if (!telefono.matches("\\d+")) {
+		        JOptionPane.showMessageDialog(null, "El teléfono solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
+		        break;
+		    }
+
+		    // Excepción para que el documento solo contenga números
+		    if (!documento.matches("\\d+")) {
+		        JOptionPane.showMessageDialog(null, "El documento solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
+		        break;
+		    }		    
 		    
 		    provDao.updateById(id, nombre, tipoDocumento, documento, telefono, direccion);
 		    

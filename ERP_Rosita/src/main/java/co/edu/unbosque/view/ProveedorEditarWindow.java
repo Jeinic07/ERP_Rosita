@@ -47,10 +47,10 @@ public class ProveedorEditarWindow extends JFrame{
 		txtDocumento.setBounds(116, 177, 99, 25);
 
 		txtTelefono = new JTextField("");
-		txtTelefono.setBounds(116, 217, 99, 25);
+		txtTelefono.setBounds(116, 257, 99, 25);
 
 		txtDireccion = new JTextField("");
-		txtDireccion.setBounds(116, 257, 99, 25);
+		txtDireccion.setBounds(116, 217, 99, 25);
 
 		btnConfirm = new JButton();
 		btnConfirm.setBounds(84, 312, 84, 40);
