@@ -58,13 +58,13 @@ public class VentaNuevaWindow extends JFrame {
         btnDone.setBorderPainted(false);
 
 
-        txtProducto = new JTextField("Producto");
+        txtProducto = new JTextField();
         txtProducto.setBounds(49, 69, 153, 34);
 
-        txtCantidad = new JTextField("Cantidad");
+        txtCantidad = new JTextField();
         txtCantidad.setBounds(221, 69, 153, 34);
 
-        txtPrecio = new JTextField("Precio");
+        txtPrecio = new JTextField();
         txtPrecio.setBounds(393, 69, 153, 34);
         
         panel.add(btnBack);

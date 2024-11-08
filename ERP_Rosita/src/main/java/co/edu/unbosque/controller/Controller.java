@@ -337,8 +337,9 @@ public class Controller implements ActionListener {
 		    mw.getPp().getModel().setValueAt(telefono, selectedRow, 4);
 		    mw.getPp().getModel().setValueAt(direccion, selectedRow, 5);
 		    
+		    mw.getPew().setVisible(false);
 		    JOptionPane.showMessageDialog(mw, "Empleado Editado correctamente");
-			mw.getPew().setVisible(false);
+			
 
 		    break;
 		}

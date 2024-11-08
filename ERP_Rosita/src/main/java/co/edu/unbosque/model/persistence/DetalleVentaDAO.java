@@ -1,5 +1,91 @@
 package co.edu.unbosque.model.persistence;
 
-public class DetalleVentaDAO {
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import co.edu.unbosque.controller.DBConnection;
+import co.edu.unbosque.model.DetalleVentaDTO;
+
+public class DetalleVentaDAO implements OperationsDAO {
+
+	DBConnection dbcon;
+	private ArrayList<DetalleVentaDTO> dvs;
+
+	public DetalleVentaDAO() {
+		dbcon = new DBConnection();
+		dvs = new ArrayList<DetalleVentaDTO>();
+	}
+
+	public DBConnection getDbcon() {
+		return dbcon;
+	}
+
+	public void setDbcon(DBConnection dbcon) {
+		this.dbcon = dbcon;
+	}
+
+	public ArrayList<DetalleVentaDTO> getDvs() {
+		return dvs;
+	}
+
+	public void setDvs(ArrayList<DetalleVentaDTO> dvs) {
+		this.dvs = dvs;
+	}
+
+	@Override
+	public void create(Object o) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public int create(String... args) {
+		DetalleVentaDTO newDv = new DetalleVentaDTO(Integer.parseInt(args[0]), Float.parseFloat(args[1]),
+				Float.parseFloat(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]));
+
+		dbcon.initConnection();
+		try {
+			dbcon.setPrepareStatement(dbcon.getConnect().prepareStatement("INSERT INTO DetalleVenta "
+					+ "(cantidadDV, precioUnitarioDV, subtotalDV, idProductoDV, idVentaDV)" + "VALUES (?,?,?,?,?)"));
+
+			dbcon.getPrepareStatement().setInt(1, newDv.getCantidadDV());
+			dbcon.getPrepareStatement().setFloat(2, newDv.getPrecioUnitarioDV());
+			dbcon.getPrepareStatement().setFloat(3, newDv.getSubtotalDV());
+			dbcon.getPrepareStatement().setInt(4, newDv.getIdProductoDV());
+			dbcon.getPrepareStatement().setInt(5, newDv.getIdVentaDV());
+
+			dbcon.getPrepareStatement().executeUpdate();
+			dbcon.closeConnection();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		dvs.add(newDv);
+		return 0;
+	}
+
+	@Override
+	public String readAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String readByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int updateById(int id, String... args) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteById(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 }
