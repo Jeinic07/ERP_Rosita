@@ -18,9 +18,10 @@ public class AplMain {
 //		VentaDAO vdao = new VentaDAO();
 //        LocalTime horaActual = LocalTime.now().truncatedTo(ChronoUnit.SECONDS);
 //        System.out.println("Hora actual sin milisegundos: " + horaActual.toString());
-//        
+//  
 //        LocalDate fechaActual = LocalDate.now();
 //        System.out.println("Fecha actual: " + fechaActual.toString());
 //        
-//    }
+//        vdao.create2(0f);
+//   }
 }

@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 
@@ -65,27 +66,40 @@ public class VentaDAO implements OperationsDAO {
 		ventas.add(newVenta);
 		return 0;
 	}
-
 	public int create2(float total) {
-		VentaDTO newVenta = new VentaDTO(LocalDate.now(), LocalTime.now().truncatedTo(ChronoUnit.SECONDS), total);
+	    int idVenta = -1;  
+	    VentaDTO newVenta = new VentaDTO(LocalDate.now(), LocalTime.now().truncatedTo(ChronoUnit.SECONDS), total);
 
-		dbcon.initConnection();
-		try {
-			dbcon.setPrepareStatement(dbcon.getConnect()
-					.prepareStatement("INSERT INTO Venta(fechaVenta, " + "horaVenta, totalVenta) VALUES(?, ?, ?)"));
-			dbcon.getPrepareStatement().setDate(1, Date.valueOf(newVenta.getFechaVenta()));
-			dbcon.getPrepareStatement().setTime(2, Time.valueOf(newVenta.getHoraVenta()));
-			dbcon.getPrepareStatement().setFloat(3, newVenta.getTotalVenta());
+	    dbcon.initConnection();
+	    try {
 
-			dbcon.getPrepareStatement().executeUpdate();
-			dbcon.closeConnection();
+	        dbcon.setPrepareStatement(dbcon.getConnect()
+	                .prepareStatement("INSERT INTO Venta(fechaVenta, horaVenta, totalVenta) VALUES(?, ?, ?)",
+	                        java.sql.Statement.RETURN_GENERATED_KEYS));
+	        
+	        dbcon.getPrepareStatement().setDate(1, Date.valueOf(newVenta.getFechaVenta()));
+	        dbcon.getPrepareStatement().setTime(2, Time.valueOf(newVenta.getHoraVenta()));
+	        dbcon.getPrepareStatement().setFloat(3, newVenta.getTotalVenta());
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		ventas.add(newVenta);
-		return 0;
+
+	        dbcon.getPrepareStatement().executeUpdate();
+
+	        try (ResultSet rs = dbcon.getPrepareStatement().getGeneratedKeys()) {
+	            if (rs.next()) {
+	                idVenta = rs.getInt(1);  
+	            }
+	        }
+
+	        dbcon.closeConnection();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    ventas.add(newVenta);
+	    return idVenta;  // Devolver el ID de la venta generada
 	}
+
 
 	@Override
 	public String readAll() {
