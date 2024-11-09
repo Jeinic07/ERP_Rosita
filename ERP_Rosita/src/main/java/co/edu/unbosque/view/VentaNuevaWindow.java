@@ -1,6 +1,8 @@
 package co.edu.unbosque.view;
 
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,74 +20,108 @@ public class VentaNuevaWindow extends JFrame {
     private JTextField txtCantidad;
     private JTextField txtPrecio;
 
-    public VentaNuevaWindow() {
-        setBounds(369, 250, 700, 450);
-        setLayout(null);
-        setVisible(false);
-		setUndecorated(true);
-		setResizable(false);
-		setLocationRelativeTo(null);
-        
-        imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/VentasAgregar.png").getImage();
+   
+        public VentaNuevaWindow() {
+            setBounds(369, 250, 700, 450);
+            setLayout(null);
+            setVisible(false);
+            setUndecorated(true);
+            setResizable(false);
+            setLocationRelativeTo(null);
 
-        panel = new PanelConFondo();
-        panel.setBounds(0, 0, 700, 450);  // Ajustar tamaño del panel
-        panel.setLayout(null);
+            imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/VentasAgregar.png").getImage();
 
-        String[] columnNames = {"Producto", "Cantidad", "Precio", "SubTotal"};
-        model = new DefaultTableModel(columnNames, 0);
+            panel = new PanelConFondo();
+            panel.setBounds(0, 0, 700, 450);
+            panel.setLayout(null);
 
-        tableNuevaVenta = new JTable(model);
-        tableNuevaVenta.setBounds(49, 153, 605, 215);
+            String[] columnNames = {"Producto", "Cantidad", "Precio", "SubTotal"};
+            model = new DefaultTableModel(columnNames, 0);
 
-        scroll = new JScrollPane(tableNuevaVenta);
-        scroll.setBounds(49, 153, 605, 215);
+            tableNuevaVenta = new JTable(model);
+            tableNuevaVenta.setBounds(49, 153, 605, 215);
 
-        btnBack = new JButton();
-        btnBack.setBounds(10, 5, 50, 32);
-        btnBack.setContentAreaFilled(false);
-        btnBack.setBorderPainted(false);
+            scroll = new JScrollPane(tableNuevaVenta);
+            scroll.setBounds(49, 153, 605, 215);
 
-        
-        btnAdd = new JButton();
-        btnAdd.setBounds(567, 69, 87, 34);
-        btnAdd.setContentAreaFilled(false);
-        btnAdd.setBorderPainted(false);
- 
-        btnDone = new JButton();
-        btnDone.setBounds(306, 375, 87, 34);
-        btnDone.setContentAreaFilled(false);
-        btnDone.setBorderPainted(false);
+            btnBack = new JButton();
+            btnBack.setBounds(10, 5, 50, 32);
+            btnBack.setContentAreaFilled(false);
+            btnBack.setBorderPainted(false);
 
+            btnAdd = new JButton();
+            btnAdd.setBounds(567, 69, 87, 34);
+            btnAdd.setContentAreaFilled(false);
+            btnAdd.setBorderPainted(false);
 
-        txtProducto = new JTextField("Producto");
-        txtProducto.setBounds(49, 69, 153, 34);
+            btnDone = new JButton();
+            btnDone.setBounds(306, 375, 87, 34);
+            btnDone.setContentAreaFilled(false);
+            btnDone.setBorderPainted(false);
 
-        txtCantidad = new JTextField("Cantidad");
-        txtCantidad.setBounds(221, 69, 153, 34);
+            // Usar RoundedTextField en lugar de JTextField
+            txtProducto = new RoundedTextField("Producto", 20, 20);
+            txtProducto.setBounds(49, 69, 153, 34);
 
-        txtPrecio = new JTextField("Precio");
-        txtPrecio.setBounds(393, 69, 153, 34);
-        
-        panel.add(btnBack);
-        panel.add(scroll);
-        panel.add(btnAdd);
-        panel.add(txtProducto);
-        panel.add(txtCantidad);
-        panel.add(txtPrecio);
-        panel.add(btnDone);
-        add(panel);
-    }
+            txtCantidad = new RoundedTextField("Cantidad", 20, 20);
+            txtCantidad.setBounds(221, 69, 153, 34);
 
+            txtPrecio = new RoundedTextField("Precio", 20, 20);
+            txtPrecio.setBounds(393, 69, 153, 34);
 
-    private class PanelConFondo extends JPanel {
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            // Dibujar la imagen de fondo
-            g.drawImage(imagenBg, 0, 0, getWidth(), getHeight(), this);
+            panel.add(btnBack);
+            panel.add(scroll);
+            panel.add(btnAdd);
+            panel.add(txtProducto);
+            panel.add(txtCantidad);
+            panel.add(txtPrecio);
+            panel.add(btnDone);
+            add(panel);
         }
-    }
+
+        private class RoundedTextField extends JTextField {
+            private int arcWidth;
+            private int arcHeight;
+
+            public RoundedTextField(String text, int arcWidth, int arcHeight) {
+                super(text);
+                this.arcWidth = arcWidth;
+                this.arcHeight = arcHeight;
+                setOpaque(false); 
+                setBackground(Color.decode("#FFF9F3"));// Hace que el fondo sea transparente
+            }
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getBackground());
+                g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), arcWidth, arcHeight));
+                super.paintComponent(g);
+                g2.dispose();
+            }
+
+            @Override
+            protected void paintBorder(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(Color.decode("#FFCD94")); 
+                g2.setStroke(new BasicStroke(2));
+                g2.draw(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, arcWidth, arcHeight));
+                g2.dispose();
+            }
+        }
+
+        private class PanelConFondo extends JPanel {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(imagenBg, 0, 0, getWidth(), getHeight(), this);
+            }
+        }
+
+    
+
 
 	public JButton getBtnBack() {
 		return btnBack;

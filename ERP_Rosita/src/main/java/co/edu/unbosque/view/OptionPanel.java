@@ -56,23 +56,8 @@ public class OptionPanel extends JPanel {
 		btnPreg.setContentAreaFilled(false);
 		btnPreg.setBorderPainted(false);
 		btnPreg.setFocusPainted(false);
-
-		btnX = new JButton();
-		btnX.setBounds(734, 16, 36, 36);
-		btnX.setContentAreaFilled(false);
-		btnX.setBorderPainted(false);
-		btnX.setFocusPainted(false);
-
-		btnMinus = new JButton();
-		btnMinus.setBounds(681, 16, 36, 36);
-		btnMinus.setContentAreaFilled(false);
-		btnMinus.setBorderPainted(false);
-		btnMinus.setFocusPainted(false);
-        
 		
 		panel.add(btnPreg);
-		panel.add(btnX);
-		panel.add(btnMinus);
         panel.add(btnInventario);
         panel.add(btnVentas);
         panel.add(btnCompras);

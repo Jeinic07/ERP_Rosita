@@ -41,11 +41,12 @@ public class Controller implements ActionListener {
 		mw.getOp().getBtnGastos().addActionListener(this);
 		mw.getOp().getBtnGastos().setActionCommand("Gastos");
 
-		mw.getOp().getBtnX().addActionListener(this);
-		mw.getOp().getBtnX().setActionCommand("Cerrar");
+		//CAMBIO 09/11
+//		mw.getOp().getBtnX().addActionListener(this);
+//		mw.getOp().getBtnX().setActionCommand("Cerrar");
 
-		mw.getOp().getBtnMinus().addActionListener(this);
-		mw.getOp().getBtnMinus().setActionCommand("Minus");
+//		mw.getOp().getBtnMinus().addActionListener(this);
+//		mw.getOp().getBtnMinus().setActionCommand("Minus");
 
 		mw.getOp().getBtnPreg().addActionListener(this);
 		mw.getOp().getBtnPreg().setActionCommand("Consulta");
@@ -62,11 +63,11 @@ public class Controller implements ActionListener {
 		mw.getIp().getBtnProveedores().addActionListener(this);
 		mw.getIp().getBtnProveedores().setActionCommand("invProveedores");
 
-		mw.getIp().getBtnX().addActionListener(this);
-		mw.getIp().getBtnX().setActionCommand("Cerrar");
-		
-		mw.getPp().getBtnMinus().addActionListener(this);
-		mw.getPp().getBtnMinus().setActionCommand("Minus");
+//		mw.getIp().getBtnX().addActionListener(this);
+//		mw.getIp().getBtnX().setActionCommand("Cerrar");
+//		
+//		mw.getPp().getBtnMinus().addActionListener(this);
+//		mw.getPp().getBtnMinus().setActionCommand("Minus");
 		
 		// BOtones ProveedoresPanel
 		mw.getPp().getBtnBack().addActionListener(this);
@@ -81,11 +82,11 @@ public class Controller implements ActionListener {
 		mw.getPp().getBtnDelete().addActionListener(this);
 		mw.getPp().getBtnDelete().setActionCommand("provDelete");
 		
-		mw.getPp().getBtnX().addActionListener(this);
-		mw.getPp().getBtnX().setActionCommand("Cerrar");
-		
-		mw.getPp().getBtnMinus().addActionListener(this);
-		mw.getPp().getBtnMinus().setActionCommand("Minus");
+//		mw.getPp().getBtnX().addActionListener(this);
+//		mw.getPp().getBtnX().setActionCommand("Cerrar");
+//		
+//		mw.getPp().getBtnMinus().addActionListener(this);
+//		mw.getPp().getBtnMinus().setActionCommand("Minus");
 
 
 		// Botones ProveedorNuevoWindow
@@ -109,11 +110,11 @@ public class Controller implements ActionListener {
 		mw.getVp().getBtnNuevaVenta().addActionListener(this);
 		mw.getVp().getBtnNuevaVenta().setActionCommand("venAdd");
 		
-		mw.getVp().getBtnX().addActionListener(this);
-		mw.getVp().getBtnX().setActionCommand("Cerrar");
-		
-		mw.getVp().getBtnMinus().addActionListener(this);
-		mw.getVp().getBtnMinus().setActionCommand("Minus");
+//		mw.getVp().getBtnX().addActionListener(this);
+//		mw.getVp().getBtnX().setActionCommand("Cerrar");
+//		
+//		mw.getVp().getBtnMinus().addActionListener(this);
+//		mw.getVp().getBtnMinus().setActionCommand("Minus");
 
 		// Botones VentaNuevaWindow
 		mw.getVw().getBtnAdd().addActionListener(this);

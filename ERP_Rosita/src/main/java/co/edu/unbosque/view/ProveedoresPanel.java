@@ -1,43 +1,61 @@
 package co.edu.unbosque.view;
 
-
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 public class ProveedoresPanel extends JPanel {
 
 	private JTable tableProveedores;
+	private JTableHeader header;
 	private JScrollPane scroll;
 	private JPanel panel;
 	private NonEditableTableModel model;
 	private Image imageBg;
-	private JButton btnAdd, btnEdit, btnBack,btnDelete, btnX, btnMinus, btnPreg;
+	private JButton btnAdd, btnEdit, btnBack, btnDelete, btnX, btnMinus, btnPreg;
 
 	public ProveedoresPanel() {
-
 		setBounds(0, 0, 800, 600);
 		setLayout(null);
 
+		// Cargar la imagen de fondo
 		imageBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/Proveedores.png").getImage();
 
+		// Crear el panel con imagen de fondo
 		panel = new PanelConFondo();
 		panel.setBounds(0, 0, 800, 600);
 		panel.setLayout(null);
+		
+		
 
+		// Columnas de la tabla
 		String[] columnNames = { "ID", "Nombre", "Tipo Documento", "Documento", "Direccion", "Telefono" };
-
 		model = new NonEditableTableModel(columnNames, 0);
 
+		// Crear y configurar la tabla
 		tableProveedores = new JTable(model);
-		tableProveedores.setBounds(66, 169, 668, 263);
 		tableProveedores.setGridColor(Color.decode("#FFC581"));
+		tableProveedores.setRowHeight(30);
+		tableProveedores.setShowGrid(false);
+		tableProveedores.setIntercellSpacing(new Dimension(0, 0));
 
-		scroll = new JScrollPane(tableProveedores);
-		scroll.setBounds(66, 169, 668, 263);
+		// Configurar el renderizado del encabezado de la tabla
+		header = tableProveedores.getTableHeader();
+		header.setDefaultRenderer(new BubbleHeaderRenderer());
+		header.setPreferredSize(new Dimension(header.getWidth(), 35));
+		tableProveedores.setDefaultRenderer(Object.class, new AlternateRowRenderer());
 		
-		 
-		btnBack = new JButton();
+		
+		// Agregar la tabla a un JScrollPane
+		scroll = new JScrollPane(tableProveedores);
+		scroll.setBounds(70, 157, 668, 283);
+		scroll.setOpaque(false);
+	    scroll.getViewport().setOpaque(false);
+	    scroll.setBorder(BorderFactory.createEmptyBorder());
+		// Configurar botones
+	    btnBack = new JButton();
 		btnBack.setBounds(27, 17, 36, 36);
 		btnBack.setContentAreaFilled(false);
         btnBack.setBorderPainted(false);
@@ -72,7 +90,7 @@ public class ProveedoresPanel extends JPanel {
 		btnMinus.setContentAreaFilled(false);
 		btnMinus.setBorderPainted(false);
 		btnMinus.setFocusPainted(false);
-        
+		// Agregar componentes al panel
 		panel.add(btnMinus);
 		panel.add(btnX);
 		panel.add(scroll);
@@ -81,11 +99,12 @@ public class ProveedoresPanel extends JPanel {
 		panel.add(btnAdd);
 		panel.add(btnDelete);
 		add(panel);
-
+		
 		setVisible(false);
-
 	}
 
+	// Método para crear botones transparentes
+	
 	// Modelo de tabla no editable
 	private class NonEditableTableModel extends DefaultTableModel {
 		public NonEditableTableModel(Object[] columnNames, int rowCount) {
@@ -107,6 +126,57 @@ public class ProveedoresPanel extends JPanel {
 		}
 	}
 
+	// Renderer personalizado para los encabezados de la tabla con estilo burbuja
+	private static class BubbleHeaderRenderer extends DefaultTableCellRenderer {
+
+	    public BubbleHeaderRenderer() {
+	        setHorizontalAlignment(JLabel.CENTER); 
+	        setBackground(Color.decode("#77C4F2"));
+	        setForeground(Color.WHITE); 
+	        setFont(new Font("Arial", Font.BOLD, 18)); 
+	        setOpaque(true);
+	    }
+
+	    @Override
+	    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+	                                                   int row, int column) {
+	        // Ajustar el componente del renderizado para cada celda del encabezado
+	        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	        
+	        setFont(new Font("Arial", Font.BOLD, 12));
+	        setBackground(Color.decode("#FFC581")); 
+	        setForeground(Color.WHITE); 
+
+	        return this;
+	    }
+
+	    @Override
+	    protected void paintComponent(Graphics g) {
+	        Graphics2D g2 = (Graphics2D) g;
+	        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	        g2.setColor(getBackground());
+	        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 60, 60);
+	        super.paintComponent(g);
+	    }
+	}
+
+	// Renderer personalizado para alternar colores de fondo en las filas
+	private static class AlternateRowRenderer extends DefaultTableCellRenderer {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			if (row % 2 == 0) {
+				setBackground(new Color(255, 239, 213)); // Amarillo pastel
+			} else {
+				setBackground(new Color(255, 228, 196)); // Naranja pastel
+			}
+			setForeground(Color.BLACK);
+			setOpaque(true);
+			return this;
+		}
+	}
 	public JTable getTableProveedores() {
 		return tableProveedores;
 	}
@@ -202,5 +272,5 @@ public class ProveedoresPanel extends JPanel {
 	public void setBtnPreg(JButton btnPreg) {
 		this.btnPreg = btnPreg;
 	}
-	
+
 }
