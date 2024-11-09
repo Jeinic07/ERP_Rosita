@@ -11,6 +11,8 @@ import com.google.protobuf.StringValueOrBuilder;
 
 import co.edu.unbosque.model.ProductoDTO;
 import co.edu.unbosque.model.ProveedorDTO;
+import co.edu.unbosque.model.persistence.CompraDAO;
+import co.edu.unbosque.model.persistence.DetalleCompraDAO;
 import co.edu.unbosque.model.persistence.DetalleVentaDAO;
 import co.edu.unbosque.model.persistence.ProductoDAO;
 import co.edu.unbosque.model.persistence.ProveedorDAO;
@@ -24,6 +26,8 @@ public class Controller implements ActionListener {
 	private ProductoDAO producDao;
 	private VentaDAO venDao;
 	private DetalleVentaDAO dvDao;
+	private CompraDAO comDao;
+	private DetalleCompraDAO dcDao;
 
 	public Controller() {
 		mw = new MainWindow();
@@ -31,6 +35,8 @@ public class Controller implements ActionListener {
 		producDao = new ProductoDAO();
 		venDao = new VentaDAO();
 		dvDao = new DetalleVentaDAO();
+		comDao = new CompraDAO();
+		dcDao = new DetalleCompraDAO();
 		addListeners();
 
 	}
@@ -148,12 +154,28 @@ public class Controller implements ActionListener {
 		mw.getCp().getBtnBack().addActionListener(this);
 		mw.getCp().getBtnBack().setActionCommand("comBack");
 
+		mw.getCp().getbtnNuevaCompra().addActionListener(this);
+		mw.getCp().getbtnNuevaCompra().setActionCommand("comAdd");
+
+		// Botones NuevaCompraWindow
+		mw.getCnp().getBtnAdd().addActionListener(this);
+		mw.getCnp().getBtnAdd().setActionCommand("newComAdd");
+
+		mw.getCnp().getBtnBack().addActionListener(this);
+		mw.getCnp().getBtnBack().setActionCommand("newComBack");
+
+		mw.getCnp().getBtnDone().addActionListener(this);
+		mw.getCnp().getBtnDone().setActionCommand("newComDone");
+
 		// Botones GastosPanel
 		mw.getGp().getBtnBack().addActionListener(this);
 		mw.getGp().getBtnBack().setActionCommand("gasBack");
+		
+		
 	}
 
 	private static int idVenta;
+	private static int idCompra;
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -422,7 +444,7 @@ public class Controller implements ActionListener {
 			break;
 
 		// Botones VentaNuevaWindow
-		case "newVenAdd":
+		case "newVenAdd":{
 
 			if (idVenta == -1) {
 				JOptionPane.showMessageDialog(null, "Error al crear la venta.");
@@ -447,7 +469,7 @@ public class Controller implements ActionListener {
 
 			mw.getVw().getModel().addRow(new Object[] { producto, cantidad, precio, subTotal });
 			break;
-
+		}
 		case "newVenDone":
 
 			break;
@@ -463,6 +485,57 @@ public class Controller implements ActionListener {
 			mw.getCp().setVisible(false);
 			break;
 		}
+		case "comAdd":
+
+			mw.getCnp().setVisible(true);
+
+			producDao.readAll();
+			for (ProductoDTO item : producDao.getProductos()) {
+				mw.getCnp().getItems().add((item.getIdProducto() + " - " + item.getNombreProducto()));
+			}
+			mw.getCnp().getTxtProducto().setSuggestions(mw.getCnp().getItems());
+			
+			
+			idCompra = comDao.create2(0f);
+
+			break;
+		// Botones NuevaCompraWindow
+		case "newComAdd":{
+			
+			System.out.println("pene");
+			if (idCompra == -1) {
+				JOptionPane.showMessageDialog(null, "Error al crear la compra.");
+				return;
+			}
+
+			String producto = mw.getCnp().getTxtProducto().getText();
+			String cantidad;
+			String precio;
+
+			try {
+				cantidad = mw.getCnp().getTxtCantidad().getText();
+				precio = mw.getCnp().getTxtPrecio().getText();
+			} catch (Exception i) {
+				JOptionPane.showMessageDialog(null, "Ingrese una cantidad y precio válidos.");
+				return;
+			}
+
+			float subTotal = Float.parseFloat(cantidad) * Float.parseFloat(precio);
+
+			dcDao.create(cantidad, precio, String.valueOf(subTotal), "3", String.valueOf(idVenta));
+
+			mw.getCnp().getModel().addRow(new Object[] { producto, cantidad, precio, subTotal });
+			break;
+		}
+		case "newComDone":
+
+			break;
+
+		case "newComBack": {
+			mw.getCnp().setVisible(false);
+			break;
+		}
+
 
 		// Botones GastosPanel
 		case "gasBack": {
@@ -470,6 +543,8 @@ public class Controller implements ActionListener {
 			mw.getGp().setVisible(false);
 			break;
 		}
+		
+		
 		}
 	}
 

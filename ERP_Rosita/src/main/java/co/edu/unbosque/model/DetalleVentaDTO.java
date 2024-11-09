@@ -15,7 +15,6 @@ public class DetalleVentaDTO {
 
 	}
 
-
 	public DetalleVentaDTO(int idDV, int cantidadDV, float precioUnitarioDV, float subtotalDV, int idProductoDV,
 			int idVentaDV, String nombreProducto) {
 		super();
@@ -28,7 +27,6 @@ public class DetalleVentaDTO {
 		this.nombreProducto = nombreProducto;
 	}
 
-
 	public DetalleVentaDTO(int cantidadDV, float precioUnitarioDV, float subtotalDV, int idProductoDV, int idVentaDV) {
 		super();
 		this.cantidadDV = cantidadDV;
@@ -37,7 +35,6 @@ public class DetalleVentaDTO {
 		this.idProductoDV = idProductoDV;
 		this.idVentaDV = idVentaDV;
 	}
-
 
 	public DetalleVentaDTO(int idDV, int cantidadDV, float precioUnitarioDV, float subtotalDV, int idProductoDV,
 			int idVentaDV) {
@@ -50,76 +47,61 @@ public class DetalleVentaDTO {
 		this.idVentaDV = idVentaDV;
 	}
 
-
 	public int getIdDV() {
 		return idDV;
 	}
-
 
 	public void setIdDV(int idDV) {
 		this.idDV = idDV;
 	}
 
-
 	public int getCantidadDV() {
 		return cantidadDV;
 	}
-
 
 	public void setCantidadDV(int cantidadDV) {
 		this.cantidadDV = cantidadDV;
 	}
 
-
 	public float getPrecioUnitarioDV() {
 		return precioUnitarioDV;
 	}
-
 
 	public void setPrecioUnitarioDV(float precioUnitarioDV) {
 		this.precioUnitarioDV = precioUnitarioDV;
 	}
 
-
 	public float getSubtotalDV() {
 		return subtotalDV;
 	}
-
 
 	public void setSubtotalDV(float subtotalDV) {
 		this.subtotalDV = subtotalDV;
 	}
 
-
 	public int getIdProductoDV() {
 		return idProductoDV;
 	}
-
 
 	public void setIdProductoDV(int idProductoDV) {
 		this.idProductoDV = idProductoDV;
 	}
 
-
 	public int getIdVentaDV() {
 		return idVentaDV;
 	}
-
 
 	public void setIdVentaDV(int idVentaDV) {
 		this.idVentaDV = idVentaDV;
 	}
 
-
 	public String getNombreProducto() {
 		return nombreProducto;
 	}
 
-
 	public void setNombreProducto(String nombreProducto) {
 		this.nombreProducto = nombreProducto;
 	}
-
 
 	@Override
 	public String toString() {
@@ -127,8 +109,5 @@ public class DetalleVentaDTO {
 				+ ", subtotalDV=" + subtotalDV + ", idProductoDV=" + idProductoDV + ", idVentaDV=" + idVentaDV
 				+ ", nombreProducto=" + nombreProducto + "]";
 	}
-	
-	
-	
 	
 }

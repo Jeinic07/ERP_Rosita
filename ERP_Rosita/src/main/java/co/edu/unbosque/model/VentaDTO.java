@@ -66,6 +66,5 @@ public class VentaDTO {
 		return "VentaDTO [idFechaVenta=" + idFechaVenta + ", fechaVenta=" + fechaVenta + ", horaVenta=" + horaVenta
 				+ ", totalVenta=" + totalVenta + "]";
 	}
-
 	
 }
