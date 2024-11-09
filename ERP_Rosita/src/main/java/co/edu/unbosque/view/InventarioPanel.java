@@ -9,7 +9,7 @@ public class InventarioPanel extends JPanel {
 
     private Image imageBg;
     private JPanel panel;
-    private JButton btnBack, btnProveedores, btnX, btnMinus, btnPreg;
+    private JButton btnBack, btnProveedores, btnX, btnMinus, btnPreg, btnAdd;
     private JTable tableInventario;
     private JScrollPane scroll;
     private NonEditableTableModel model;
@@ -69,12 +69,17 @@ public class InventarioPanel extends JPanel {
         btnProveedores.setBorderPainted(false);
         btnProveedores.setFocusPainted(false);
 
+        btnAdd = new JButton("Agregar");
+        btnAdd.setBounds(100, 443, 133, 38);
+
+        panel.add(btnAdd);
         panel.add(btnPreg);
         panel.add(btnMinus);
         panel.add(btnX);
         panel.add(btnBack);
         panel.add(btnProveedores);
         panel.add(scroll);
+
         add(panel);
     }
 
@@ -178,4 +183,13 @@ public class InventarioPanel extends JPanel {
     public void setModel(NonEditableTableModel model) {
         this.model = model;
     }
+
+	public JButton getBtnAdd() {
+		return btnAdd;
+	}
+
+	public void setBtnAdd(JButton btnAdd) {
+		this.btnAdd = btnAdd;
+	}
+    
 }

@@ -60,6 +60,20 @@ public class ProductoDTO {
 		this.costoProducto = costoProducto;
 		this.precioProducto = precioProducto;
 		this.nombreProveedor = nombreProveedor;
+		
+		
+	}
+
+	public ProductoDTO(String nombreProducto, String marcaProducto, int stockProducto, float costoProducto,
+			float precioProducto, int idProveedor, String nombreProveedor) {
+		super();
+		this.nombreProducto = nombreProducto;
+		this.marcaProducto = marcaProducto;
+		this.stockProducto = stockProducto;
+		this.costoProducto = costoProducto;
+		this.precioProducto = precioProducto;
+		this.idProveedor = idProveedor;
+		this.nombreProveedor = nombreProveedor;
 	}
 
 	public int getIdProducto() {
@@ -130,9 +144,11 @@ public class ProductoDTO {
 	public String toString() {
 		return "ProductoDTO [idProducto=" + idProducto + ", nombreProducto=" + nombreProducto + ", marcaProducto="
 				+ marcaProducto + ", stockProducto=" + stockProducto + ", costoProducto=" + costoProducto
-				+ ", precioProducto=" + precioProducto + ", idProveedor=" + idProveedor + "]";
+				+ ", precioProducto=" + precioProducto + ", idProveedor=" + idProveedor + ", nombreProveedor="
+				+ nombreProveedor + "]";
 	}
-	
+
+
 	
 	
 }

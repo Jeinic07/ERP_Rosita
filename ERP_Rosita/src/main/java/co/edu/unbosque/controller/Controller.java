@@ -6,10 +6,15 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import com.google.protobuf.StringValue;
+import com.google.protobuf.StringValueOrBuilder;
+
 import co.edu.unbosque.model.ProductoDTO;
 import co.edu.unbosque.model.ProveedorDTO;
+import co.edu.unbosque.model.persistence.DetalleVentaDAO;
 import co.edu.unbosque.model.persistence.ProductoDAO;
 import co.edu.unbosque.model.persistence.ProveedorDAO;
+import co.edu.unbosque.model.persistence.VentaDAO;
 import co.edu.unbosque.view.MainWindow;
 
 public class Controller implements ActionListener {
@@ -17,11 +22,15 @@ public class Controller implements ActionListener {
 	private MainWindow mw;
 	private ProveedorDAO provDao;
 	private ProductoDAO producDao;
+	private VentaDAO venDao;
+	private DetalleVentaDAO dvDao;
 
 	public Controller() {
 		mw = new MainWindow();
 		provDao = new ProveedorDAO();
 		producDao = new ProductoDAO();
+		venDao = new VentaDAO();
+		dvDao = new DetalleVentaDAO();
 		addListeners();
 
 	}
@@ -64,10 +73,21 @@ public class Controller implements ActionListener {
 
 		mw.getIp().getBtnX().addActionListener(this);
 		mw.getIp().getBtnX().setActionCommand("Cerrar");
-		
+
 		mw.getPp().getBtnMinus().addActionListener(this);
 		mw.getPp().getBtnMinus().setActionCommand("Minus");
 		
+		mw.getIp().getBtnAdd().addActionListener(this);
+		mw.getIp().getBtnAdd().setActionCommand("invAdd");
+		
+		//Botones ProductoNuevoWindow
+		mw.getPnw().getBtnBack().addActionListener(this);
+		mw.getPnw().getBtnBack().setActionCommand("newProducBack");
+		
+		mw.getPnw().getBtnDone().addActionListener(this);
+		mw.getPnw().getBtnDone().setActionCommand("newProducAdd");
+		
+
 		// BOtones ProveedoresPanel
 		mw.getPp().getBtnBack().addActionListener(this);
 		mw.getPp().getBtnBack().setActionCommand("provBack");
@@ -80,13 +100,12 @@ public class Controller implements ActionListener {
 
 		mw.getPp().getBtnDelete().addActionListener(this);
 		mw.getPp().getBtnDelete().setActionCommand("provDelete");
-		
+
 		mw.getPp().getBtnX().addActionListener(this);
 		mw.getPp().getBtnX().setActionCommand("Cerrar");
-		
+
 		mw.getPp().getBtnMinus().addActionListener(this);
 		mw.getPp().getBtnMinus().setActionCommand("Minus");
-
 
 		// Botones ProveedorNuevoWindow
 		mw.getPw().getBtnAdd().addActionListener(this);
@@ -94,8 +113,8 @@ public class Controller implements ActionListener {
 
 		mw.getPw().getBtnBack().addActionListener(this);
 		mw.getPw().getBtnBack().setActionCommand("newProvBack");
-		
-		//Botones ProveedorEditarWindow
+
+		// Botones ProveedorEditarWindow
 		mw.getPew().getBtnConfirm().addActionListener(this);
 		mw.getPew().getBtnConfirm().setActionCommand("editProvConfirm");
 
@@ -108,10 +127,10 @@ public class Controller implements ActionListener {
 
 		mw.getVp().getBtnNuevaVenta().addActionListener(this);
 		mw.getVp().getBtnNuevaVenta().setActionCommand("venAdd");
-		
+
 		mw.getVp().getBtnX().addActionListener(this);
 		mw.getVp().getBtnX().setActionCommand("Cerrar");
-		
+
 		mw.getVp().getBtnMinus().addActionListener(this);
 		mw.getVp().getBtnMinus().setActionCommand("Minus");
 
@@ -122,6 +141,9 @@ public class Controller implements ActionListener {
 		mw.getVw().getBtnBack().addActionListener(this);
 		mw.getVw().getBtnBack().setActionCommand("newVenBack");
 
+		mw.getVw().getBtnDone().addActionListener(this);
+		mw.getVw().getBtnDone().setActionCommand("newVenDone");
+
 		// Botones ComprasPanel
 		mw.getCp().getBtnBack().addActionListener(this);
 		mw.getCp().getBtnBack().setActionCommand("comBack");
@@ -130,6 +152,8 @@ public class Controller implements ActionListener {
 		mw.getGp().getBtnBack().addActionListener(this);
 		mw.getGp().getBtnBack().setActionCommand("gasBack");
 	}
+
+	private static int idVenta;
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -143,24 +167,17 @@ public class Controller implements ActionListener {
 			mw.getIp().setVisible(true);
 
 			producDao.readAll();
-			
-			for(ProductoDTO p : producDao.getProductos()) {
-				Object row[] = { 
-						p.getIdProducto(), 
-						p.getNombreProducto(),
-						p.getMarcaProducto(),
-						p.getStockProducto(),
-						p.getCostoProducto(),
-						p.getPrecioProducto(),
-						p.getNombreProveedor(),
-				};
+
+			for (ProductoDTO p : producDao.getProductos()) {
+				Object row[] = { p.getIdProducto(), p.getNombreProducto(), p.getMarcaProducto(), p.getStockProducto(),
+						p.getCostoProducto(), p.getPrecioProducto(), p.getNombreProveedor(), };
 				mw.getIp().getModel().addRow(row);
 			}
 
 			break;
 		}
 
-		//cambios
+		// cambios
 		case "Ventas": {
 			mw.getOp().setVisible(false);
 			mw.getVp().setVisible(true);
@@ -178,24 +195,24 @@ public class Controller implements ActionListener {
 			mw.getGp().setVisible(true);
 			break;
 		}
-		
+
 		case "Consulta": {
 			mw.getOpi().setVisible(true);
 			break;
-			
+
 		}
-		
-		case "OptOk":{
+
+		case "OptOk": {
 			mw.getOpi().setVisible(false);
 			break;
 		}
-		
-		case "Cerrar":{
+
+		case "Cerrar": {
 			System.exit(0);
 			break;
 		}
-		
-		case "Minus":{
+
+		case "Minus": {
 			mw.setState(JFrame.ICONIFIED);
 			break;
 		}
@@ -204,7 +221,6 @@ public class Controller implements ActionListener {
 		case "invBack": {
 			mw.getOp().setVisible(true);
 			mw.getIp().setVisible(false);
-			
 
 			mw.getIp().getModel().setRowCount(0);
 			break;
@@ -213,20 +229,62 @@ public class Controller implements ActionListener {
 		case "invProveedores": {
 			mw.getIp().setVisible(false);
 			mw.getPp().setVisible(true);
-			
+
 			provDao.readAll();
 
 			for (ProveedorDTO p : provDao.getProveedores()) {
-				Object row[] = { 
-						p.getIdProveedor(), 
-						p.getNombreProveedor(),
-						p.getTipoDocumentoProveedor(),
-						p.getDocumentoProveedor(), 
-						p.getTelefonoProveedor(),
-						p.getDireccionProveedor()
-				};
+				Object row[] = { p.getIdProveedor(), p.getNombreProveedor(), p.getTipoDocumentoProveedor(),
+						p.getDocumentoProveedor(), p.getTelefonoProveedor(), p.getDireccionProveedor() };
 				mw.getPp().getModel().addRow(row);
 			}
+			break;
+		}
+		
+		case "invAdd":{
+			mw.getPnw().setVisible(true);
+			
+			producDao.readAll();
+			
+			for(ProductoDTO p : producDao.getProductos()) {
+				mw.getPnw().getItems().add(p.getIdProveedor()+ " - "+ p.getNombreProveedor());
+			}
+			System.out.println(mw.getPnw().getItems().toString());
+			mw.getPnw().getTxtProveedor().setSuggestions(mw.getPnw().getItems());
+			
+			break;
+		}
+		
+		case "newProducBack":{
+			mw.getPnw().setVisible(false);
+			break;
+		}
+		
+		case "newProducAdd":{
+			
+			String nombre = mw.getPnw().getTxtNombre().getText();
+			String marca = mw.getPnw().getTxtMarca().getText();
+			String costo = mw.getPnw().getTxtCosto().getText();
+			String precio = mw.getPnw().getTxtPrecio().getText();
+			String proveedor = mw.getPnw().getTxtProveedor().getText();
+			
+			producDao.create2(nombre, marca, "0", costo, precio, proveedor.split(" - ")[1]);
+			
+			producDao.readAll();
+			
+			ProductoDTO nuevoProducto = producDao.getProductos().get(producDao.getProductos().size() - 1);
+			System.out.println(nuevoProducto.toString());
+			mw.getIp().getModel()
+					.addRow(new Object[] { nuevoProducto.getIdProducto(), nuevoProducto.getNombreProducto(),
+							nuevoProducto.getMarcaProducto(), nuevoProducto.getStockProducto(),
+							nuevoProducto.getCostoProducto(), nuevoProducto.getPrecioProducto(),
+							nuevoProducto.getNombreProveedor() });
+
+			mw.getPnw().getTxtNombre().setText("");
+			mw.getPnw().getTxtMarca().setText("");
+			mw.getPnw().getTxtCosto().setText("");
+			mw.getPnw().getTxtPrecio().setText("");
+			mw.getPnw().getTxtProveedor().setText("");			
+
 			break;
 		}
 
@@ -235,7 +293,7 @@ public class Controller implements ActionListener {
 		case "provBack": {
 			mw.getPp().setVisible(false);
 			mw.getIp().setVisible(true);
-			
+
 			mw.getPp().getModel().setRowCount(0);
 			break;
 		}
@@ -244,30 +302,34 @@ public class Controller implements ActionListener {
 			break;
 		}
 
-		case "provEdit":
-		    try {
-		        int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
+		case "provEdit": {
+			mw.getPew().setVisible(true);
 
-		        // Verifica si se ha seleccionado alguna fila
-		        if (selectedRow == -1) {
-		            throw new Exception("No se ha seleccionado ningún proveedor para editar.");
-		        }
+			int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
+			int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
 
-		        // Obtiene el ID y los datos del proveedor seleccionado
-		        int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
+			mw.getPew().getTxtNombre().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 1));
+			mw.getPew().getTxtDocumento().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 3));
+			mw.getPew().getTxtTelefono().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 4));
+			mw.getPew().getTxtDireccion().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 5));
 
-		        // Carga los datos en los campos de edición en el panel 'Pew'
-		        mw.getPew().getTxtNombre().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 1));
-		        mw.getPew().getTxtDocumento().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 3));
-		        mw.getPew().getTxtTelefono().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 4));
-		        mw.getPew().getTxtDireccion().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 5));
+			break;
+		}
 
-		        // Muestra el panel de edición
-		        mw.getPew().setVisible(true);
-		    } catch (Exception ex) {
-		        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error de edición", JOptionPane.ERROR_MESSAGE);
-		    }
-		    break;
+		case "provDelete": {
+			int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
+
+			int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
+
+			provDao.deleteById(id);
+			if (JOptionPane.showConfirmDialog(mw, "Seguro que desea eliminarlo?") == 0) {
+				mw.getPp().getModel().removeRow(selectedRow);
+				System.out.println("Empleado eliminado correctamente");
+			}
+
+			break;
+		}
+
 		// Botones ProveedorNuevoAdd
 
 		case "newProvAdd": {
@@ -277,44 +339,17 @@ public class Controller implements ActionListener {
 			String documento = mw.getPw().getTxtDocumento().getText();
 			String telefono = mw.getPw().getTxtTelefono().getText();
 			String direccion = mw.getPw().getTxtDireccion().getText();
-			//Verificar si no hay algun campo vacio
-			if (nombre.isEmpty() || tipoDocumento == null || tipoDocumento.isEmpty() ||
-			        documento.isEmpty() || telefono.isEmpty() || direccion.isEmpty()) {
-			        JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos", "Error", JOptionPane.ERROR_MESSAGE);
-			        break; 
-			    }
-			 // Excepción para que el nombre solo contenga letras
-		    if (!nombre.matches("[a-zA-Z\\s]+")) {
-		        JOptionPane.showMessageDialog(null, "El nombre solo debe contener letras", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }
-		    
-		 // Excepción para que el teléfono solo contenga números
-		    if (!telefono.matches("\\d+")) {
-		        JOptionPane.showMessageDialog(null, "El teléfono solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }
 
-		    // Excepción para que el documento solo contenga números
-		    if (!documento.matches("\\d+")) {
-		        JOptionPane.showMessageDialog(null, "El documento solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }
-		    
 			provDao.create(nombre, tipoDocumento, documento, telefono, direccion);
-			
+
 			provDao.readAll();
-		    ProveedorDTO nuevoProveedor = provDao.getProveedores().get(provDao.getProveedores().size() - 1);
-		    
-			mw.getPp().getModel().addRow(new Object[] {
-			        nuevoProveedor.getIdProveedor(),
-			        nuevoProveedor.getNombreProveedor(),
-			        nuevoProveedor.getTipoDocumentoProveedor(),
-			        nuevoProveedor.getDocumentoProveedor(),
-			        nuevoProveedor.getTelefonoProveedor(),
-			        nuevoProveedor.getDireccionProveedor()
-			});
-			
+			ProveedorDTO nuevoProveedor = provDao.getProveedores().get(provDao.getProveedores().size() - 1);
+
+			mw.getPp().getModel()
+					.addRow(new Object[] { nuevoProveedor.getIdProveedor(), nuevoProveedor.getNombreProveedor(),
+							nuevoProveedor.getTipoDocumentoProveedor(), nuevoProveedor.getDocumentoProveedor(),
+							nuevoProveedor.getTelefonoProveedor(), nuevoProveedor.getDireccionProveedor() });
+
 			mw.getPw().getTxtNombre().setText("");
 			mw.getPw().getTxtDocumento().setText("");
 			mw.getPw().getTxtTelefono().setText("");
@@ -327,63 +362,40 @@ public class Controller implements ActionListener {
 			mw.getPw().setVisible(false);
 			break;
 		}
-		
-		//Botones ProveedorEditarWindow
+
+		// Botones ProveedorEditarWindow
 		case "editProvConfirm": {
-		    int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
+			int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
 
-		    // Verificar si hay una fila seleccionada
-		    if (selectedRow == -1) {
-		        JOptionPane.showMessageDialog(null, "Por favor, selecciona un proveedor para editar.");
-		        break;
-		    }
-
-		    int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
-		    
-		    String nombre = mw.getPew().getTxtNombre().getText();
-		    String tipoDocumento = (String) mw.getPew().getTxtTipoDocumento().getSelectedItem();
-		    String documento = mw.getPew().getTxtDocumento().getText();
-		    String telefono = mw.getPew().getTxtTelefono().getText();
-		    String direccion = mw.getPew().getTxtDireccion().getText();
-		    
-		    if (nombre.isEmpty() || tipoDocumento == null || tipoDocumento.isEmpty() ||
-			        documento.isEmpty() || telefono.isEmpty() || direccion.isEmpty()) {
-			        JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos", "Error", JOptionPane.ERROR_MESSAGE);
-			        break; 
+			// Verificar si hay una fila seleccionada
+			if (selectedRow == -1) {
+				JOptionPane.showMessageDialog(null, "Por favor, selecciona un proveedor para editar.");
+				break;
 			}
-		    // Excepción para que el nombre solo contenga letras
-		    if (!nombre.matches("[a-zA-Z\\s]+")) {
-		        JOptionPane.showMessageDialog(null, "El nombre solo debe contener letras", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }
-		    
-		 // Excepción para que el teléfono solo contenga números
-		    if (!telefono.matches("\\d+")) {
-		        JOptionPane.showMessageDialog(null, "El teléfono solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }
 
-		    // Excepción para que el documento solo contenga números
-		    if (!documento.matches("\\d+")) {
-		        JOptionPane.showMessageDialog(null, "El documento solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }		    
-		    
-		    provDao.updateById(id, nombre, tipoDocumento, documento, telefono, direccion);
-		    
-		    mw.getPp().getModel().setValueAt(nombre, selectedRow, 1);
-		    mw.getPp().getModel().setValueAt(tipoDocumento, selectedRow, 2);
-		    mw.getPp().getModel().setValueAt(documento, selectedRow, 3);
-		    mw.getPp().getModel().setValueAt(telefono, selectedRow, 4);
-		    mw.getPp().getModel().setValueAt(direccion, selectedRow, 5);
-		    
-		    JOptionPane.showMessageDialog(mw, "Empleado Editado correctamente");
+			int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
+
+			String nombre = mw.getPew().getTxtNombre().getText();
+			String tipoDocumento = (String) mw.getPew().getTxtTipoDocumento().getSelectedItem();
+			String documento = mw.getPew().getTxtDocumento().getText();
+			String telefono = mw.getPew().getTxtTelefono().getText();
+			String direccion = mw.getPew().getTxtDireccion().getText();
+
+			provDao.updateById(id, nombre, tipoDocumento, documento, telefono, direccion);
+
+			mw.getPp().getModel().setValueAt(nombre, selectedRow, 1);
+			mw.getPp().getModel().setValueAt(tipoDocumento, selectedRow, 2);
+			mw.getPp().getModel().setValueAt(documento, selectedRow, 3);
+			mw.getPp().getModel().setValueAt(telefono, selectedRow, 4);
+			mw.getPp().getModel().setValueAt(direccion, selectedRow, 5);
+
 			mw.getPew().setVisible(false);
+			JOptionPane.showMessageDialog(mw, "Empleado Editado correctamente");
 
-		    break;
+			break;
 		}
 
-		case "editProvBack":{
+		case "editProvBack": {
 			mw.getPew().setVisible(false);
 			break;
 		}
@@ -393,31 +405,55 @@ public class Controller implements ActionListener {
 			mw.getVp().setVisible(false);
 			break;
 		}
-		case "venAdd":{
-			mw.getVw().setVisible(true);
-			break;
-		}
-		
-		//Botones NuevaVentaWindow
-		case "newVenBack":{
-			mw.getVw().setVisible(false);
-			break;
-		}
-		
-		case "newVenAdd":{
-			String producto = mw.getVw().getTxtProducto().getText();
-	        int cantidad;
-	        double precio;
 
-	        try {
-	            cantidad = Integer.parseInt(mw.getVw().getTxtCantidad().getText());
-	            precio = Double.parseDouble(mw.getVw().getTxtPrecio().getText());
-	        } catch (NumberFormatException i) {
-	            JOptionPane.showMessageDialog(null, "Ingrese una cantidad y precio válidos.");
-	            return;
-	        }
-	        double subTotal = cantidad * precio;
-	        mw.getVw().getModel().addRow(new Object[]{producto, cantidad, precio, subTotal});
+		case "venAdd":
+
+			mw.getVw().setVisible(true);
+
+			producDao.readAll();
+			for (ProductoDTO item : producDao.getProductos()) {
+				mw.getVw().getItems().add((item.getIdProducto() + " - " + item.getNombreProducto()));
+			}
+			mw.getVw().getTxtProducto().setSuggestions(mw.getVw().getItems());
+			
+			
+			idVenta = venDao.create2(0f);
+
+			break;
+
+		// Botones VentaNuevaWindow
+		case "newVenAdd":
+
+			if (idVenta == -1) {
+				JOptionPane.showMessageDialog(null, "Error al crear la venta.");
+				return;
+			}
+
+			String producto = mw.getVw().getTxtProducto().getText();
+			String cantidad;
+			String precio;
+
+			try {
+				cantidad = mw.getVw().getTxtCantidad().getText();
+				precio = mw.getVw().getTxtPrecio().getText();
+			} catch (Exception i) {
+				JOptionPane.showMessageDialog(null, "Ingrese una cantidad y precio válidos.");
+				return;
+			}
+
+			float subTotal = Float.parseFloat(cantidad) * Float.parseFloat(precio);
+
+			dvDao.create(cantidad, precio, String.valueOf(subTotal), "3", String.valueOf(idVenta));
+
+			mw.getVw().getModel().addRow(new Object[] { producto, cantidad, precio, subTotal });
+			break;
+
+		case "newVenDone":
+
+			break;
+
+		case "newVenBack": {
+			mw.getVw().setVisible(false);
 			break;
 		}
 
