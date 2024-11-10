@@ -332,16 +332,13 @@ public class Controller implements ActionListener {
 	            throw new Exception("No se ha seleccionado ningún proveedor para editar.");
 	        }
 
-	        // Obtiene el ID y los datos del proveedor seleccionado
 	        int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
 
-	        // Carga los datos en los campos de edición en el panel 'Pew'
 	        mw.getPew().getTxtNombre().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 1));
 	        mw.getPew().getTxtDocumento().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 3));
 	        mw.getPew().getTxtTelefono().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 4));
 	        mw.getPew().getTxtDireccion().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 5));
 
-	        // Muestra el panel de edición
 	        mw.getPew().setVisible(true);
 	    } catch (Exception ex) {
 	        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error de edición", JOptionPane.ERROR_MESSAGE);
@@ -368,7 +365,6 @@ public class Controller implements ActionListener {
 		}
 
 		// Botones ProveedorNuevoAdd
-
 		case "newProvAdd": {
 
 			String nombre = mw.getPw().getTxtNombre().getText();
@@ -458,17 +454,18 @@ public class Controller implements ActionListener {
 		        break;
 		    }
 		    
+		 // Excepción para que el documento solo contenga números
+		    if (!documento.matches("\\d+")) {
+		        JOptionPane.showMessageDialog(null, "El documento solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
+		        break;
+		    }	
 		 // Excepción para que el teléfono solo contenga números
 		    if (!telefono.matches("\\d+")) {
 		        JOptionPane.showMessageDialog(null, "El teléfono solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
 		        break;
 		    }
 
-		    // Excepción para que el documento solo contenga números
-		    if (!documento.matches("\\d+")) {
-		        JOptionPane.showMessageDialog(null, "El documento solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }	
+		    
 		    // Verificar si se ha realizado algún cambio
 		    if (nombre.equals(nombreActual) && tipoDocumento.equals(tipoDocumentoActual) &&
 		        documento.equals(documentoActual) && telefono.equals(telefonoActual) && 
@@ -525,14 +522,12 @@ public class Controller implements ActionListener {
 		        return;
 		    }
 
-		    // Obtener el texto del campo de producto
 		    String producto = mw.getVw().getTxtProducto().getText();
 		    if (producto.isEmpty()) {
 		        JOptionPane.showMessageDialog(null, "El campo de producto no puede estar vacío.");
 		        return;
 		    }
 
-		    // Obtener los textos de cantidad y precio
 		    String cantidadStr = mw.getVw().getTxtCantidad().getText();
 		    String precioStr = mw.getVw().getTxtPrecio().getText();
 
@@ -572,13 +567,10 @@ public class Controller implements ActionListener {
 		        return;
 		    }
 
-		    // Calcular el subtotal
 		    float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(precioStr);
 
-		    // Llamar a la función para crear la venta
 		    dvDao.create(cantidadStr, precioStr, String.valueOf(subTotal), "3", String.valueOf(idVenta));
 
-		    // Agregar la fila a la tabla
 		    mw.getVw().getModel().addRow(new Object[] { producto, cantidadStr, precioStr, subTotal });
 
 		    break;
@@ -624,14 +616,12 @@ public class Controller implements ActionListener {
 		        return;
 		    }
 
-		    // Obtener el texto del campo de producto
 		    String producto = mw.getCnp().getTxtProducto().getText();
 		    if (producto.isEmpty()) {
 		        JOptionPane.showMessageDialog(null, "El campo de producto no puede estar vacío.");
 		        return;
 		    }
 
-		    // Obtener los textos de cantidad y precio
 		    String cantidadStr = mw.getCnp().getTxtCantidad().getText();
 		    String precioStr = mw.getCnp().getTxtPrecio().getText();
 
@@ -671,13 +661,10 @@ public class Controller implements ActionListener {
 		        return;
 		    }
 
-		    // Calcular el subtotal
 		    float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(precioStr);
 
-		    // Llamar a la función para crear la compra
 		    dcDao.create(cantidadStr, precioStr, String.valueOf(subTotal), "3", String.valueOf(idCompra));
 
-		    // Agregar la fila a la tabla
 		    mw.getCnp().getModel().addRow(new Object[] { producto, cantidadStr, precioStr, subTotal });
 
 		    break;
