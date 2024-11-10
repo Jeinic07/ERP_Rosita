@@ -25,7 +25,7 @@ public class ProveedoresPanel extends JPanel {
 		panel.setBounds(0, 0, 800, 600);
 		panel.setLayout(null);
 
-		String[] columnNames = { "ID", "Nombre", "Tipo Documento", "Documento", "Direccion", "Telefono" };
+		String[] columnNames = { "ID", "Nombre", "Tipo Documento", "Documento", "Telefono", "Direccion" };
 
 		model = new NonEditableTableModel(columnNames, 0);
 

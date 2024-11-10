@@ -51,13 +51,14 @@ public class DetalleCompraDAO implements OperationsDAO{
 		dbcon.initConnection();
 		try {
 			dbcon.setPrepareStatement(dbcon.getConnect().prepareStatement("INSERT INTO DetalleCompra "
-					+ "(cantidadDC, costoUnitarioDC, subtotalDC, idCompra,idProducto)" + "VALUES (?,?,?,?,?)"));
+					+ "(cantidadDC, costoUnitarioDC, subtotalDC, idProducto,idCompra)" + "VALUES (?,?,?,?,?)"));
 
 			dbcon.getPrepareStatement().setInt(1, newDc.getCantidadDC());
-			dbcon.getPrepareStatement().setFloat(2, newDc.getPrecioUnitarioDC());
+			dbcon.getPrepareStatement().setFloat(2, newDc.getcostoUnitarioDC());
 			dbcon.getPrepareStatement().setFloat(3, newDc.getSubtotalDC());
-			dbcon.getPrepareStatement().setInt(4, newDc.getIdCompraDC());
-			dbcon.getPrepareStatement().setInt(5, newDc.getIdProductoDC());
+			dbcon.getPrepareStatement().setInt(4, newDc.getIdProductoDC());
+			dbcon.getPrepareStatement().setInt(5, newDc.getIdCompraDC());
+			
 			
 
 			dbcon.getPrepareStatement().executeUpdate();
