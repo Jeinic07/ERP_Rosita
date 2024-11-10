@@ -66,6 +66,7 @@ public class VentaDAO implements OperationsDAO {
 		ventas.add(newVenta);
 		return 0;
 	}
+	
 	public int create2(float total) {
 	    int idVenta = -1;  
 	    VentaDTO newVenta = new VentaDTO(LocalDate.now(), LocalTime.now().truncatedTo(ChronoUnit.SECONDS), total);
@@ -97,7 +98,7 @@ public class VentaDAO implements OperationsDAO {
 	    }
 	    
 	    ventas.add(newVenta);
-	    return idVenta;  // Devolver el ID de la venta generada
+	    return idVenta;  
 	}
 
 
@@ -107,7 +108,7 @@ public class VentaDAO implements OperationsDAO {
 
 		try {
 			dbcon.setStatement(dbcon.getConnect().createStatement());
-			dbcon.setResultSet(dbcon.getStatement().executeQuery("SELECT * FROM Venta;"));
+			dbcon.setResultSet(dbcon.getStatement().executeQuery("SELECT * FROM Venta"));
 
 			while (dbcon.getResultSet().next()) {
 				int id = dbcon.getResultSet().getInt("idVenta");

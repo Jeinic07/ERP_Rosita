@@ -9,15 +9,14 @@ import javax.swing.RowFilter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import com.google.protobuf.StringValue;
-import com.google.protobuf.StringValueOrBuilder;
-
+import co.edu.unbosque.model.GastoDTO;
 import co.edu.unbosque.model.Login;
 import co.edu.unbosque.model.ProductoDTO;
 import co.edu.unbosque.model.ProveedorDTO;
 import co.edu.unbosque.model.persistence.CompraDAO;
 import co.edu.unbosque.model.persistence.DetalleCompraDAO;
 import co.edu.unbosque.model.persistence.DetalleVentaDAO;
+import co.edu.unbosque.model.persistence.GastoDAO;
 import co.edu.unbosque.model.persistence.ProductoDAO;
 import co.edu.unbosque.model.persistence.ProveedorDAO;
 import co.edu.unbosque.model.persistence.VentaDAO;
@@ -35,11 +34,12 @@ public class Controller implements ActionListener {
 	private DetalleVentaDAO dvDao;
 	private CompraDAO comDao;
 	private DetalleCompraDAO dcDao;
+	private GastoDAO gdao;
 	private Login l;
 	private LoginPreguntaPanel lpp;
 
 	public Controller() {
-		
+
 		l = new Login();
 		lp = new LoginPanel();
 		lpp = new LoginPreguntaPanel();
@@ -50,6 +50,7 @@ public class Controller implements ActionListener {
 		dvDao = new DetalleVentaDAO();
 		comDao = new CompraDAO();
 		dcDao = new DetalleCompraDAO();
+		gdao = new GastoDAO();
 		addListeners();
 
 	}
@@ -59,10 +60,10 @@ public class Controller implements ActionListener {
 		// Botones LoginPanel
 		lp.getBtnIngresar().addActionListener(this);
 		lp.getBtnIngresar().setActionCommand("Ingresar");
-		
+
 		lp.getBtnOlvidoContra().addActionListener(this);
 		lp.getBtnOlvidoContra().setActionCommand("OlvContra");
-		
+
 		lpp.getBtnValidar().addActionListener(this);
 		lpp.getBtnValidar().setActionCommand("Validar");
 		// Botones OptionPanel
@@ -95,17 +96,16 @@ public class Controller implements ActionListener {
 
 		mw.getIp().getBtnAdd().addActionListener(this);
 		mw.getIp().getBtnAdd().setActionCommand("invAdd");
-		
+
 		mw.getIp().getBtnBusqueda().addActionListener(this);
 		mw.getIp().getBtnBusqueda().setActionCommand("invBus");
-		
-		//Botones ProductoNuevoWindow
+
+		// Botones ProductoNuevoWindow
 		mw.getPnw().getBtnBack().addActionListener(this);
 		mw.getPnw().getBtnBack().setActionCommand("newProducBack");
-		
+
 		mw.getPnw().getBtnDone().addActionListener(this);
 		mw.getPnw().getBtnDone().setActionCommand("newProducAdd");
-		
 
 		// BOtones ProveedoresPanel
 		mw.getPp().getBtnBack().addActionListener(this);
@@ -116,8 +116,8 @@ public class Controller implements ActionListener {
 
 		mw.getPp().getBtnBusqueda().addActionListener(this);
 		mw.getPp().getBtnBusqueda().setActionCommand("provBus");
-		//aca jijijiji
-		
+		// aca jijijiji
+
 		mw.getPp().getBtnEdit().addActionListener(this);
 		mw.getPp().getBtnEdit().setActionCommand("provEdit");
 
@@ -175,8 +175,18 @@ public class Controller implements ActionListener {
 		// Botones GastosPanel
 		mw.getGp().getBtnBack().addActionListener(this);
 		mw.getGp().getBtnBack().setActionCommand("gasBack");
-		
-		
+
+		mw.getGp().getBtnAdd().addActionListener(this);
+		mw.getGp().getBtnAdd().setActionCommand("gasAdd");
+
+		// Botones GastoNuevoWindos
+
+		mw.getGnw().getBtnBack().addActionListener(this);
+		mw.getGnw().getBtnBack().setActionCommand("gnwBack");
+
+		mw.getGnw().getBtnAdd().addActionListener(this);
+		mw.getGnw().getBtnAdd().setActionCommand("gnwAdd");
+
 	}
 
 	private static int idVenta;
@@ -189,47 +199,45 @@ public class Controller implements ActionListener {
 		switch (e.getActionCommand()) {
 
 		// Botones Login
-		
+
 		case "Ingresar": {
-			
-			
-		    String userName = lp.getTxtUser().getText();
-		    String contraseña = lp.getTxtContra().getText();
-		    
-		    if (Login.validarCredenciales(userName, contraseña)) {
-		        JOptionPane.showMessageDialog(null, "Ingreso exitoso");
-		        mw.setVisible(true);
-		        lp.setVisible(false);
-		    } else {
-		        JOptionPane.showMessageDialog(null, "Credenciales incorrectas");
-		    }
-		    break;
+
+			String userName = lp.getTxtUser().getText();
+			String contraseña = lp.getTxtContra().getText();
+
+			if (Login.validarCredenciales(userName, contraseña)) {
+				JOptionPane.showMessageDialog(null, "Ingreso exitoso");
+				mw.setVisible(true);
+				lp.setVisible(false);
+			} else {
+				JOptionPane.showMessageDialog(null, "Credenciales incorrectas");
+			}
+			break;
 		}
-		
+
 		case "OlvContra": {
-		    lp.setVisible(false);
-		    lpp.setVisible(true);
-		    break;
+			lp.setVisible(false);
+			lpp.setVisible(true);
+			break;
 		}
-		
+
 		// Botones LoginPanelPregunta
-		
+
 		case "Validar": {
 			String respuestaUsuario = lpp.getTxtRta().getText(); // Obtener la respuesta ingresada
 
-		    if (Login.validarRespuestaSeguridad(respuestaUsuario)) {
-		        JOptionPane.showMessageDialog(null, "Respuesta correcta");
-		        mw.setVisible(true); // Puede ser la siguiente pantalla o acción a realizar
-		        lp.setVisible(false); // Ocultamos la pantalla de ingreso
-		    } else {
-		        JOptionPane.showMessageDialog(null, "Respuesta incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
-		    }
-		    break;
+			if (Login.validarRespuestaSeguridad(respuestaUsuario)) {
+				JOptionPane.showMessageDialog(null, "Respuesta correcta");
+				mw.setVisible(true); // Puede ser la siguiente pantalla o acción a realizar
+				lp.setVisible(false); // Ocultamos la pantalla de ingreso
+			} else {
+				JOptionPane.showMessageDialog(null, "Respuesta incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+			break;
 		}
 
 		// Botones OptionPanel
-		
-		
+
 		case "Inventario": {
 			mw.getOp().setVisible(false);
 			mw.getIp().setVisible(true);
@@ -255,12 +263,21 @@ public class Controller implements ActionListener {
 		case "Compras": {
 			mw.getOp().setVisible(false);
 			mw.getCp().setVisible(true);
+
 			break;
 		}
 
 		case "Gastos": {
 			mw.getOp().setVisible(false);
 			mw.getGp().setVisible(true);
+
+			gdao.readAll();
+
+			for (GastoDTO g : gdao.getGastos()) {
+				Object row[] = { g.getIdGasto(), g.getFechaGasto(), g.getHoraGasto(), g.getDescipcionGasto(),
+						g.getValorGasto() };
+				mw.getGp().getModel().addRow(row);
+			}
 			break;
 		}
 
@@ -295,25 +312,26 @@ public class Controller implements ActionListener {
 		}
 		case "invBus": {
 			System.out.println("pepepepenenneneen");
-		    String textoBuscar = mw.getIp().getTxtBusqueda().getText().toLowerCase();
-		    		// Convertir el texto a minúsculas para que la búsqueda sea insensible al caso
+			String textoBuscar = mw.getIp().getTxtBusqueda().getText().toLowerCase();
+			// Convertir el texto a minúsculas para que la búsqueda sea insensible al caso
 
-		    if (textoBuscar.isEmpty()) {
-		        JOptionPane.showMessageDialog(null, "Por favor, ingresa un nombre para buscar.");
-		        return;
-		    }
+			if (textoBuscar.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Por favor, ingresa un nombre para buscar.");
+				return;
+			}
 
-		    // Obtener el modelo de la tabla de proveedores
-		    TableModel modelInventario = mw.getIp().getTableInventario().getModel();
+			// Obtener el modelo de la tabla de proveedores
+			TableModel modelInventario = mw.getIp().getTableInventario().getModel();
 
-		    // Filtrar las filas de la tabla
-		    TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelInventario);
-		    mw.getIp().getTableInventario().setRowSorter(sorter);
+			// Filtrar las filas de la tabla
+			TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelInventario);
+			mw.getIp().getTableInventario().setRowSorter(sorter);
 
-		    // Configuración del filtro
-		    RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + textoBuscar, 1); // 1 es el índice de la columna "Nombre"
-		    sorter.setRowFilter(rf);
-		    break;
+			// Configuración del filtro
+			RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + textoBuscar, 1); // 1 es el índice de la
+																								// columna "Nombre"
+			sorter.setRowFilter(rf);
+			break;
 		}
 
 		case "invProveedores": {
@@ -329,38 +347,38 @@ public class Controller implements ActionListener {
 			}
 			break;
 		}
-		
-		case "invAdd":{
+
+		case "invAdd": {
 			mw.getPnw().setVisible(true);
-			
+
 			producDao.readAll();
-			
-			for(ProductoDTO p : producDao.getProductos()) {
-				mw.getPnw().getItems().add(p.getIdProveedor()+ " - "+ p.getNombreProveedor());
+
+			for (ProductoDTO p : producDao.getProductos()) {
+				mw.getPnw().getItems().add(p.getIdProveedor() + " - " + p.getNombreProveedor());
 			}
 			System.out.println(mw.getPnw().getItems().toString());
 			mw.getPnw().getTxtProveedor().setSuggestions(mw.getPnw().getItems());
-			
+
 			break;
 		}
-		
-		case "newProducBack":{
+
+		case "newProducBack": {
 			mw.getPnw().setVisible(false);
 			break;
 		}
-		
-		case "newProducAdd":{
-			
+
+		case "newProducAdd": {
+
 			String nombre = mw.getPnw().getTxtNombre().getText();
 			String marca = mw.getPnw().getTxtMarca().getText();
 			String costo = mw.getPnw().getTxtCosto().getText();
 			String precio = mw.getPnw().getTxtPrecio().getText();
 			String proveedor = mw.getPnw().getTxtProveedor().getText();
-			
+
 			producDao.create2(nombre, marca, "0", costo, precio, proveedor.split(" - ")[1]);
-			
+
 			producDao.readAll();
-			
+
 			ProductoDTO nuevoProducto = producDao.getProductos().get(producDao.getProductos().size() - 1);
 			System.out.println(nuevoProducto.toString());
 			mw.getIp().getModel()
@@ -373,7 +391,7 @@ public class Controller implements ActionListener {
 			mw.getPnw().getTxtMarca().setText("");
 			mw.getPnw().getTxtCosto().setText("");
 			mw.getPnw().getTxtPrecio().setText("");
-			mw.getPnw().getTxtProveedor().setText("");			
+			mw.getPnw().getTxtProveedor().setText("");
 
 			break;
 		}
@@ -382,25 +400,26 @@ public class Controller implements ActionListener {
 
 		case "provBus": {
 			System.out.println("pepepepenenneneen");
-		    String textoBuscar = mw.getPp().getTxtBusqueda().getText().toLowerCase();
-		    		// Convertir el texto a minúsculas para que la búsqueda sea insensible al caso
+			String textoBuscar = mw.getPp().getTxtBusqueda().getText().toLowerCase();
+			// Convertir el texto a minúsculas para que la búsqueda sea insensible al caso
 
-		    if (textoBuscar.isEmpty()) {
-		        JOptionPane.showMessageDialog(null, "Por favor, ingresa un nombre para buscar.");
-		        return;
-		    }
+			if (textoBuscar.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Por favor, ingresa un nombre para buscar.");
+				return;
+			}
 
-		    // Obtener el modelo de la tabla de proveedores
-		    TableModel modelProveedores = mw.getPp().getTableProveedores().getModel();
+			// Obtener el modelo de la tabla de proveedores
+			TableModel modelProveedores = mw.getPp().getTableProveedores().getModel();
 
-		    // Filtrar las filas de la tabla
-		    TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelProveedores);
-		    mw.getPp().getTableProveedores().setRowSorter(sorter);
+			// Filtrar las filas de la tabla
+			TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelProveedores);
+			mw.getPp().getTableProveedores().setRowSorter(sorter);
 
-		    // Configuración del filtro
-		    RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + textoBuscar, 1); // 1 es el índice de la columna "Nombre"
-		    sorter.setRowFilter(rf);
-		    break;
+			// Configuración del filtro
+			RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + textoBuscar, 1); // 1 es el índice de la
+																								// columna "Nombre"
+			sorter.setRowFilter(rf);
+			break;
 		}
 		case "provBack": {
 			mw.getPp().setVisible(false);
@@ -414,35 +433,42 @@ public class Controller implements ActionListener {
 			break;
 		}
 
-		case "provEdit": try {
-	        int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
+		case "provEdit":
+			try {
+				int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
 
-	        // Verifica si se ha seleccionado alguna fila
-	        if (selectedRow == -1) {
-	            throw new Exception("No se ha seleccionado ningún proveedor para editar.");
-	        }
+				// Verifica si se ha seleccionado alguna fila
+				if (selectedRow == -1) {
+					throw new Exception("No se ha seleccionado ningún proveedor para editar.");
+				}
 
-	        int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
+				int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
 
-	        mw.getPew().getTxtNombre().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 1));
-	        mw.getPew().getTxtDocumento().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 3));
-	        mw.getPew().getTxtTelefono().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 4));
-	        mw.getPew().getTxtDireccion().setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 5));
+				mw.getPew().getTxtNombre()
+						.setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 1));
+				mw.getPew().getTxtDocumento()
+						.setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 3));
+				mw.getPew().getTxtTelefono()
+						.setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 4));
+				mw.getPew().getTxtDireccion()
+						.setText((String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 5));
 
-	        mw.getPew().setVisible(true);
-	    } catch (Exception ex) {
-	        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error de edición", JOptionPane.ERROR_MESSAGE);
-	    }
-	    break;
+				mw.getPew().setVisible(true);
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error de edición",
+						JOptionPane.ERROR_MESSAGE);
+			}
+			break;
 
-		case "provDelete":{
-			  int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
+		case "provDelete": {
+			int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
 
-			    // Verifica si se ha seleccionado alguna fila
-			    if (selectedRow == -1) {
-			        JOptionPane.showMessageDialog(mw, "No se ha seleccionado ningún proveedor para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
-			        break; // Termina el proceso si no se selecciona una fila
-			    }
+			// Verifica si se ha seleccionado alguna fila
+			if (selectedRow == -1) {
+				JOptionPane.showMessageDialog(mw, "No se ha seleccionado ningún proveedor para eliminar.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				break; // Termina el proceso si no se selecciona una fila
+			}
 			int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
 
 			provDao.deleteById(id);
@@ -463,30 +489,30 @@ public class Controller implements ActionListener {
 			String telefono = mw.getPw().getTxtTelefono().getText();
 			String direccion = mw.getPw().getTxtDireccion().getText();
 
-			//Verificar si no hay algun campo vacio
-			if (nombre.isEmpty() || tipoDocumento == null || tipoDocumento.isEmpty() ||
-			        documento.isEmpty() || telefono.isEmpty() || direccion.isEmpty()) {
-			        JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos", "Error", JOptionPane.ERROR_MESSAGE);
-			        break; 
-			    }
-			 // Excepción para que el nombre solo contenga letras
-		    if (!nombre.matches("[a-zA-Z\\s]+")) {
-		        JOptionPane.showMessageDialog(null, "El nombre solo debe contener letras", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }
-		    
-		    // Excepción para que el teléfono solo contenga números
-		    if (!telefono.matches("\\d+")) {
-		        JOptionPane.showMessageDialog(null, "El teléfono solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }
+			if (nombre.isEmpty() || tipoDocumento == null || tipoDocumento.isEmpty() || documento.isEmpty()
+					|| telefono.isEmpty() || direccion.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				break;
+			}
+			if (!nombre.matches("[a-zA-Z\\s]+")) {
+				JOptionPane.showMessageDialog(null, "El nombre solo debe contener letras", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				break;
+			}
 
-		    // Excepción para que el documento solo contenga números
-		    if (!documento.matches("\\d+")) {
-		        JOptionPane.showMessageDialog(null, "El documento solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }
-		    
+			if (!telefono.matches("\\d+")) {
+				JOptionPane.showMessageDialog(null, "El teléfono solo debe contener números", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				break;
+			}
+
+			if (!documento.matches("\\d+")) {
+				JOptionPane.showMessageDialog(null, "El documento solo debe contener números", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				break;
+			}
+
 			provDao.create(nombre, tipoDocumento, documento, telefono, direccion);
 
 			provDao.readAll();
@@ -514,68 +540,72 @@ public class Controller implements ActionListener {
 		case "editProvConfirm": {
 			int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
 			if (selectedRow == -1) {
-			    JOptionPane.showMessageDialog(null, "Por favor, selecciona un proveedor para editar.");
-			    break;
+				JOptionPane.showMessageDialog(null, "Por favor, selecciona un proveedor para editar.");
+				break;
 			}
 
-		    int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
-		    
-		 // Obtener los valores actuales de la tabla para ahorita comparar con los existentes y verificar si se hizo un cambio
-		    String nombreActual = (String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 1);
-		    String tipoDocumentoActual = (String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 2);
-		    String documentoActual = (String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 3);
-		    String telefonoActual = (String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 4);
-		    String direccionActual = (String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 5);
+			int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
 
-		    String nombre = mw.getPew().getTxtNombre().getText();
-		    String tipoDocumento = (String) mw.getPew().getTxtTipoDocumento().getSelectedItem();
-		    String documento = mw.getPew().getTxtDocumento().getText();
-		    String telefono = mw.getPew().getTxtTelefono().getText();
-		    String direccion = mw.getPew().getTxtDireccion().getText();
-		    
-		    if (nombre.isEmpty() || tipoDocumento == null || tipoDocumento.isEmpty() ||
-			        documento.isEmpty() || telefono.isEmpty() || direccion.isEmpty()) {
-			        JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos", "Error", JOptionPane.ERROR_MESSAGE);
-			        break; 
+			// Obtener los valores actuales de la tabla para ahorita comparar con los
+			// existentes y verificar si se hizo un cambio
+			String nombreActual = (String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 1);
+			String tipoDocumentoActual = (String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 2);
+			String documentoActual = (String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 3);
+			String telefonoActual = (String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 4);
+			String direccionActual = (String) mw.getPp().getTableProveedores().getValueAt(selectedRow, 5);
+
+			String nombre = mw.getPew().getTxtNombre().getText();
+			String tipoDocumento = (String) mw.getPew().getTxtTipoDocumento().getSelectedItem();
+			String documento = mw.getPew().getTxtDocumento().getText();
+			String telefono = mw.getPew().getTxtTelefono().getText();
+			String direccion = mw.getPew().getTxtDireccion().getText();
+
+			if (nombre.isEmpty() || tipoDocumento == null || tipoDocumento.isEmpty() || documento.isEmpty()
+					|| telefono.isEmpty() || direccion.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				break;
 			}
-		    // Excepción para que el nombre solo contenga letras
-		    if (!nombre.matches("[a-zA-Z\\s]+")) {
-		        JOptionPane.showMessageDialog(null, "El nombre solo debe contener letras", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }
-		    
-		 // Excepción para que el documento solo contenga números
-		    if (!documento.matches("\\d+")) {
-		        JOptionPane.showMessageDialog(null, "El documento solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }	
-		 // Excepción para que el teléfono solo contenga números
-		    if (!telefono.matches("\\d+")) {
-		        JOptionPane.showMessageDialog(null, "El teléfono solo debe contener números", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }
+			// Excepción para que el nombre solo contenga letras
+			if (!nombre.matches("[a-zA-Z\\s]+")) {
+				JOptionPane.showMessageDialog(null, "El nombre solo debe contener letras", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				break;
+			}
 
-		    
-		    // Verificar si se ha realizado algún cambio
-		    if (nombre.equals(nombreActual) && tipoDocumento.equals(tipoDocumentoActual) &&
-		        documento.equals(documentoActual) && telefono.equals(telefonoActual) && 
-		        direccion.equals(direccionActual)) {
-		        JOptionPane.showMessageDialog(null, "No se ha editado nada", "Error", JOptionPane.ERROR_MESSAGE);
-		        break;
-		    }
-		    
-		    provDao.updateById(id, nombre, tipoDocumento, documento, telefono, direccion);
-		    
-		    mw.getPp().getModel().setValueAt(nombre, selectedRow, 1);
-		    mw.getPp().getModel().setValueAt(tipoDocumento, selectedRow, 2);
-		    mw.getPp().getModel().setValueAt(documento, selectedRow, 3);
-		    mw.getPp().getModel().setValueAt(telefono, selectedRow, 4);
-		    mw.getPp().getModel().setValueAt(direccion, selectedRow, 5);
-		    
-		    JOptionPane.showMessageDialog(mw, "Empleado Editado correctamente");
+			// Excepción para que el documento solo contenga números
+			if (!documento.matches("\\d+")) {
+				JOptionPane.showMessageDialog(null, "El documento solo debe contener números", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				break;
+			}
+			// Excepción para que el teléfono solo contenga números
+			if (!telefono.matches("\\d+")) {
+				JOptionPane.showMessageDialog(null, "El teléfono solo debe contener números", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				break;
+			}
+
+			// Verificar si se ha realizado algún cambio
+			if (nombre.equals(nombreActual) && tipoDocumento.equals(tipoDocumentoActual)
+					&& documento.equals(documentoActual) && telefono.equals(telefonoActual)
+					&& direccion.equals(direccionActual)) {
+				JOptionPane.showMessageDialog(null, "No se ha editado nada", "Error", JOptionPane.ERROR_MESSAGE);
+				break;
+			}
+
+			provDao.updateById(id, nombre, tipoDocumento, documento, telefono, direccion);
+
+			mw.getPp().getModel().setValueAt(nombre, selectedRow, 1);
+			mw.getPp().getModel().setValueAt(tipoDocumento, selectedRow, 2);
+			mw.getPp().getModel().setValueAt(documento, selectedRow, 3);
+			mw.getPp().getModel().setValueAt(telefono, selectedRow, 4);
+			mw.getPp().getModel().setValueAt(direccion, selectedRow, 5);
+
+			JOptionPane.showMessageDialog(mw, "Empleado Editado correctamente");
 			mw.getPew().setVisible(false);
 
-		    break;
+			break;
 		}
 
 		case "editProvBack": {
@@ -589,7 +619,7 @@ public class Controller implements ActionListener {
 			break;
 		}
 
-		case "venAdd":{
+		case "venAdd": {
 
 			mw.getVw().setVisible(true);
 
@@ -598,8 +628,7 @@ public class Controller implements ActionListener {
 				mw.getVw().getItems().add((item.getIdProducto() + " - " + item.getNombreProducto()));
 			}
 			mw.getVw().getTxtProducto().setSuggestions(mw.getVw().getItems());
-			
-			
+
 			idVenta = venDao.create2(0f);
 
 			break;
@@ -607,66 +636,64 @@ public class Controller implements ActionListener {
 		// Botones VentaNuevaWindow
 		case "newVenAdd": {
 
-		    if (idVenta == -1) {
-		        JOptionPane.showMessageDialog(null, "Error al crear la venta.");
-		        return;
-		    }
+			if (idVenta == -1) {
+				JOptionPane.showMessageDialog(null, "Error al crear la venta.");
+				return;
+			}
 
-		    String producto = mw.getVw().getTxtProducto().getText();
-		    if (producto.isEmpty()) {
-		        JOptionPane.showMessageDialog(null, "El campo de producto no puede estar vacío.");
-		        return;
-		    }
+			String producto = mw.getVw().getTxtProducto().getText();
+			if (producto.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "El campo de producto no puede estar vacío.");
+				return;
+			}
 
-		    String cantidadStr = mw.getVw().getTxtCantidad().getText();
-		    String precioStr = mw.getVw().getTxtPrecio().getText();
+			String cantidadStr = mw.getVw().getTxtCantidad().getText();
+			String precioStr = mw.getVw().getTxtPrecio().getText();
 
-		    // Validar que la cantidad no esté vacía
-		    if (cantidadStr.isEmpty()) {
-		        JOptionPane.showMessageDialog(null, "El campo de cantidad no puede estar vacío.");
-		        return;
-		    }
+			// Validar que la cantidad no esté vacía
+			if (cantidadStr.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "El campo de cantidad no puede estar vacío.");
+				return;
+			}
 
-		    // Validar que el precio no esté vacío
-		    if (precioStr.isEmpty()) {
-		        JOptionPane.showMessageDialog(null, "El campo de precio no puede estar vacío.");
-		        return;
-		    }
+			// Validar que el precio no esté vacío
+			if (precioStr.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "El campo de precio no puede estar vacío.");
+				return;
+			}
 
-		    // Validar que la cantidad sea un número válido
-		    try {
-		        float cantidad = Float.parseFloat(cantidadStr);
-		        if (cantidad <= 0) {
-		            JOptionPane.showMessageDialog(null, "La cantidad debe ser un número mayor a cero.");
-		            return;
-		        }
-		    } catch (NumberFormatException e1) {
-		        JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida (solo números).");
-		        return;
-		    }
+			// Validar que la cantidad sea un número válido
+			try {
+				float cantidad = Float.parseFloat(cantidadStr);
+				if (cantidad <= 0) {
+					JOptionPane.showMessageDialog(null, "La cantidad debe ser un número mayor a cero.");
+					return;
+				}
+			} catch (NumberFormatException e1) {
+				JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida (solo números).");
+				return;
+			}
 
-		    // Validar que el precio sea un número válido
-		    try {
-		        float precio = Float.parseFloat(precioStr);
-		        if (precio <= 0) {
-		            JOptionPane.showMessageDialog(null, "El precio debe ser un número mayor a cero.");
-		            return;
-		        }
-		    } catch (NumberFormatException e1) {
-		        JOptionPane.showMessageDialog(null, "Ingrese un precio válido (solo números).");
-		        return;
-		    }
+			// Validar que el precio sea un número válido
+			try {
+				float precio = Float.parseFloat(precioStr);
+				if (precio <= 0) {
+					JOptionPane.showMessageDialog(null, "El precio debe ser un número mayor a cero.");
+					return;
+				}
+			} catch (NumberFormatException e1) {
+				JOptionPane.showMessageDialog(null, "Ingrese un precio válido (solo números).");
+				return;
+			}
 
-		    float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(precioStr);
+			float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(precioStr);
 
-		    dvDao.create(cantidadStr, precioStr, String.valueOf(subTotal), "3", String.valueOf(idVenta));
+			dvDao.create(cantidadStr, precioStr, String.valueOf(subTotal), "3", String.valueOf(idVenta));
 
-		    mw.getVw().getModel().addRow(new Object[] { producto, cantidadStr, precioStr, subTotal });
+			mw.getVw().getModel().addRow(new Object[] { producto, cantidadStr, precioStr, subTotal });
 
-		    break;
+			break;
 		}
-
-
 
 		case "newVenDone":
 
@@ -692,72 +719,71 @@ public class Controller implements ActionListener {
 				mw.getCnp().getItems().add((item.getIdProducto() + " - " + item.getNombreProducto()));
 			}
 			mw.getCnp().getTxtProducto().setSuggestions(mw.getCnp().getItems());
-			
-			
+
 			idCompra = comDao.create2(0f);
 
 			break;
 		// Botones NuevaCompraWindow
 		case "newComAdd": {
 
-		    System.out.println("pene");
-		    if (idCompra == -1) {
-		        JOptionPane.showMessageDialog(null, "Error al crear la compra.");
-		        return;
-		    }
+			System.out.println("pene");
+			if (idCompra == -1) {
+				JOptionPane.showMessageDialog(null, "Error al crear la compra.");
+				return;
+			}
 
-		    String producto = mw.getCnp().getTxtProducto().getText();
-		    if (producto.isEmpty()) {
-		        JOptionPane.showMessageDialog(null, "El campo de producto no puede estar vacío.");
-		        return;
-		    }
+			String producto = mw.getCnp().getTxtProducto().getText();
+			if (producto.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "El campo de producto no puede estar vacío.");
+				return;
+			}
 
-		    String cantidadStr = mw.getCnp().getTxtCantidad().getText();
-		    String precioStr = mw.getCnp().getTxtPrecio().getText();
+			String cantidadStr = mw.getCnp().getTxtCantidad().getText();
+			String precioStr = mw.getCnp().getTxtPrecio().getText();
 
-		    // Validar que la cantidad no esté vacía
-		    if (cantidadStr.isEmpty()) {
-		        JOptionPane.showMessageDialog(null, "El campo de cantidad no puede estar vacío.");
-		        return;
-		    }
+			// Validar que la cantidad no esté vacía
+			if (cantidadStr.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "El campo de cantidad no puede estar vacío.");
+				return;
+			}
 
-		    // Validar que el precio no esté vacío
-		    if (precioStr.isEmpty()) {
-		        JOptionPane.showMessageDialog(null, "El campo de precio no puede estar vacío.");
-		        return;
-		    }
+			// Validar que el precio no esté vacío
+			if (precioStr.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "El campo de precio no puede estar vacío.");
+				return;
+			}
 
-		    // Validar que la cantidad sea un número válido
-		    try {
-		        float cantidad = Float.parseFloat(cantidadStr);
-		        if (cantidad <= 0) {
-		            JOptionPane.showMessageDialog(null, "La cantidad debe ser un número mayor a cero.");
-		            return;
-		        }
-		    } catch (NumberFormatException e1) {
-		        JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida (solo números).");
-		        return;
-		    }
+			// Validar que la cantidad sea un número válido
+			try {
+				float cantidad = Float.parseFloat(cantidadStr);
+				if (cantidad <= 0) {
+					JOptionPane.showMessageDialog(null, "La cantidad debe ser un número mayor a cero.");
+					return;
+				}
+			} catch (NumberFormatException e1) {
+				JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida (solo números).");
+				return;
+			}
 
-		    // Validar que el precio sea un número válido
-		    try {
-		        float precio = Float.parseFloat(precioStr);
-		        if (precio <= 0) {
-		            JOptionPane.showMessageDialog(null, "El precio debe ser un número mayor a cero.");
-		            return;
-		        }
-		    } catch (NumberFormatException e1) {
-		        JOptionPane.showMessageDialog(null, "Ingrese un precio válido (solo números).");
-		        return;
-		    }
+			// Validar que el precio sea un número válido
+			try {
+				float precio = Float.parseFloat(precioStr);
+				if (precio <= 0) {
+					JOptionPane.showMessageDialog(null, "El precio debe ser un número mayor a cero.");
+					return;
+				}
+			} catch (NumberFormatException e1) {
+				JOptionPane.showMessageDialog(null, "Ingrese un precio válido (solo números).");
+				return;
+			}
 
-		    float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(precioStr);
+			float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(precioStr);
 
-		    dcDao.create(cantidadStr, precioStr, String.valueOf(subTotal), "3", String.valueOf(idCompra));
+			dcDao.create(cantidadStr, precioStr, String.valueOf(subTotal), "3", String.valueOf(idCompra));
 
-		    mw.getCnp().getModel().addRow(new Object[] { producto, cantidadStr, precioStr, subTotal });
+			mw.getCnp().getModel().addRow(new Object[] { producto, cantidadStr, precioStr, subTotal });
 
-		    break;
+			break;
 		}
 		case "newComDone":
 
@@ -768,15 +794,41 @@ public class Controller implements ActionListener {
 			break;
 		}
 
-
 		// Botones GastosPanel
 		case "gasBack": {
 			mw.getOp().setVisible(true);
 			mw.getGp().setVisible(false);
+			
+			mw.getGp().getModel().setRowCount(0);
 			break;
 		}
-		
-		
+		case "gasAdd": {
+			mw.getGnw().setVisible(true);
+			break;
+		}
+
+		// Botones GastoNuevoWindow
+
+		case "gnwBack": {
+			mw.getGnw().setVisible(false);
+			break;
+		}
+
+		case "gnwAdd": {
+			String descripcion = mw.getGnw().getTxtDescripcion().getText();
+			String valor = mw.getGnw().getTxtValor().getText();
+
+			gdao.create(descripcion, valor);
+			GastoDTO nuevoGasto = gdao.getGastos().get(gdao.getGastos().size() - 1);
+
+			mw.getGp().getModel()
+			.addRow(new Object[] { nuevoGasto.getIdGasto(), nuevoGasto.getFechaGasto(),
+					nuevoGasto.getHoraGasto(), nuevoGasto.getDescipcionGasto(), nuevoGasto.getValorGasto()});
+			System.out.println("Gasto añadido :D");
+			
+			break;
+		}
+
 		}
 	}
 

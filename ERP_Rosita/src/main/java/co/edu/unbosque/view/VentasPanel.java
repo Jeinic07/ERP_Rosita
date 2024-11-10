@@ -26,7 +26,7 @@ public class VentasPanel extends JPanel {
         panel.setBounds(0, 0, 800, 600);  // Ajustar tamaño del panel
         panel.setLayout(null);
 		
-        String[] columnNames = {"N. Factura", "Fecha", "Total"};
+        String[] columnNames = {"No. Factura", "Fecha", "Hora", "Total"};
         
 		model = new DefaultTableModel(columnNames, 0);
 		
