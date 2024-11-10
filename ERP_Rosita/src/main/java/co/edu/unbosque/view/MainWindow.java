@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 
 public class MainWindow extends JFrame{
 
+	private LoginPanel lp;
 	private OptionPanel op;
 	private OptionPanelInfo opi;
 	private InventarioPanel ip;
@@ -50,8 +51,19 @@ public class MainWindow extends JFrame{
 		add(gp);
 		add(pp);
 		
-		setVisible(true);
+		setVisible(false);
 	}
+	
+
+	public LoginPanel getLp() {
+		return lp;
+	}
+
+
+	public void setLp(LoginPanel lp) {
+		this.lp = lp;
+	}
+
 
 	public OptionPanel getOp() {
 		return op;

@@ -30,8 +30,7 @@ public class CompraNuevaWindow extends JFrame {
 	private JScrollPane scroll;
 	private DefaultTableModel model;
 	private AutoTextField txtProducto;
-	private JTextField txtCantidad;
-	private JTextField txtPrecio;
+	private JTextField txtCantidad, txtPrecio;
 	private ArrayList<String> items;
 
 	public CompraNuevaWindow() {
