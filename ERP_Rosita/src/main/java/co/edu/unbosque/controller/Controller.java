@@ -12,6 +12,7 @@ import javax.swing.table.TableRowSorter;
 import com.google.protobuf.StringValue;
 import com.google.protobuf.StringValueOrBuilder;
 
+import co.edu.unbosque.model.Login;
 import co.edu.unbosque.model.ProductoDTO;
 import co.edu.unbosque.model.ProveedorDTO;
 import co.edu.unbosque.model.persistence.CompraDAO;
@@ -20,10 +21,13 @@ import co.edu.unbosque.model.persistence.DetalleVentaDAO;
 import co.edu.unbosque.model.persistence.ProductoDAO;
 import co.edu.unbosque.model.persistence.ProveedorDAO;
 import co.edu.unbosque.model.persistence.VentaDAO;
+import co.edu.unbosque.view.LoginPanel;
+import co.edu.unbosque.view.LoginPreguntaPanel;
 import co.edu.unbosque.view.MainWindow;
 
 public class Controller implements ActionListener {
 
+	private LoginPanel lp;
 	private MainWindow mw;
 	private ProveedorDAO provDao;
 	private ProductoDAO producDao;
@@ -31,8 +35,14 @@ public class Controller implements ActionListener {
 	private DetalleVentaDAO dvDao;
 	private CompraDAO comDao;
 	private DetalleCompraDAO dcDao;
+	private Login l;
+	private LoginPreguntaPanel lpp;
 
 	public Controller() {
+		
+		l = new Login();
+		lp = new LoginPanel();
+		lpp = new LoginPreguntaPanel();
 		mw = new MainWindow();
 		provDao = new ProveedorDAO();
 		producDao = new ProductoDAO();
@@ -46,6 +56,15 @@ public class Controller implements ActionListener {
 
 	public void addListeners() {
 
+		// Botones LoginPanel
+		lp.getBtnIngresar().addActionListener(this);
+		lp.getBtnIngresar().setActionCommand("Ingresar");
+		
+		lp.getBtnOlvidoContra().addActionListener(this);
+		lp.getBtnOlvidoContra().setActionCommand("OlvContra");
+		
+		lpp.getBtnValidar().addActionListener(this);
+		lpp.getBtnValidar().setActionCommand("Validar");
 		// Botones OptionPanel
 		mw.getOp().getBtnInventario().addActionListener(this);
 		mw.getOp().getBtnInventario().setActionCommand("Inventario");
@@ -193,7 +212,48 @@ public class Controller implements ActionListener {
 
 		switch (e.getActionCommand()) {
 
+		// Botones Login
+		
+		case "Ingresar": {
+			
+			
+		    String userName = lp.getTxtUser().getText();
+		    String contraseña = lp.getTxtContra().getText();
+		    
+		    if (Login.validarCredenciales(userName, contraseña)) {
+		        JOptionPane.showMessageDialog(null, "Ingreso exitoso");
+		        mw.setVisible(true);
+		        lp.setVisible(false);
+		    } else {
+		        JOptionPane.showMessageDialog(null, "Credenciales incorrectas");
+		    }
+		    break;
+		}
+		
+		case "OlvContra": {
+		    lp.setVisible(false);
+		    lpp.setVisible(true);
+		    break;
+		}
+		
+		// Botones LoginPanelPregunta
+		
+		case "Validar": {
+			String respuestaUsuario = lpp.getTxtRta().getText(); // Obtener la respuesta ingresada
+
+		    if (Login.validarRespuestaSeguridad(respuestaUsuario)) {
+		        JOptionPane.showMessageDialog(null, "Respuesta correcta");
+		        mw.setVisible(true); // Puede ser la siguiente pantalla o acción a realizar
+		        lp.setVisible(false); // Ocultamos la pantalla de ingreso
+		    } else {
+		        JOptionPane.showMessageDialog(null, "Respuesta incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+		    }
+		    break;
+		}
+
 		// Botones OptionPanel
+		
+		
 		case "Inventario": {
 			mw.getOp().setVisible(false);
 			mw.getIp().setVisible(true);
