@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.google.protobuf.StringValue;
 import com.google.protobuf.StringValueOrBuilder;
@@ -86,6 +89,9 @@ public class Controller implements ActionListener {
 		mw.getIp().getBtnAdd().addActionListener(this);
 		mw.getIp().getBtnAdd().setActionCommand("invAdd");
 		
+		mw.getIp().getBtnBusqueda().addActionListener(this);
+		mw.getIp().getBtnBusqueda().setActionCommand("invBus");
+		
 		//Botones ProductoNuevoWindow
 		mw.getPnw().getBtnBack().addActionListener(this);
 		mw.getPnw().getBtnBack().setActionCommand("newProducBack");
@@ -101,6 +107,10 @@ public class Controller implements ActionListener {
 		mw.getPp().getBtnAdd().addActionListener(this);
 		mw.getPp().getBtnAdd().setActionCommand("provAdd");
 
+		mw.getPp().getBtnBusqueda().addActionListener(this);
+		mw.getPp().getBtnBusqueda().setActionCommand("provBus");
+		//aca jijijiji
+		
 		mw.getPp().getBtnEdit().addActionListener(this);
 		mw.getPp().getBtnEdit().setActionCommand("provEdit");
 
@@ -247,6 +257,28 @@ public class Controller implements ActionListener {
 			mw.getIp().getModel().setRowCount(0);
 			break;
 		}
+		case "invBus": {
+			System.out.println("pepepepenenneneen");
+		    String textoBuscar = mw.getIp().getTxtBusqueda().getText().toLowerCase();
+		    		// Convertir el texto a minúsculas para que la búsqueda sea insensible al caso
+
+		    if (textoBuscar.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "Por favor, ingresa un nombre para buscar.");
+		        return;
+		    }
+
+		    // Obtener el modelo de la tabla de proveedores
+		    TableModel modelInventario = mw.getIp().getTableInventario().getModel();
+
+		    // Filtrar las filas de la tabla
+		    TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelInventario);
+		    mw.getIp().getTableInventario().setRowSorter(sorter);
+
+		    // Configuración del filtro
+		    RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + textoBuscar, 1); // 1 es el índice de la columna "Nombre"
+		    sorter.setRowFilter(rf);
+		    break;
+		}
 
 		case "invProveedores": {
 			mw.getIp().setVisible(false);
@@ -312,6 +344,28 @@ public class Controller implements ActionListener {
 
 		// Botones ProveedoresPanel
 
+		case "provBus": {
+			System.out.println("pepepepenenneneen");
+		    String textoBuscar = mw.getPp().getTxtBusqueda().getText().toLowerCase();
+		    		// Convertir el texto a minúsculas para que la búsqueda sea insensible al caso
+
+		    if (textoBuscar.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "Por favor, ingresa un nombre para buscar.");
+		        return;
+		    }
+
+		    // Obtener el modelo de la tabla de proveedores
+		    TableModel modelProveedores = mw.getPp().getTableProveedores().getModel();
+
+		    // Filtrar las filas de la tabla
+		    TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelProveedores);
+		    mw.getPp().getTableProveedores().setRowSorter(sorter);
+
+		    // Configuración del filtro
+		    RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + textoBuscar, 1); // 1 es el índice de la columna "Nombre"
+		    sorter.setRowFilter(rf);
+		    break;
+		}
 		case "provBack": {
 			mw.getPp().setVisible(false);
 			mw.getIp().setVisible(true);

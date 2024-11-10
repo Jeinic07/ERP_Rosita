@@ -72,6 +72,7 @@ public class CompraNuevaWindow extends JFrame {
 		btnDone.setContentAreaFilled(false);
 		btnDone.setBorderPainted(false);
 
+		
 		items = new ArrayList<String>();
 
 		txtProducto = new AutoTextField();

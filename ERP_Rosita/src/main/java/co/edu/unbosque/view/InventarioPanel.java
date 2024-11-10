@@ -9,10 +9,11 @@ public class InventarioPanel extends JPanel {
 
     private Image imageBg;
     private JPanel panel;
-    private JButton btnBack, btnProveedores, btnX, btnMinus, btnPreg, btnAdd;
+    private JButton btnBack, btnProveedores, btnX, btnMinus, btnPreg, btnAdd, btnBusqueda;
     private JTable tableInventario;
     private JScrollPane scroll;
     private NonEditableTableModel model;
+    private JTextField txtBusqueda;
 
     public InventarioPanel() {
 
@@ -62,6 +63,11 @@ public class InventarioPanel extends JPanel {
 		btnMinus.setBorderPainted(false);
 		btnMinus.setFocusPainted(false);
 
+		btnBusqueda = new JButton("Buscar");
+		btnBusqueda.setBounds(100, 490, 133, 40);
+		btnBusqueda.setContentAreaFilled(true);
+		btnBusqueda.setBorderPainted(false);
+		btnBusqueda.setFocusPainted(false);
 
         btnProveedores = new JButton();
         btnProveedores.setBounds(606, 443, 133, 38);
@@ -71,7 +77,12 @@ public class InventarioPanel extends JPanel {
 
         btnAdd = new JButton("Agregar");
         btnAdd.setBounds(100, 443, 133, 38);
+        
+        txtBusqueda = new JTextField();
+		txtBusqueda.setBounds(250, 490, 133, 40);
 
+		panel.add(txtBusqueda);
+        panel.add(btnBusqueda);
         panel.add(btnAdd);
         panel.add(btnPreg);
         panel.add(btnMinus);
@@ -191,5 +202,22 @@ public class InventarioPanel extends JPanel {
 	public void setBtnAdd(JButton btnAdd) {
 		this.btnAdd = btnAdd;
 	}
+
+	public JButton getBtnBusqueda() {
+		return btnBusqueda;
+	}
+
+	public void setBtnBusqueda(JButton btnBusqueda) {
+		this.btnBusqueda = btnBusqueda;
+	}
+
+	public JTextField getTxtBusqueda() {
+		return txtBusqueda;
+	}
+
+	public void setTxtBusqueda(JTextField txtBusqueda) {
+		this.txtBusqueda = txtBusqueda;
+	}
+	
     
 }

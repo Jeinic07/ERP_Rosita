@@ -5,14 +5,17 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import co.edu.unbosque.view.VentaNuevaWindow.AutoTextField;
+
 public class ProveedoresPanel extends JPanel {
 
 	private JTable tableProveedores;
 	private JScrollPane scroll;
 	private JPanel panel;
+	private JTextField txtBusqueda;
 	private NonEditableTableModel model;
 	private Image imageBg;
-	private JButton btnAdd, btnEdit, btnBack,btnDelete, btnX, btnMinus, btnPreg;
+	private JButton btnAdd, btnEdit, btnBack,btnDelete, btnX, btnMinus, btnPreg, btnBusqueda;
 
 	public ProveedoresPanel() {
 
@@ -36,7 +39,15 @@ public class ProveedoresPanel extends JPanel {
 		scroll = new JScrollPane(tableProveedores);
 		scroll.setBounds(66, 169, 668, 263);
 		
+		txtBusqueda = new JTextField();
+		txtBusqueda.setBounds(340, 490, 133, 40);
 		 
+		btnBusqueda = new JButton("Buscar");
+		btnBusqueda.setBounds(179, 490, 133, 40);
+		btnBusqueda.setContentAreaFilled(true);
+		btnBusqueda.setBorderPainted(false);
+		btnBusqueda.setFocusPainted(false);
+        
 		btnBack = new JButton();
 		btnBack.setBounds(27, 17, 36, 36);
 		btnBack.setContentAreaFilled(false);
@@ -73,6 +84,8 @@ public class ProveedoresPanel extends JPanel {
 		btnMinus.setBorderPainted(false);
 		btnMinus.setFocusPainted(false);
         
+		panel.add(btnBusqueda);
+		panel.add(txtBusqueda);
 		panel.add(btnMinus);
 		panel.add(btnX);
 		panel.add(scroll);
@@ -110,6 +123,7 @@ public class ProveedoresPanel extends JPanel {
 	public JTable getTableProveedores() {
 		return tableProveedores;
 	}
+	
 
 	public void setTableProveedores(JTable tableProveedores) {
 		this.tableProveedores = tableProveedores;
@@ -202,5 +216,23 @@ public class ProveedoresPanel extends JPanel {
 	public void setBtnPreg(JButton btnPreg) {
 		this.btnPreg = btnPreg;
 	}
+
+	public JTextField getTxtBusqueda() {
+		return txtBusqueda;
+	}
+
+	public void setTxtBusqueda(JTextField txtBusqueda) {
+		this.txtBusqueda = txtBusqueda;
+	}
+
+	public JButton getBtnBusqueda() {
+		return btnBusqueda;
+	}
+
+	public void setBtnBusqueda(JButton btnBusqueda) {
+		this.btnBusqueda = btnBusqueda;
+	}
+	
+	
 	
 }
