@@ -16,6 +16,7 @@ public class MainWindow extends JFrame{
 	private ProveedorNuevoWindow pw;
 	private ProveedorEditarWindow pew;
 	private VentaNuevaWindow vw;
+	private CompraNuevaWindow cnp;
 	
 	
 	
@@ -32,6 +33,7 @@ public class MainWindow extends JFrame{
 		vw = new VentaNuevaWindow();
 		pew = new ProveedorEditarWindow();
 		pnw = new ProductoNuevoWindow();
+		cnp = new CompraNuevaWindow();
 		
 		setTitle("sisas");
 		setSize(800, 600);
@@ -138,8 +140,16 @@ public class MainWindow extends JFrame{
 	public void setPnw(ProductoNuevoWindow pnw) {
 		this.pnw = pnw;
 	}
-	
 
+	public CompraNuevaWindow getCnp() {
+		return cnp;
+	}
+
+	public void setCnp(CompraNuevaWindow cnp) {
+		this.cnp = cnp;
+	}
+	
+	
 	
 	
 }
