@@ -23,6 +23,10 @@ public class LoginPanel extends JFrame {
 		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 20, 20));
 		createCustomTitleBar();
 
+		ImageIcon icon = new ImageIcon(getClass().getResource("images/icono.png"));
+
+		setIconImage(icon.getImage());
+		
 		imageBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/Main.png").getImage();
 		panel = new PanelConFondo();
 		panel.setBounds(0, 0, 800, 600);

@@ -2,32 +2,36 @@ package co.edu.unbosque.view;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.table.*;
 
-public class GastosPanel extends JPanel{
-	
-	private JButton btnBack, btnAdd, btnInfo;
+public class GastosPanel extends JPanel {
+
+	private JButton btnBack, btnAdd, btnInfo, btnBusqueda;
 	private DefaultTableModel model;
 	private Image imagenBg;
+	private JTextField txtBusqueda;
 	private JPanel panel, titleBar;
 	private JTableHeader header;
 	private JTable tableGastos;
+	private LineBorder customBorder;
 	private JScrollPane scroll;
-	
+
 	public GastosPanel() {
 		setBounds(0, 0, 800, 600);
 		setLayout(null);
-		
+
 		imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/Gastos.png").getImage();
 
 		panel = new PanelConFondo();
 		panel.setBounds(0, 0, 800, 600); // Ajustar tamaño del panel
 		panel.setLayout(null);
-		
-	    String[] columnNames = {"No. Gasto", "Fecha", "Hora", "Descipción", "Total"};
-	    
+		customBorder = new LineBorder(Color.decode("#FFC581"), 2, true);
+
+		String[] columnNames = { "No. Gasto", "Fecha", "Hora", "Descipción", "Total" };
+
 		model = new NonEditableTableModel(columnNames, 0);
-		
+
 		tableGastos = new JTable(model);
 		tableGastos.setGridColor(Color.decode("#FFC581"));
 		tableGastos.setRowHeight(30);
@@ -36,44 +40,54 @@ public class GastosPanel extends JPanel{
 		tableGastos.getColumnModel().getColumn(0).setPreferredWidth(30);
 		tableGastos.getColumnModel().getColumn(3).setPreferredWidth(200);
 
+		txtBusqueda = new JTextField();
+		txtBusqueda.setBounds(527, 141, 167, 29);
+		txtBusqueda.setBorder(customBorder);
+		txtBusqueda.setBackground(Color.decode("#FFF9F3"));
 
 		header = tableGastos.getTableHeader();
 		header.setDefaultRenderer(new BubbleHeaderRenderer());
 		header.setPreferredSize(new Dimension(header.getWidth(), 35));
 		tableGastos.setDefaultRenderer(Object.class, new AlternateRowRenderer());
-		
+
 		scroll = new JScrollPane(tableGastos);
-		scroll.setBounds(80, 165, 668, 270);
+		scroll.setBounds(66, 182, 668, 263);
 		scroll.setOpaque(false);
 		scroll.getViewport().setOpaque(false);
 		scroll.setBorder(BorderFactory.createEmptyBorder());
-		
+
 		btnBack = new JButton();
 		btnBack.setBounds(39, 48, 36, 36);
 		btnBack.setContentAreaFilled(false);
-		btnBack.setBorderPainted(true);
-		
-		btnAdd= new JButton();
+		btnBack.setBorderPainted(false);
+
+		btnAdd = new JButton();
 		btnAdd.setBounds(319, 464, 162, 37);
 		btnAdd.setContentAreaFilled(false);
-		btnAdd.setBorderPainted(true);
+		btnAdd.setBorderPainted(false);
 
+		btnBusqueda = new JButton();
+		btnBusqueda.setBounds(694, 134, 36, 36);
+		btnBusqueda.setContentAreaFilled(false);
+		btnBusqueda.setBorderPainted(false);
+		btnBusqueda.setFocusPainted(false);
 
-		
-		btnInfo= new JButton();
+		btnInfo = new JButton();
 		btnInfo.setBounds(734, 547, 36, 36);
 		btnInfo.setContentAreaFilled(false);
-		btnInfo.setBorderPainted(true);
-		
+		btnInfo.setBorderPainted(false);
+
+		panel.add(txtBusqueda);
+		panel.add(btnBusqueda);
 		panel.add(btnInfo);
 		panel.add(btnBack);
 		panel.add(scroll);
 		panel.add(btnAdd);
 		add(panel);
-		
 
 		setVisible(false);
 	}
+
 	private class NonEditableTableModel extends DefaultTableModel {
 		public NonEditableTableModel(Object[] columnNames, int rowCount) {
 			super(columnNames, rowCount);
@@ -93,6 +107,7 @@ public class GastosPanel extends JPanel{
 			g.drawImage(imagenBg, 0, 0, getWidth(), getHeight(), this);
 		}
 	}
+
 	private static class BubbleHeaderRenderer extends DefaultTableCellRenderer {
 
 		public BubbleHeaderRenderer() {
@@ -143,7 +158,31 @@ public class GastosPanel extends JPanel{
 			return this;
 		}
 	}
-	
+
+	public JButton getBtnBusqueda() {
+		return btnBusqueda;
+	}
+
+	public void setBtnBusqueda(JButton btnBusqueda) {
+		this.btnBusqueda = btnBusqueda;
+	}
+
+	public JTextField getTxtBusqueda() {
+		return txtBusqueda;
+	}
+
+	public void setTxtBusqueda(JTextField txtBusqueda) {
+		this.txtBusqueda = txtBusqueda;
+	}
+
+	public LineBorder getCustomBorder() {
+		return customBorder;
+	}
+
+	public void setCustomBorder(LineBorder customBorder) {
+		this.customBorder = customBorder;
+	}
+
 	public JButton getBtnInfo() {
 		return btnInfo;
 	}

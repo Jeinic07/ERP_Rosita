@@ -3,6 +3,7 @@ package co.edu.unbosque.model.persistence;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import co.edu.unbosque.controller.DBConnection;
 import co.edu.unbosque.model.ProductoDTO;
@@ -189,6 +190,18 @@ public class ProductoDAO implements OperationsDAO {
 		}
 		return null;
 	}
+	
+	public List<ProductoDTO> getProductosBajoStock(int threshold) {
+	    List<ProductoDTO> productosBajoStock = new ArrayList<>();
+	    for (ProductoDTO producto : productos) {
+	        if (producto.getStockProducto() < threshold) {
+	            productosBajoStock.add(producto);
+	        }
+	    }
+	    return productosBajoStock;
+	}
+
+
 
 	@Override
 	public String readByName(String name) {

@@ -57,12 +57,12 @@ public class ComprasPanel extends JPanel {
 		btnInfo.setBorderPainted(false);
 
 		btnNuevaCompra = new JButton();
-		btnNuevaCompra.setBounds(319, 464, 162, 37);
+		btnNuevaCompra.setBounds(222, 464, 162, 37);
 		btnNuevaCompra.setContentAreaFilled(false);
 		btnNuevaCompra.setBorderPainted(false);
 		
-		btnDetails= new JButton("Detalles");
-		btnDetails.setBounds(500, 464, 162, 37);
+		btnDetails= new JButton();
+		btnDetails.setBounds(415, 464, 162, 37);
 		btnDetails.setContentAreaFilled(false);
 		btnDetails.setBorderPainted(true);
 

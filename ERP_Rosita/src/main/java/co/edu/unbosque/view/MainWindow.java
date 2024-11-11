@@ -31,7 +31,6 @@ public class MainWindow extends JFrame {
 	private JButton closeButton;
 	private VentaEnDetalle ved;
 	private CompraEnDetalle ced;
-	
 
 	public MainWindow() {
 
@@ -66,6 +65,9 @@ public class MainWindow extends JFrame {
 
 		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 20, 20));
 		createCustomTitleBar();
+
+		ImageIcon icon = new ImageIcon(getClass().getResource("images/icono.png"));
+		setIconImage(icon.getImage());
 
 		add(op);
 		add(ip);
@@ -137,10 +139,7 @@ public class MainWindow extends JFrame {
 		titleBar.add(closeButton);
 		add(titleBar);
 	}
-	
-	
 
-	
 	public InventarioPanelInfo getIpi() {
 		return ipi;
 	}
@@ -332,9 +331,5 @@ public class MainWindow extends JFrame {
 	public void setCed(CompraEnDetalle ced) {
 		this.ced = ced;
 	}
-
-
-	
-	
 
 }
