@@ -5,7 +5,7 @@ import java.time.LocalTime;
 
 public class VentaDTO {
 
-	private int idFechaVenta;
+	private int idVenta;
 	private LocalDate fechaVenta;
 	private LocalTime horaVenta;
 	private float totalVenta;
@@ -21,20 +21,22 @@ public class VentaDTO {
 		this.totalVenta = totalVenta;
 	}
 
-	public VentaDTO(int idFechaVenta, LocalDate fechaVenta, LocalTime horaVenta, float totalVenta) {
+	public VentaDTO(int idVenta, LocalDate fechaVenta, LocalTime horaVenta, float totalVenta) {
 		super();
-		this.idFechaVenta = idFechaVenta;
+		this.idVenta = idVenta;
 		this.fechaVenta = fechaVenta;
 		this.horaVenta = horaVenta;
 		this.totalVenta = totalVenta;
 	}
 
-	public int getIdFechaVenta() {
-		return idFechaVenta;
+
+
+	public int getIdVenta() {
+		return idVenta;
 	}
 
-	public void setIdFechaVenta(int idFechaVenta) {
-		this.idFechaVenta = idFechaVenta;
+	public void setIdVenta(int idVenta) {
+		this.idVenta = idVenta;
 	}
 
 	public LocalDate getFechaVenta() {
@@ -63,7 +65,7 @@ public class VentaDTO {
 
 	@Override
 	public String toString() {
-		return "VentaDTO [idFechaVenta=" + idFechaVenta + ", fechaVenta=" + fechaVenta + ", horaVenta=" + horaVenta
+		return "VentaDTO [idFechaVenta=" + idVenta + ", fechaVenta=" + fechaVenta + ", horaVenta=" + horaVenta
 				+ ", totalVenta=" + totalVenta + "]";
 	}
 	

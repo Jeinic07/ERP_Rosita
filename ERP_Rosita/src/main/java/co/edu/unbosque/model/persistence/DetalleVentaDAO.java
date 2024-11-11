@@ -66,13 +66,41 @@ public class DetalleVentaDAO implements OperationsDAO {
 
 	@Override
 	public String readAll() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
+	
+	public void readById(int id) {
+		dvs.clear();
+		dbcon.initConnection();
+		
+		try {
+			dbcon.setStatement(dbcon.getConnect().createStatement());
+			dbcon.setResultSet(dbcon.getStatement().executeQuery(
+					"SELECT p.nombreProducto, dv.cantidadDV, "
+					+ "dv.precioUnitarioDV, "
+					+ "dv.subTotalDV "
+					+ "FROM DetalleVenta dv "
+					+ "JOIN Producto p ON dv.idProductoDV = p.idProducto "
+					+ "WHERE dv.idVentaDV = " + id));
 
+			while(dbcon.getResultSet().next()) {
+				
+				String producto = dbcon.getResultSet().getString("p.nombreProducto");
+				int cantidad = dbcon.getResultSet().getInt("dv.cantidadDV");
+				float precio = dbcon.getResultSet().getFloat("dv.precioUnitarioDV");
+				float subtotal = dbcon.getResultSet().getFloat("dv.subtotalDV");
+				
+				dvs.add(new DetalleVentaDTO(producto, cantidad, precio, subtotal));
+			}
+			dbcon.closeConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public String readByName(String name) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

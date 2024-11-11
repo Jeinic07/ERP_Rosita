@@ -232,5 +232,7 @@ public class VentasPanel extends JPanel {
 	public void setTableVentas(JTable tableVentas) {
 		this.tableVentas = tableVentas;
 	}
+	
+	
 
 }

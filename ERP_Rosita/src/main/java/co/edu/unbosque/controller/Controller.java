@@ -9,10 +9,12 @@ import javax.swing.RowFilter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import co.edu.unbosque.model.DetalleVentaDTO;
 import co.edu.unbosque.model.GastoDTO;
 import co.edu.unbosque.model.Login;
 import co.edu.unbosque.model.ProductoDTO;
 import co.edu.unbosque.model.ProveedorDTO;
+import co.edu.unbosque.model.VentaDTO;
 import co.edu.unbosque.model.persistence.CompraDAO;
 import co.edu.unbosque.model.persistence.DetalleCompraDAO;
 import co.edu.unbosque.model.persistence.DetalleVentaDAO;
@@ -99,7 +101,7 @@ public class Controller implements ActionListener {
 
 		mw.getIp().getBtnBusqueda().addActionListener(this);
 		mw.getIp().getBtnBusqueda().setActionCommand("invBus");
-		
+
 		// boton Info
 
 		mw.getIp().getBtnPreg().addActionListener(this);
@@ -127,7 +129,7 @@ public class Controller implements ActionListener {
 
 		mw.getPp().getBtnDelete().addActionListener(this);
 		mw.getPp().getBtnDelete().setActionCommand("provDelete");
-		
+
 		// Boton info
 		mw.getPp().getBtnPreg().addActionListener(this);
 		mw.getPp().getBtnPreg().setActionCommand("ConsultaProveedores");
@@ -152,12 +154,14 @@ public class Controller implements ActionListener {
 
 		mw.getVp().getBtnNuevaVenta().addActionListener(this);
 		mw.getVp().getBtnNuevaVenta().setActionCommand("venAdd");
-		
-		//Boton Info
-		
+
+		mw.getVp().getBtnVerVenta().addActionListener(this);
+		mw.getVp().getBtnVerVenta().setActionCommand("venView");
+
+		// Boton Info
+
 		mw.getVp().getBtnPreg().addActionListener(this);
 		mw.getVp().getBtnPreg().setActionCommand("ConsultaVentas");
-		
 
 		// Botones VentaNuevaWindow
 		mw.getVw().getBtnAdd().addActionListener(this);
@@ -169,15 +173,19 @@ public class Controller implements ActionListener {
 		mw.getVw().getBtnDone().addActionListener(this);
 		mw.getVw().getBtnDone().setActionCommand("newVenDone");
 
+		// Botones VentaEnDetalle
+		mw.getVed().getBtnOk().addActionListener(this);
+		mw.getVed().getBtnOk().setActionCommand("detailVenOk");
+
 		// Botones ComprasPanel
 		mw.getCp().getBtnBack().addActionListener(this);
 		mw.getCp().getBtnBack().setActionCommand("comBack");
 
 		mw.getCp().getbtnNuevaCompra().addActionListener(this);
 		mw.getCp().getbtnNuevaCompra().setActionCommand("comAdd");
-		
-		//Boton Info
-		
+
+		// Boton Info
+
 		mw.getCp().getBtnInfo().addActionListener(this);
 		mw.getCp().getBtnInfo().setActionCommand("ConsultaCompras");
 
@@ -197,7 +205,7 @@ public class Controller implements ActionListener {
 
 		mw.getGp().getBtnAdd().addActionListener(this);
 		mw.getGp().getBtnAdd().setActionCommand("gasAdd");
-		
+
 		mw.getGp().getBtnInfo().addActionListener(this);
 		mw.getGp().getBtnInfo().setActionCommand("ConsultaGastos");
 
@@ -279,6 +287,13 @@ public class Controller implements ActionListener {
 		case "Ventas": {
 			mw.getOp().setVisible(false);
 			mw.getVp().setVisible(true);
+
+			venDao.readAll();
+
+			for (VentaDTO v : venDao.getVentas()) {
+				Object row[] = { v.getIdVenta(), v.getFechaVenta(), v.getHoraVenta(), v.getTotalVenta() };
+				mw.getVp().getModel().addRow(row);
+			}
 			break;
 		}
 
@@ -308,33 +323,31 @@ public class Controller implements ActionListener {
 			break;
 
 		}
-		
+
 		case "ConsultaInventario": {
 			mw.getIpi().setVisible(true);
 			break;
 		}
-		
+
 		case "ConsultaProveedores": {
 			mw.getPpi().setVisible(true);
 			break;
 		}
-		
+
 		case "ConsultaVentas": {
 			mw.getVpi().setVisible(true);
 			break;
 		}
-		
+
 		case "ConsultaCompras": {
 			mw.getCpi().setVisible(true);
 			break;
 		}
-		
+
 		case "ConsultaGastos": {
 			mw.getGpi().setVisible(true);
 			break;
 		}
-		
-		
 
 		case "OptOk": {
 			mw.getOpi().setVisible(false);
@@ -400,12 +413,11 @@ public class Controller implements ActionListener {
 		case "invAdd": {
 			mw.getPnw().setVisible(true);
 
-			producDao.readAll();
-
-			for (ProductoDTO p : producDao.getProductos()) {
+			provDao.readAll();
+			System.out.println(producDao.getProductos().toString());
+			for (ProveedorDTO p : provDao.getProveedores()) {
 				mw.getPnw().getItems().add(p.getIdProveedor() + " - " + p.getNombreProveedor());
 			}
-			System.out.println(mw.getPnw().getItems().toString());
 			mw.getPnw().getTxtProveedor().setSuggestions(mw.getPnw().getItems());
 
 			break;
@@ -665,9 +677,25 @@ public class Controller implements ActionListener {
 		case "venBack": {
 			mw.getOp().setVisible(true);
 			mw.getVp().setVisible(false);
+
+			mw.getVp().getModel().setRowCount(0);
 			break;
 		}
+		case "venView": {
+			int selectedRow = mw.getVp().getTableVentas().getSelectedRow();
 
+			int id = (Integer) mw.getVp().getTableVentas().getValueAt(selectedRow, 0);
+
+			dvDao.readById(id);
+			for (DetalleVentaDTO dv : dvDao.getDvs()) {
+				Object row[] = { dv.getNombreProducto(), dv.getCantidadDV(), dv.getPrecioUnitarioDV(),
+						dv.getSubtotalDV() };
+
+				mw.getVed().getModel().addRow(row);
+			}
+			mw.getVed().setVisible(true);
+			break;
+		}
 		case "venAdd": {
 
 			mw.getVw().setVisible(true);
@@ -682,6 +710,7 @@ public class Controller implements ActionListener {
 
 			break;
 		}
+
 		// Botones VentaNuevaWindow
 		case "newVenAdd": {
 
@@ -736,20 +765,46 @@ public class Controller implements ActionListener {
 			}
 
 			float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(precioStr);
+			String idProdcuto = mw.getVw().getTxtProducto().getText().split(" - ")[0];
 
-			dvDao.create(cantidadStr, precioStr, String.valueOf(subTotal), "3", String.valueOf(idVenta));
+			dvDao.create(cantidadStr, precioStr, String.valueOf(subTotal), idProdcuto, String.valueOf(idVenta));
 
 			mw.getVw().getModel().addRow(new Object[] { producto, cantidadStr, precioStr, subTotal });
 
+			mw.getVw().getTxtPrecio().setText("");
+			mw.getVw().getTxtCantidad().setText("");
+			mw.getVw().getTxtProducto().setText("");
+			
 			break;
 		}
 
-		case "newVenDone":
+		case "newVenDone": {
+			float totalVenta = venDao.getTotalByVentaId(idVenta);
+			venDao.updateTotalVentaById(idVenta, totalVenta);
+			venDao.readAll();
+			VentaDTO v = venDao.getVentas().get(venDao.getVentas().size() - 1);
+			mw.getVp().getModel()
+					.addRow(new Object[] { v.getIdVenta(), v.getFechaVenta(), v.getHoraVenta(), v.getTotalVenta() });
 
+			mw.getVw().setVisible(false);
+			
+			mw.getVw().getTxtPrecio().setText("");
+			mw.getVw().getTxtCantidad().setText("");
+			mw.getVw().getTxtProducto().setText("");
+			
+			mw.getVw().getModel().setRowCount(0);
 			break;
-
+		}
 		case "newVenBack": {
 			mw.getVw().setVisible(false);
+			mw.getVw().getModel().setRowCount(0);
+			break;
+		}
+
+		// Botones VentaEnDetalle
+		case "detailVenOk": {
+			mw.getVed().setVisible(false);
+			mw.getVed().getModel().setRowCount(0);
 			break;
 		}
 
@@ -847,7 +902,7 @@ public class Controller implements ActionListener {
 		case "gasBack": {
 			mw.getOp().setVisible(true);
 			mw.getGp().setVisible(false);
-			
+
 			mw.getGp().getModel().setRowCount(0);
 			break;
 		}
@@ -864,17 +919,18 @@ public class Controller implements ActionListener {
 		}
 
 		case "gnwAdd": {
+			System.out.println("pene");
 			String descripcion = mw.getGnw().getTxtDescripcion().getText();
 			String valor = mw.getGnw().getTxtValor().getText();
 
 			gdao.create(descripcion, valor);
+			gdao.readAll();
 			GastoDTO nuevoGasto = gdao.getGastos().get(gdao.getGastos().size() - 1);
 
-			mw.getGp().getModel()
-			.addRow(new Object[] { nuevoGasto.getIdGasto(), nuevoGasto.getFechaGasto(),
-					nuevoGasto.getHoraGasto(), nuevoGasto.getDescipcionGasto(), nuevoGasto.getValorGasto()});
+			mw.getGp().getModel().addRow(new Object[] { nuevoGasto.getIdGasto(), nuevoGasto.getFechaGasto(),
+					nuevoGasto.getHoraGasto(), nuevoGasto.getDescipcionGasto(), nuevoGasto.getValorGasto() });
 			System.out.println("Gasto añadido :D");
-			
+
 			break;
 		}
 

@@ -40,7 +40,7 @@ public class ProductoNuevoWindow extends JFrame {
 		btnBack.setBorderPainted(false);
 		
 		btnDone = new JButton("Hecho");
-		btnDone.setBounds(84, 312, 84, 40);
+		btnDone.setBounds(84, 380, 84, 40);
 		btnDone.setContentAreaFilled(false);
 		btnDone.setBorderPainted(false);
 		
@@ -59,7 +59,7 @@ public class ProductoNuevoWindow extends JFrame {
 		items = new ArrayList<>();
 
 		txtProveedor = new AutoTextField();
-		txtProveedor.setBounds(116, 257, 99, 25);
+		txtProveedor.setBounds(116, 257, 99, 100);
 		
 		add(btnBack);
 		add(btnDone);

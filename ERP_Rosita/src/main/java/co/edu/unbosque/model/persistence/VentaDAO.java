@@ -66,49 +66,89 @@ public class VentaDAO implements OperationsDAO {
 		ventas.add(newVenta);
 		return 0;
 	}
-	
+
 	public int create2(float total) {
-	    int idVenta = -1;  
-	    VentaDTO newVenta = new VentaDTO(LocalDate.now(), LocalTime.now().truncatedTo(ChronoUnit.SECONDS), total);
+		int idVenta = -1;
+		VentaDTO newVenta = new VentaDTO(LocalDate.now(), LocalTime.now().truncatedTo(ChronoUnit.SECONDS), total);
 
+		dbcon.initConnection();
+		try {
+
+			dbcon.setPrepareStatement(dbcon.getConnect().prepareStatement(
+					"INSERT INTO Venta(fechaVenta, horaVenta, totalVenta) VALUES(?, ?, ?)",
+					java.sql.Statement.RETURN_GENERATED_KEYS));
+
+			dbcon.getPrepareStatement().setDate(1, Date.valueOf(newVenta.getFechaVenta()));
+			dbcon.getPrepareStatement().setTime(2, Time.valueOf(newVenta.getHoraVenta()));
+			dbcon.getPrepareStatement().setFloat(3, newVenta.getTotalVenta());
+
+			dbcon.getPrepareStatement().executeUpdate();
+
+			try (ResultSet rs = dbcon.getPrepareStatement().getGeneratedKeys()) {
+				if (rs.next()) {
+					idVenta = rs.getInt(1);
+				}
+			}
+
+			dbcon.closeConnection();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		ventas.add(newVenta);
+		return idVenta;
+	}
+
+	public int updateTotalVentaById(int id, float newTotalVenta) {
+		dbcon.initConnection();
+
+		try {
+			dbcon.setPrepareStatement(
+					dbcon.getConnect().prepareStatement("UPDATE Venta SET totalVenta = ? WHERE idVenta = ?"));
+			dbcon.getPrepareStatement().setFloat(1, newTotalVenta);
+			dbcon.getPrepareStatement().setInt(2, id);
+
+			dbcon.getPrepareStatement().executeUpdate();
+			dbcon.closeConnection();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return 0; 
+	}
+	
+	public float getTotalByVentaId(int idVenta) {
 	    dbcon.initConnection();
+	    float totalSubtotal = 0;
+
 	    try {
-
 	        dbcon.setPrepareStatement(dbcon.getConnect()
-	                .prepareStatement("INSERT INTO Venta(fechaVenta, horaVenta, totalVenta) VALUES(?, ?, ?)",
-	                        java.sql.Statement.RETURN_GENERATED_KEYS));
-	        
-	        dbcon.getPrepareStatement().setDate(1, Date.valueOf(newVenta.getFechaVenta()));
-	        dbcon.getPrepareStatement().setTime(2, Time.valueOf(newVenta.getHoraVenta()));
-	        dbcon.getPrepareStatement().setFloat(3, newVenta.getTotalVenta());
+	                .prepareStatement("SELECT SUM(subTotalDV) AS totalSubtotal FROM DetalleVenta WHERE idVentaDV = ?"));
+	        dbcon.getPrepareStatement().setInt(1, idVenta);
 
-
-	        dbcon.getPrepareStatement().executeUpdate();
-
-	        try (ResultSet rs = dbcon.getPrepareStatement().getGeneratedKeys()) {
-	            if (rs.next()) {
-	                idVenta = rs.getInt(1);  
-	            }
+	        ResultSet rs = dbcon.getPrepareStatement().executeQuery();
+	        if (rs.next()) {
+	            totalSubtotal = rs.getFloat("totalSubtotal"); 
 	        }
-
 	        dbcon.closeConnection();
-
+	        
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
-	    
-	    ventas.add(newVenta);
-	    return idVenta;  
+
+	    return totalSubtotal; 
 	}
 
 
 	@Override
 	public String readAll() {
 		ventas.clear();
-
+		dbcon.initConnection();
 		try {
 			dbcon.setStatement(dbcon.getConnect().createStatement());
-			dbcon.setResultSet(dbcon.getStatement().executeQuery("SELECT * FROM Venta"));
+			dbcon.setResultSet(dbcon.getStatement().executeQuery("SELECT * FROM Venta WHERE totalVenta != 0"));
 
 			while (dbcon.getResultSet().next()) {
 				int id = dbcon.getResultSet().getInt("idVenta");

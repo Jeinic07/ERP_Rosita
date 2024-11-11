@@ -44,6 +44,7 @@ public class DetalleCompraDTO {
 		this.idProductoDC = idProductoDC;
 		this.idCompraDC = idCompraDC;
 	}
+	
 
 	public int getIdDC() {
 		return idDC;

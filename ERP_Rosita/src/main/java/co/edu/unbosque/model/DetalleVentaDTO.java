@@ -46,6 +46,17 @@ public class DetalleVentaDTO {
 		this.idProductoDV = idProductoDV;
 		this.idVentaDV = idVentaDV;
 	}
+	
+	
+
+	public DetalleVentaDTO(String nombreProducto, int cantidadDV, float precioUnitarioDV, float subtotalDV) {
+		super();
+		this.nombreProducto = nombreProducto;
+		this.cantidadDV = cantidadDV;
+		this.precioUnitarioDV = precioUnitarioDV;
+		this.subtotalDV = subtotalDV;
+
+	}
 
 	public int getIdDV() {
 		return idDV;

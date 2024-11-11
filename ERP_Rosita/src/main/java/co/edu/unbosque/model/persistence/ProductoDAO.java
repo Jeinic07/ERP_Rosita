@@ -66,24 +66,19 @@ public class ProductoDAO implements OperationsDAO {
 	}
 	
 	public int create2(String... args) {
-	    // Crear un nuevo producto con el nombre del proveedor en lugar de su id
 	    ProductoDTO newProducto = new ProductoDTO(args[0], args[1], Integer.parseInt(args[2]),
 	            Float.parseFloat(args[3]), Float.parseFloat(args[4]), args[5]);
 	    dbcon.initConnection();
 
 	    try {
-	        // Buscar el id del proveedor a partir del nombre del proveedor (args[5])
 	        dbcon.setPrepareStatement(dbcon.getConnect()
 	                .prepareStatement("SELECT idProveedor FROM Proveedor WHERE nombreProveedor = ?"));
 	        dbcon.getPrepareStatement().setString(1, newProducto.getNombreProveedor());
 	        ResultSet rs = dbcon.getPrepareStatement().executeQuery();
 
-	        // Verificar si se encontró un id
 	        if (rs.next()) {
 	            int idProveedor = rs.getInt("idProveedor");
 	            newProducto.setIdProveedor(idProveedor);
-	            System.out.println("esta: "+ newProducto.toString());
-	            // Preparar y ejecutar la inserción en la tabla Producto
 	            dbcon.setPrepareStatement(dbcon.getConnect()
 	                    .prepareStatement("INSERT INTO Producto(nombreProducto, marcaProducto, stockProducto, "
 	                            + "costoProducto, precioProducto, idProveedor) VALUES(?,?,?,?,?,?)"));
@@ -93,7 +88,6 @@ public class ProductoDAO implements OperationsDAO {
 	            dbcon.getPrepareStatement().setFloat(4, newProducto.getCostoProducto());
 	            dbcon.getPrepareStatement().setFloat(5, newProducto.getPrecioProducto());
 	            dbcon.getPrepareStatement().setInt(6, idProveedor);
-
 	            dbcon.getPrepareStatement().executeUpdate();
 	         ;
 	        } else {
@@ -106,7 +100,7 @@ public class ProductoDAO implements OperationsDAO {
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
-
+	    
 	    productos.add(newProducto);
 	    return 0;
 	}

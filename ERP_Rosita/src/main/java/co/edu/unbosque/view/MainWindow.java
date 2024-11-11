@@ -29,6 +29,7 @@ public class MainWindow extends JFrame {
 	private JPanel titleBar;
 	private JButton minimizeButton;
 	private JButton closeButton;
+	private VentaEnDetalle ved;
 	
 
 	public MainWindow() {
@@ -51,6 +52,7 @@ public class MainWindow extends JFrame {
 		pnw = new ProductoNuevoWindow();
 		cnp = new CompraNuevaWindow();
 		gnw = new GastoNuevoWindow();
+		ved = new VentaEnDetalle();
 
 		setTitle("sisas");
 		setSize(800, 600);
@@ -311,6 +313,14 @@ public class MainWindow extends JFrame {
 
 	public void setGnw(GastoNuevoWindow gnw) {
 		this.gnw = gnw;
+	}
+
+	public VentaEnDetalle getVed() {
+		return ved;
+	}
+
+	public void setVed(VentaEnDetalle ved) {
+		this.ved = ved;
 	}
 	
 	

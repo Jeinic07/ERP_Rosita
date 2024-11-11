@@ -43,7 +43,7 @@ public class GastoNuevoWindow extends JFrame {
 		txtValor.setBackground(Color.decode("#FFF9F3"));
 
 		btnAdd = new JButton();
-		btnAdd.setBounds(88, 324, 76, 29);
+		btnAdd.setBounds(88, 340, 76, 29);
 		btnAdd.setContentAreaFilled(false);
 		btnAdd.setBorderPainted(false);
 		btnAdd.setFocusPainted(false);
