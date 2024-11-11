@@ -1,63 +1,185 @@
 package co.edu.unbosque.view;
 
-import java.awt.Font;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.table.*;
 
 public class GastosPanel extends JPanel{
 	
-	private JLabel si;
-	private JButton btnBack, btnAdd;
+	private JButton btnBack, btnAdd, btnInfo;
 	private DefaultTableModel model;
+	private Image imagenBg;
+	private JPanel panel, titleBar;
+	private JTableHeader header;
 	private JTable tableGastos;
 	private JScrollPane scroll;
 	
 	public GastosPanel() {
 		setBounds(0, 0, 800, 600);
 		setLayout(null);
+		
+		imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/Gastos.png").getImage();
 
-		si = new JLabel("Gastos");
-		si.setFont(new Font("Arial", Font.PLAIN, 18));
-		si.setBounds(323, 46, 161, 50);
-
-		btnBack = new JButton("<-");
-		btnBack.setBounds(47, 30, 77, 32);
+		panel = new PanelConFondo();
+		panel.setBounds(0, 0, 800, 600); // Ajustar tamaño del panel
+		panel.setLayout(null);
 		
 	    String[] columnNames = {"No. Gasto", "Fecha", "Hora", "Descipción", "Total"};
 	    
-		model = new DefaultTableModel(columnNames, 0);
+		model = new NonEditableTableModel(columnNames, 0);
 		
 		tableGastos = new JTable(model);
-		tableGastos.setBounds(66, 169, 668, 263);
+		tableGastos.setGridColor(Color.decode("#FFC581"));
+		tableGastos.setRowHeight(30);
+		tableGastos.setShowGrid(false);
+		tableGastos.setIntercellSpacing(new Dimension(0, 0));
+		tableGastos.getColumnModel().getColumn(0).setPreferredWidth(30);
+		tableGastos.getColumnModel().getColumn(3).setPreferredWidth(200);
+
+
+		header = tableGastos.getTableHeader();
+		header.setDefaultRenderer(new BubbleHeaderRenderer());
+		header.setPreferredSize(new Dimension(header.getWidth(), 35));
+		tableGastos.setDefaultRenderer(Object.class, new AlternateRowRenderer());
 		
-		btnAdd= new JButton("Añadir");
-		btnAdd.setBounds(319, 444, 172, 42);
+		scroll = new JScrollPane(tableGastos);
+		scroll.setBounds(80, 165, 668, 270);
+		scroll.setOpaque(false);
+		scroll.getViewport().setOpaque(false);
+		scroll.setBorder(BorderFactory.createEmptyBorder());
+		
+		btnBack = new JButton();
+		btnBack.setBounds(39, 48, 36, 36);
+		btnBack.setContentAreaFilled(false);
+		btnBack.setBorderPainted(true);
+		
+		btnAdd= new JButton();
+		btnAdd.setBounds(319, 464, 162, 37);
 		btnAdd.setContentAreaFilled(false);
-		btnAdd.setBorderPainted(false);
+		btnAdd.setBorderPainted(true);
+
+		btnInfo= new JButton();
+		btnInfo.setBounds(734, 547, 36, 36);
+		btnInfo.setContentAreaFilled(false);
+		btnInfo.setBorderPainted(true);
 		
-        scroll= new JScrollPane(tableGastos);
-        scroll.setBounds(66, 169, 668, 263);
-		
-		add(si);
-		add(btnBack);
-		add(scroll);
-		add(btnAdd);
+		panel.add(btnInfo);
+		panel.add(btnBack);
+		panel.add(scroll);
+		panel.add(btnAdd);
+		add(panel);
 		
 
 		setVisible(false);
 	}
+	private class NonEditableTableModel extends DefaultTableModel {
+		public NonEditableTableModel(Object[] columnNames, int rowCount) {
+			super(columnNames, rowCount);
+		}
 
-	public JLabel getSi() {
-		return si;
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
 	}
 
-	public void setSi(JLabel si) {
-		this.si = si;
+	private class PanelConFondo extends JPanel {
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			// Dibujar la imagen de fondo
+			g.drawImage(imagenBg, 0, 0, getWidth(), getHeight(), this);
+		}
+	}
+	private static class BubbleHeaderRenderer extends DefaultTableCellRenderer {
+
+		public BubbleHeaderRenderer() {
+			setHorizontalAlignment(JLabel.CENTER);
+			setBackground(Color.decode("#77C4F2"));
+			setForeground(Color.WHITE);
+			setFont(new Font("Arial", Font.BOLD, 18));
+			setOpaque(true);
+		}
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			// Ajustar el componente del renderizado para cada celda del encabezado
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			setFont(new Font("Arial", Font.BOLD, 12));
+			setBackground(Color.decode("#FFC581"));
+			setForeground(Color.WHITE);
+
+			return this;
+		}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setColor(getBackground());
+			g2.fillRoundRect(0, 0, getWidth(), getHeight(), 60, 60);
+			super.paintComponent(g);
+		}
+	}
+
+	// Renderer personalizado para alternar colores de fondo en las filas
+	private static class AlternateRowRenderer extends DefaultTableCellRenderer {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			if (row % 2 == 0) {
+				setBackground(new Color(255, 239, 213)); // Amarillo pastel
+			} else {
+				setBackground(new Color(255, 228, 196)); // Naranja pastel
+			}
+			setForeground(Color.BLACK);
+			setOpaque(true);
+			return this;
+		}
+	}
+	
+	public JButton getBtnInfo() {
+		return btnInfo;
+	}
+
+	public void setBtnInfo(JButton btnInfo) {
+		this.btnInfo = btnInfo;
+	}
+
+	public Image getImagenBg() {
+		return imagenBg;
+	}
+
+	public void setImagenBg(Image imagenBg) {
+		this.imagenBg = imagenBg;
+	}
+
+	public JPanel getPanel() {
+		return panel;
+	}
+
+	public void setPanel(JPanel panel) {
+		this.panel = panel;
+	}
+
+	public JPanel getTitleBar() {
+		return titleBar;
+	}
+
+	public void setTitleBar(JPanel titleBar) {
+		this.titleBar = titleBar;
+	}
+
+	public JTableHeader getHeader() {
+		return header;
+	}
+
+	public void setHeader(JTableHeader header) {
+		this.header = header;
 	}
 
 	public JButton getBtnBack() {

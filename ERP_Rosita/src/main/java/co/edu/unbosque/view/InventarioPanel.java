@@ -3,6 +3,7 @@ package co.edu.unbosque.view;
 import java.awt.*;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.table.*;
 
 public class InventarioPanel extends JPanel {
@@ -15,6 +16,7 @@ public class InventarioPanel extends JPanel {
 	private JScrollPane scroll;
 	private NonEditableTableModel model;
     private JTextField txtBusqueda;
+    private LineBorder customBorder;
 
     public InventarioPanel() {
 
@@ -31,6 +33,8 @@ public class InventarioPanel extends JPanel {
         String[] columnNames = {"id", "Producto", "Marca", "Cantidad", "Costo", "Precio", "Proveedor"};
 
         model = new NonEditableTableModel(columnNames, 0);
+		customBorder = new LineBorder(Color.decode("#FFC581"), 2, true);
+
 
         tableInventario = new JTable(model);
 		tableInventario.setGridColor(Color.decode("#FFC581"));
@@ -76,14 +80,16 @@ public class InventarioPanel extends JPanel {
         btnProveedores.setBorderPainted(false);
         btnProveedores.setFocusPainted(false);
 
-        btnAdd = new JButton("Agregar");
+        btnAdd = new JButton();
         btnAdd.setBounds(239, 462, 133, 38);
         btnAdd.setContentAreaFilled(false);
         btnAdd.setBorderPainted(false);
         btnAdd.setFocusPainted(false);
         
         txtBusqueda = new JTextField();
-		txtBusqueda.setBounds(527, 141, 167, 30);
+		txtBusqueda.setBounds(527, 141, 167, 29);
+		txtBusqueda.setBorder(customBorder);
+		txtBusqueda.setBackground(Color.decode("#FFF9F3"));
 
 		panel.add(txtBusqueda);
         panel.add(btnBusqueda);

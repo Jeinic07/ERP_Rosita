@@ -1,37 +1,42 @@
 package co.edu.unbosque.view;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.event.*;
+import javax.swing.table.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableModel;
 public class CompraNuevaWindow extends JFrame {
 
-	private JButton btnBack;
-	private JButton btnAdd, btnDone;
+	private JButton btnBack, btnAdd, btnDone, minimizeButton, closeButton;
 	private JLabel titleLabel;
 	private Image imagenBg;
-	private JPanel panel;
-	private JTable tableNuevaVenta;
+	private JPanel panel, titleBar;
+	private JTable tableNuevaCompra;
+	private JTableHeader header;
 	private JScrollPane scroll;
 	private DefaultTableModel model;
 	private AutoTextField txtProducto;
 	private JTextField txtCantidad, txtPrecio;
 	private ArrayList<String> items;
+	private LineBorder customBorder;
+
 
 	public CompraNuevaWindow() {
 		setBounds(369, 250, 700, 450);
@@ -40,34 +45,50 @@ public class CompraNuevaWindow extends JFrame {
 		setUndecorated(true);
 		setResizable(false);
 		setLocationRelativeTo(null);
-//Cambiar el jpg por el que está haciendo mi Maria P 👊
-		imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/VentasAgregar.png").getImage();
+		setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 20, 20));
+
+		imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/ComprasAgregar.png").getImage();
 
 		panel = new PanelConFondo();
 		panel.setBounds(0, 0, 700, 450); // Ajustar tamaño del panel
 		panel.setLayout(null);
 
+		createCustomTitleBar();
+
+		customBorder = new LineBorder(Color.decode("#FFC581"), 2, true);
+
 		String[] columnNames = { "Producto", "Cantidad", "Precio", "SubTotal" };
 		model = new DefaultTableModel(columnNames, 0);
 
-		tableNuevaVenta = new JTable(model);
-		tableNuevaVenta.setBounds(49, 153, 605, 215);
+		tableNuevaCompra = new JTable(model);
+		tableNuevaCompra.setGridColor(Color.decode("#FFC581"));
+		tableNuevaCompra.setRowHeight(30);
+		tableNuevaCompra.setShowGrid(false);
+		tableNuevaCompra.setIntercellSpacing(new Dimension(0, 0));
 
-		scroll = new JScrollPane(tableNuevaVenta);
-		scroll.setBounds(49, 153, 605, 215);
+		header = tableNuevaCompra.getTableHeader();
+		header.setDefaultRenderer(new BubbleHeaderRenderer());
+		header.setPreferredSize(new Dimension(header.getWidth(), 35));
+		tableNuevaCompra.setDefaultRenderer(Object.class, new AlternateRowRenderer());
+
+		scroll = new JScrollPane(tableNuevaCompra);
+		scroll.setBounds(45, 142, 609, 225);
+		scroll.setOpaque(false);
+		scroll.getViewport().setOpaque(false);
+		scroll.setBorder(BorderFactory.createEmptyBorder());
 
 		btnBack = new JButton();
-		btnBack.setBounds(10, 5, 50, 32);
+		btnBack.setBounds(40, 28, 36, 36);
 		btnBack.setContentAreaFilled(false);
 		btnBack.setBorderPainted(false);
 
 		btnAdd = new JButton();
-		btnAdd.setBounds(567, 69, 87, 34);
+		btnAdd.setBounds(573, 88, 82, 29);
 		btnAdd.setContentAreaFilled(false);
 		btnAdd.setBorderPainted(false);
 
 		btnDone = new JButton();
-		btnDone.setBounds(306, 375, 87, 34);
+		btnDone.setBounds(306, 388, 87, 34);
 		btnDone.setContentAreaFilled(false);
 		btnDone.setBorderPainted(false);
 
@@ -75,13 +96,19 @@ public class CompraNuevaWindow extends JFrame {
 		items = new ArrayList<String>();
 
 		txtProducto = new AutoTextField();
-		txtProducto.setBounds(49, 69, 153, 34);
+		txtProducto.setBounds(47, 88, 153, 27);
+		txtProducto.setBorder(customBorder);
+		txtProducto.setBackground(Color.decode("#FFF9F3"));
 
 		txtCantidad = new JTextField();
-		txtCantidad.setBounds(221, 69, 153, 34);
+		txtCantidad.setBounds(221, 88, 153, 27);
+		txtCantidad.setBorder(customBorder);
+		txtCantidad.setBackground(Color.decode("#FFF9F3"));
 
 		txtPrecio = new JTextField();
-		txtPrecio.setBounds(393, 69, 153, 34);
+		txtPrecio.setBounds(395, 88, 153, 27);
+		txtPrecio.setBorder(customBorder);
+		txtPrecio.setBackground(Color.decode("#FFF9F3"));
 
 		panel.add(btnBack);
 		panel.add(scroll);
@@ -93,12 +120,152 @@ public class CompraNuevaWindow extends JFrame {
 		add(panel);
 	}
 
+	private void createCustomTitleBar() {
+		// Crear el panel de la barra de título
+		titleBar = new JPanel();
+		titleBar.setBackground(Color.decode("#FFC581"));
+		titleBar.setLayout(null);
+		titleBar.setBounds(0, 0, getWidth(), 30);
+
+		minimizeButton = new JButton("-");
+		minimizeButton.setForeground(Color.WHITE);
+		minimizeButton.setBackground(Color.decode("#FFC581"));
+		minimizeButton.setFocusPainted(false);
+		minimizeButton.setBorderPainted(false);
+		minimizeButton.setBounds(getWidth() - 80, 0, 40, 30);
+
+		// Cambiar color al hacer hover en el botón de minimizar, va a controller
+		minimizeButton.addMouseListener(new MouseAdapter() {
+			Color originalColor = minimizeButton.getBackground();
+			Color hoverColor = new Color(255, 140, 0);
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				minimizeButton.setBackground(hoverColor);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				minimizeButton.setBackground(originalColor);
+			}
+		});
+
+		minimizeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setState(JFrame.ICONIFIED);
+			}
+		});
+
+		// Botón de cerrar
+		closeButton = new JButton("x");
+		closeButton.setForeground(Color.WHITE);
+		closeButton.setBackground(Color.decode("#FFC581"));
+		closeButton.setFocusPainted(false);
+		closeButton.setBorderPainted(false);
+		closeButton.setBounds(getWidth() - 40, 0, 40, 30);
+		// para el controller
+		closeButton.addMouseListener(new MouseAdapter() {
+			Color originalColor = closeButton.getBackground();
+			Color hoverColor = new Color(255, 0, 0);
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				closeButton.setBackground(hoverColor);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				closeButton.setBackground(originalColor);
+			}
+		});
+
+		closeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+			}
+		});
+
+		titleBar.add(minimizeButton);
+		titleBar.add(closeButton);
+		add(titleBar);
+	}
+
 	private class PanelConFondo extends JPanel {
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			// Dibujar la imagen de fondo
 			g.drawImage(imagenBg, 0, 0, getWidth(), getHeight(), this);
+
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setColor(Color.decode("#FFBA68"));
+			g2d.setStroke(new BasicStroke(5)); // Grosor del borde
+			g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+		}
+	}
+
+	private class NonEditableTableModel extends DefaultTableModel {
+		public NonEditableTableModel(Object[] columnNames, int rowCount) {
+			super(columnNames, rowCount);
+		}
+
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	}
+
+	// Renderer personalizado para los encabezados de la tabla con estilo burbuja
+	private static class BubbleHeaderRenderer extends DefaultTableCellRenderer {
+
+		public BubbleHeaderRenderer() {
+			setHorizontalAlignment(JLabel.CENTER);
+			setBackground(Color.decode("#77C4F2"));
+			setForeground(Color.WHITE);
+			setFont(new Font("Arial", Font.BOLD, 18));
+			setOpaque(true);
+		}
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			// Ajustar el componente del renderizado para cada celda del encabezado
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			setFont(new Font("Arial", Font.BOLD, 12));
+			setBackground(Color.decode("#FFC581"));
+			setForeground(Color.WHITE);
+
+			return this;
+		}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setColor(getBackground());
+			g2.fillRoundRect(0, 0, getWidth(), getHeight(), 60, 60);
+			super.paintComponent(g);
+		}
+	}
+
+	// Renderer personalizado para alternar colores de fondo en las filas
+	private static class AlternateRowRenderer extends DefaultTableCellRenderer {
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			if (row % 2 == 0) {
+				setBackground(new Color(255, 239, 213)); // Amarillo pastel
+			} else {
+				setBackground(new Color(255, 228, 196)); // Naranja pastel
+			}
+			setForeground(Color.BLACK);
+			setOpaque(true);
+			return this;
 		}
 	}
 
@@ -124,14 +291,6 @@ public class CompraNuevaWindow extends JFrame {
 
 	public void setTitleLabel(JLabel titleLabel) {
 		this.titleLabel = titleLabel;
-	}
-
-	public JTable getTableNuevaVenta() {
-		return tableNuevaVenta;
-	}
-
-	public void setTableNuevaVenta(JTable tableNuevaVenta) {
-		this.tableNuevaVenta = tableNuevaVenta;
 	}
 
 	public JScrollPane getScroll() {
@@ -172,6 +331,54 @@ public class CompraNuevaWindow extends JFrame {
 
 	public void setBtnDone(JButton btnDone) {
 		this.btnDone = btnDone;
+	}
+
+	public JButton getMinimizeButton() {
+		return minimizeButton;
+	}
+
+	public void setMinimizeButton(JButton minimizeButton) {
+		this.minimizeButton = minimizeButton;
+	}
+
+	public JButton getCloseButton() {
+		return closeButton;
+	}
+
+	public void setCloseButton(JButton closeButton) {
+		this.closeButton = closeButton;
+	}
+
+	public JPanel getTitleBar() {
+		return titleBar;
+	}
+
+	public void setTitleBar(JPanel titleBar) {
+		this.titleBar = titleBar;
+	}
+
+	public JTable getTableNuevaCompra() {
+		return tableNuevaCompra;
+	}
+
+	public void setTableNuevaCompra(JTable tableNuevaCompra) {
+		this.tableNuevaCompra = tableNuevaCompra;
+	}
+
+	public JTableHeader getHeader() {
+		return header;
+	}
+
+	public void setHeader(JTableHeader header) {
+		this.header = header;
+	}
+
+	public LineBorder getCustomBorder() {
+		return customBorder;
+	}
+
+	public void setCustomBorder(LineBorder customBorder) {
+		this.customBorder = customBorder;
 	}
 
 	public Image getImagenBg() {

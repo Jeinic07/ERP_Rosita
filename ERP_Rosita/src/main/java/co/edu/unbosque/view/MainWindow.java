@@ -11,12 +11,17 @@ public class MainWindow extends JFrame {
 	private OptionPanel op;
 	private OptionPanelInfo opi;
 	private InventarioPanel ip;
+	private InventarioPanelInfo ipi;
 	private ProductoNuevoWindow pnw;
 	private VentasPanel vp;
+	private VentasPanelInfo vpi;
 	private ComprasPanel cp;
+	private ComprasPanelInfo cpi;
 	private GastosPanel gp;
+	private GastosPanelInfo gpi;
 	private GastoNuevoWindow gnw;
 	private ProveedoresPanel pp;
+	private ProveedoresPanelinfo ppi;
 	private ProveedorNuevoWindow pw;
 	private ProveedorEditarWindow pew;
 	private VentaNuevaWindow vw;
@@ -24,16 +29,22 @@ public class MainWindow extends JFrame {
 	private JPanel titleBar;
 	private JButton minimizeButton;
 	private JButton closeButton;
+	
 
 	public MainWindow() {
 
 		op = new OptionPanel();
 		ip = new InventarioPanel();
+		ipi = new InventarioPanelInfo();
 		opi = new OptionPanelInfo();
 		vp = new VentasPanel();
+		vpi = new VentasPanelInfo();
 		cp = new ComprasPanel();
+		cpi = new ComprasPanelInfo();
 		gp = new GastosPanel();
+		gpi = new GastosPanelInfo();
 		pp = new ProveedoresPanel();
+		ppi = new ProveedoresPanelinfo();
 		pw = new ProveedorNuevoWindow();
 		vw = new VentaNuevaWindow();
 		pew = new ProveedorEditarWindow();
@@ -122,8 +133,50 @@ public class MainWindow extends JFrame {
 		titleBar.add(closeButton);
 		add(titleBar);
 	}
+	
+	
 
 	
+	public InventarioPanelInfo getIpi() {
+		return ipi;
+	}
+
+	public void setIpi(InventarioPanelInfo ipi) {
+		this.ipi = ipi;
+	}
+
+	public VentasPanelInfo getVpi() {
+		return vpi;
+	}
+
+	public void setVpi(VentasPanelInfo vpi) {
+		this.vpi = vpi;
+	}
+
+	public ComprasPanelInfo getCpi() {
+		return cpi;
+	}
+
+	public void setCpi(ComprasPanelInfo cpi) {
+		this.cpi = cpi;
+	}
+
+	public GastosPanelInfo getGpi() {
+		return gpi;
+	}
+
+	public void setGpi(GastosPanelInfo gpi) {
+		this.gpi = gpi;
+	}
+
+	public ProveedoresPanelinfo getPpi() {
+		return ppi;
+	}
+
+	public void setPpi(ProveedoresPanelinfo ppi) {
+		this.ppi = ppi;
+	}
+
 	public JPanel getTitleBar() {
 		return titleBar;
 	}

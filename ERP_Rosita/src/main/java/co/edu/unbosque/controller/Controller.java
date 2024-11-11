@@ -82,7 +82,7 @@ public class Controller implements ActionListener {
 		mw.getOp().getBtnPreg().addActionListener(this);
 		mw.getOp().getBtnPreg().setActionCommand("Consulta");
 
-		// NUEVO, boton OptionPaneinfo
+		// boton OptionPaneinfo
 
 		mw.getOpi().getBtnOk().addActionListener(this);
 		mw.getOpi().getBtnOk().setActionCommand("OptOk");
@@ -99,6 +99,11 @@ public class Controller implements ActionListener {
 
 		mw.getIp().getBtnBusqueda().addActionListener(this);
 		mw.getIp().getBtnBusqueda().setActionCommand("invBus");
+		
+		// boton Info
+
+		mw.getIp().getBtnPreg().addActionListener(this);
+		mw.getIp().getBtnPreg().setActionCommand("ConsultaInventario");
 
 		// Botones ProductoNuevoWindow
 		mw.getPnw().getBtnBack().addActionListener(this);
@@ -116,13 +121,16 @@ public class Controller implements ActionListener {
 
 		mw.getPp().getBtnBusqueda().addActionListener(this);
 		mw.getPp().getBtnBusqueda().setActionCommand("provBus");
-		// aca jijijiji
 
 		mw.getPp().getBtnEdit().addActionListener(this);
 		mw.getPp().getBtnEdit().setActionCommand("provEdit");
 
 		mw.getPp().getBtnDelete().addActionListener(this);
 		mw.getPp().getBtnDelete().setActionCommand("provDelete");
+		
+		// Boton info
+		mw.getPp().getBtnPreg().addActionListener(this);
+		mw.getPp().getBtnPreg().setActionCommand("ConsultaProveedores");
 
 		// Botones ProveedorNuevoWindow
 		mw.getPw().getBtnAdd().addActionListener(this);
@@ -144,6 +152,12 @@ public class Controller implements ActionListener {
 
 		mw.getVp().getBtnNuevaVenta().addActionListener(this);
 		mw.getVp().getBtnNuevaVenta().setActionCommand("venAdd");
+		
+		//Boton Info
+		
+		mw.getVp().getBtnPreg().addActionListener(this);
+		mw.getVp().getBtnPreg().setActionCommand("ConsultaVentas");
+		
 
 		// Botones VentaNuevaWindow
 		mw.getVw().getBtnAdd().addActionListener(this);
@@ -161,6 +175,11 @@ public class Controller implements ActionListener {
 
 		mw.getCp().getbtnNuevaCompra().addActionListener(this);
 		mw.getCp().getbtnNuevaCompra().setActionCommand("comAdd");
+		
+		//Boton Info
+		
+		mw.getCp().getBtnInfo().addActionListener(this);
+		mw.getCp().getBtnInfo().setActionCommand("ConsultaCompras");
 
 		// Botones NuevaCompraWindow
 		mw.getCnp().getBtnAdd().addActionListener(this);
@@ -178,6 +197,9 @@ public class Controller implements ActionListener {
 
 		mw.getGp().getBtnAdd().addActionListener(this);
 		mw.getGp().getBtnAdd().setActionCommand("gasAdd");
+		
+		mw.getGp().getBtnInfo().addActionListener(this);
+		mw.getGp().getBtnInfo().setActionCommand("ConsultaGastos");
 
 		// Botones GastoNuevoWindos
 
@@ -286,6 +308,33 @@ public class Controller implements ActionListener {
 			break;
 
 		}
+		
+		case "ConsultaInventario": {
+			mw.getIpi().setVisible(true);
+			break;
+		}
+		
+		case "ConsultaProveedores": {
+			mw.getPpi().setVisible(true);
+			break;
+		}
+		
+		case "ConsultaVentas": {
+			mw.getVpi().setVisible(true);
+			break;
+		}
+		
+		case "ConsultaCompras": {
+			mw.getCpi().setVisible(true);
+			break;
+		}
+		
+		case "ConsultaGastos": {
+			mw.getGpi().setVisible(true);
+			break;
+		}
+		
+		
 
 		case "OptOk": {
 			mw.getOpi().setVisible(false);

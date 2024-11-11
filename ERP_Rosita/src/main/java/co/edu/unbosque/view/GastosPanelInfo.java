@@ -6,13 +6,13 @@ import java.awt.geom.*;
 
 import javax.swing.*;
 
-public class OptionPanelInfo extends JFrame {
+public class GastosPanelInfo extends JFrame {
 
 	private Image imagenBg;
 	private JPanel panel, titleBar;
 	private JButton btnOk, minimizeButton, closeButton;
 
-	public OptionPanelInfo() {
+	public GastosPanelInfo() {
 		setSize(253, 450);
 		setLayout(null);
 		setLocationRelativeTo(null);
@@ -23,7 +23,7 @@ public class OptionPanelInfo extends JFrame {
 
 		createCustomTitleBar();
 
-		imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/InfoSelec.png").getImage();
+		imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/InfoGast.png").getImage();
 		panel = new PanelConFondo();
 		panel.setBounds(0, 0, 253, 450);
 		panel.setLayout(null);
@@ -66,14 +66,15 @@ public class OptionPanelInfo extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				minimizeButton.setBackground(originalColor);
 			}
-
 		});
+		
 		minimizeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setState(JFrame.ICONIFIED);
-			}
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        setState(JFrame.ICONIFIED);
+		    }
 		});
+
 		// Botón de cerrar
 		closeButton = new JButton("x");
 		closeButton.setForeground(Color.WHITE);
@@ -145,5 +146,4 @@ public class OptionPanelInfo extends JFrame {
 	public void setBtnOk(JButton btnOk) {
 		this.btnOk = btnOk;
 	}
-
 }

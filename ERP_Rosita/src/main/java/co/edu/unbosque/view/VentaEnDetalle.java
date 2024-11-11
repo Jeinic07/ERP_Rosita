@@ -1,19 +1,28 @@
 package co.edu.unbosque.view;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-public class OptionPanelInfo extends JFrame {
-
+public class VentaEnDetalle extends JFrame{
 	private Image imagenBg;
 	private JPanel panel, titleBar;
 	private JButton btnOk, minimizeButton, closeButton;
 
-	public OptionPanelInfo() {
-		setSize(253, 450);
+	public VentaEnDetalle() {
+		setSize(600, 600);
 		setLayout(null);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -23,13 +32,13 @@ public class OptionPanelInfo extends JFrame {
 
 		createCustomTitleBar();
 
-		imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/InfoSelec.png").getImage();
+		imagenBg = new ImageIcon("src/main/java/co/edu/unbosque/view/images/VentaDetalle.png").getImage();
 		panel = new PanelConFondo();
 		panel.setBounds(0, 0, 253, 450);
 		panel.setLayout(null);
 
 		btnOk = new JButton();
-		btnOk.setBounds(71, 299, 112, 34);
+		btnOk.setBounds(214, 496, 172, 37);
 		btnOk.setContentAreaFilled(false);
 		btnOk.setBorderPainted(false);
 		btnOk.setFocusPainted(false);
@@ -66,14 +75,15 @@ public class OptionPanelInfo extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				minimizeButton.setBackground(originalColor);
 			}
-
 		});
+		
 		minimizeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setState(JFrame.ICONIFIED);
-			}
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        setState(JFrame.ICONIFIED);
+		    }
 		});
+
 		// Botón de cerrar
 		closeButton = new JButton("x");
 		closeButton.setForeground(Color.WHITE);
@@ -147,3 +157,5 @@ public class OptionPanelInfo extends JFrame {
 	}
 
 }
+
+
