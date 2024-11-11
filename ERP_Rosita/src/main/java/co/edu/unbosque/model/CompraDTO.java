@@ -5,7 +5,7 @@ import java.time.LocalTime;
 
 public class CompraDTO {
 
-	private int idfechaCompra;
+	private int idCompra;
 	private LocalDate fechaCompra;
 	private LocalTime horaCompra;
 	private float totalCompra;
@@ -21,20 +21,20 @@ public class CompraDTO {
 		this.totalCompra = totalCompra;
 	}
 
-	public CompraDTO(int idfechaCompra, LocalDate fechaCompra, LocalTime horaCompra, float totalCompra) {
+	public CompraDTO(int idCompra, LocalDate fechaCompra, LocalTime horaCompra, float totalCompra) {
 		super();
-		this.idfechaCompra = idfechaCompra;
+		this.idCompra = idCompra;
 		this.fechaCompra = fechaCompra;
 		this.horaCompra = horaCompra;
 		this.totalCompra = totalCompra;
 	}
 
-	public int getIdfechaCompra() {
-		return idfechaCompra;
+	public int getidCompra() {
+		return idCompra;
 	}
 
-	public void setIdfechaCompra(int idfechaCompra) {
-		this.idfechaCompra = idfechaCompra;
+	public void setIdCompra(int idfecha) {
+		this.idCompra = idfecha;
 	}
 
 	public LocalDate getfechaCompra() {
@@ -63,7 +63,7 @@ public class CompraDTO {
 
 	@Override
 	public String toString() {
-		return "CompraDTO [idfechaCompra=" + idfechaCompra + ", fechaCompra=" + fechaCompra + ", horaCompra=" + horaCompra
+		return "CompraDTO [idfechaCompra=" + idCompra + ", fechaCompra=" + fechaCompra + ", horaCompra=" + horaCompra
 				+ ", totalCompra=" + totalCompra + "]";
 	}
 	

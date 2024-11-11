@@ -6,7 +6,7 @@ import javax.swing.table.*;
 
 public class ComprasPanel extends JPanel {
 
-	private JButton btnBack, btnNuevaCompra, btnInfo;
+	private JButton btnBack, btnNuevaCompra, btnInfo, btnDetails;
 	private DefaultTableModel model;
 	private JScrollPane scroll;
 	private JPanel panel;
@@ -25,7 +25,7 @@ public class ComprasPanel extends JPanel {
 		panel.setBounds(0, 0, 800, 600); // Ajustar tamaño del panel
 		panel.setLayout(null);
 
-		String[] columnNames = { "N. Factura", "Fecha", "Total" };
+		String[] columnNames = { "N. Factura", "Fecha","Hora", "Total" };
 
 		model = new NonEditableTableModel(columnNames, 0);
 
@@ -60,11 +60,18 @@ public class ComprasPanel extends JPanel {
 		btnNuevaCompra.setBounds(319, 464, 162, 37);
 		btnNuevaCompra.setContentAreaFilled(false);
 		btnNuevaCompra.setBorderPainted(false);
+		
+		btnDetails= new JButton("Detalles");
+		btnDetails.setBounds(500, 464, 162, 37);
+		btnDetails.setContentAreaFilled(false);
+		btnDetails.setBorderPainted(true);
 
 		panel.add(btnInfo);
 		panel.add(btnBack);
 		panel.add(scroll);
 		panel.add(btnNuevaCompra);
+		panel.add(btnDetails);
+		
 		add(panel);
 
 	}
@@ -220,6 +227,14 @@ public class ComprasPanel extends JPanel {
 
 	public void setTableVentas(JTable tableVentas) {
 		this.tableVentas = tableVentas;
+	}
+
+	public JButton getBtnDetails() {
+		return btnDetails;
+	}
+
+	public void setBtnDetails(JButton btnDetails) {
+		this.btnDetails = btnDetails;
 	}
 
 }

@@ -3,15 +3,15 @@ package co.edu.unbosque.model;
 public class DetalleCompraDTO {
 
 	private int idDC;
-	private int cantidadDC; 
-	private float costoUnitarioDC; 
-	private float subtotalDC; 
-	private int idProductoDC; 
-	private int idCompraDC; 
+	private int cantidadDC;
+	private float costoUnitarioDC;
+	private float subtotalDC;
+	private int idProductoDC;
+	private int idCompraDC;
 	private String nombreProducto;
 
 	public DetalleCompraDTO() {
-		
+
 	}
 
 	public DetalleCompraDTO(int idDC, int cantidadDC, float costoUnitarioDC, float subtotalDC, int idProductoDC,
@@ -25,7 +25,7 @@ public class DetalleCompraDTO {
 		this.idCompraDC = idCompraDC;
 		this.nombreProducto = nombreProducto;
 	}
-	
+
 	public DetalleCompraDTO(int cantidadDV, float precioUnitarioDV, float subtotalDV, int idProductoDV, int idVentaDV) {
 		super();
 		this.cantidadDC = cantidadDV;
@@ -33,18 +33,16 @@ public class DetalleCompraDTO {
 		this.subtotalDC = subtotalDV;
 		this.idProductoDC = idProductoDV;
 		this.idCompraDC = idVentaDV;
-	}	
-	public DetalleCompraDTO(int idDV, int cantidadDV, float precioUnitarioDV, float subtotalDV, int idProductoDV,
-			int idVentaDV) {
+	}
+
+	public DetalleCompraDTO(String nombreProducto, int cantidadDC, float costoUnitarioDC, float subtotalDC, int idProductoDC) {
 		super();
-		this.idDC = idDC;
+		this.idProductoDC = idProductoDC;
 		this.cantidadDC = cantidadDC;
 		this.costoUnitarioDC = costoUnitarioDC;
 		this.subtotalDC = subtotalDC;
-		this.idProductoDC = idProductoDC;
-		this.idCompraDC = idCompraDC;
+		this.nombreProducto = nombreProducto;
 	}
-	
 
 	public int getIdDC() {
 		return idDC;
@@ -104,9 +102,9 @@ public class DetalleCompraDTO {
 
 	@Override
 	public String toString() {
-		return "DetalleCompraDTO [idDC=" + idDC + ", cantidadDC=" + cantidadDC + ", costoUnitarioDC="
-				+ costoUnitarioDC + ", subtotalDC=" + subtotalDC + ", idProductoDC=" + idProductoDC + ", idCompraDC="
-				+ idCompraDC + ", nombreProducto=" + nombreProducto + "]";
+		return "DetalleCompraDTO [idDC=" + idDC + ", cantidadDC=" + cantidadDC + ", costoUnitarioDC=" + costoUnitarioDC
+				+ ", subtotalDC=" + subtotalDC + ", idProductoDC=" + idProductoDC + ", idCompraDC=" + idCompraDC
+				+ ", nombreProducto=" + nombreProducto + "]";
 	}
-	
+
 }

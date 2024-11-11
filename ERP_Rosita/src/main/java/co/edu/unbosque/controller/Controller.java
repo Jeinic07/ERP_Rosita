@@ -2,6 +2,7 @@ package co.edu.unbosque.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -9,6 +10,8 @@ import javax.swing.RowFilter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import co.edu.unbosque.model.CompraDTO;
+import co.edu.unbosque.model.DetalleCompraDTO;
 import co.edu.unbosque.model.DetalleVentaDTO;
 import co.edu.unbosque.model.GastoDTO;
 import co.edu.unbosque.model.Login;
@@ -183,12 +186,19 @@ public class Controller implements ActionListener {
 
 		mw.getCp().getbtnNuevaCompra().addActionListener(this);
 		mw.getCp().getbtnNuevaCompra().setActionCommand("comAdd");
+		
+		mw.getCp().getBtnDetails().addActionListener(this);
+		mw.getCp().getBtnDetails().setActionCommand("comDetails");
 
 		// Boton Info
 
 		mw.getCp().getBtnInfo().addActionListener(this);
 		mw.getCp().getBtnInfo().setActionCommand("ConsultaCompras");
-
+		
+		//Botones CompraEnDetalle
+		mw.getCed().getBtnOk().addActionListener(this);
+		mw.getCed().getBtnOk().setActionCommand("cedOk");	
+		
 		// Botones NuevaCompraWindow
 		mw.getCnp().getBtnAdd().addActionListener(this);
 		mw.getCnp().getBtnAdd().setActionCommand("newComAdd");
@@ -198,6 +208,7 @@ public class Controller implements ActionListener {
 
 		mw.getCnp().getBtnDone().addActionListener(this);
 		mw.getCnp().getBtnDone().setActionCommand("newComDone");
+		
 
 		// Botones GastosPanel
 		mw.getGp().getBtnBack().addActionListener(this);
@@ -208,14 +219,18 @@ public class Controller implements ActionListener {
 
 		mw.getGp().getBtnInfo().addActionListener(this);
 		mw.getGp().getBtnInfo().setActionCommand("ConsultaGastos");
+		
 
-		// Botones GastoNuevoWindos
+		
+
+		// Botones GastoNuevoWindow
 
 		mw.getGnw().getBtnBack().addActionListener(this);
 		mw.getGnw().getBtnBack().setActionCommand("gnwBack");
 
 		mw.getGnw().getBtnAdd().addActionListener(this);
 		mw.getGnw().getBtnAdd().setActionCommand("gnwAdd");
+		
 
 	}
 
@@ -301,6 +316,12 @@ public class Controller implements ActionListener {
 			mw.getOp().setVisible(false);
 			mw.getCp().setVisible(true);
 
+			comDao.readAll();
+
+			for (CompraDTO c : comDao.getCompras()) {
+				Object row[] = { c.getidCompra(), c.getfechaCompra(), c.gethoraCompra(), c.gettotalCompra() };
+				mw.getCp().getModel().addRow(row);
+			}
 			break;
 		}
 
@@ -528,7 +549,7 @@ public class Controller implements ActionListener {
 			if (selectedRow == -1) {
 				JOptionPane.showMessageDialog(mw, "No se ha seleccionado ningún proveedor para eliminar.", "Error",
 						JOptionPane.ERROR_MESSAGE);
-				break; // Termina el proceso si no se selecciona una fila
+				break; 
 			}
 			int id = (Integer) mw.getPp().getTableProveedores().getValueAt(selectedRow, 0);
 
@@ -774,7 +795,7 @@ public class Controller implements ActionListener {
 			mw.getVw().getTxtPrecio().setText("");
 			mw.getVw().getTxtCantidad().setText("");
 			mw.getVw().getTxtProducto().setText("");
-			
+
 			break;
 		}
 
@@ -787,11 +808,27 @@ public class Controller implements ActionListener {
 					.addRow(new Object[] { v.getIdVenta(), v.getFechaVenta(), v.getHoraVenta(), v.getTotalVenta() });
 
 			mw.getVw().setVisible(false);
+
+			dvDao.readById(idVenta);
+			producDao.readAll();
 			
+			for (DetalleVentaDTO dv : dvDao.getDvs()) {
+				int idProducto = dv.getIdProductoDV();
+				int newStock = (producDao.getStockById(idProducto))- dv.getCantidadDV();
+				System.out.println(newStock);
+				
+				if (newStock < 0 ) {
+					JOptionPane.showMessageDialog(null, "No hay stock suficiente para realizar la venta");
+				}else {
+					producDao.updateStockById(idProducto, newStock);
+				}
+
+			}
+
 			mw.getVw().getTxtPrecio().setText("");
 			mw.getVw().getTxtCantidad().setText("");
 			mw.getVw().getTxtProducto().setText("");
-			
+
 			mw.getVw().getModel().setRowCount(0);
 			break;
 		}
@@ -814,7 +851,7 @@ public class Controller implements ActionListener {
 			mw.getCp().setVisible(false);
 			break;
 		}
-		case "comAdd":
+		case "comAdd":{
 
 			mw.getCnp().setVisible(true);
 
@@ -827,6 +864,37 @@ public class Controller implements ActionListener {
 			idCompra = comDao.create2(0f);
 
 			break;
+		}	
+		case "comDetails":{
+			
+			int selectedRow = mw.getCp().getTableVentas().getSelectedRow();
+
+			int id = (Integer) mw.getCp().getTableVentas().getValueAt(selectedRow, 0);
+			
+			mw.getCed().setVisible(true);
+			
+			dcDao.readById(id);
+			
+			for (DetalleCompraDTO dc : dcDao.getDcs()) {
+				Object row [] = {
+						dc.getNombreProducto(), dc.getCantidadDC(),dc.getcostoUnitarioDC(), 
+						dc.getSubtotalDC()
+				};
+				mw.getCed().getModel().addRow(row);
+			}
+			
+			break;
+		}
+		
+		//Botones CompraEnDetalle
+		case "cedOk":{
+			mw.getCed().setVisible(false);
+			System.out.println("pija");
+			mw.getCed().getModel().setRowCount(0);
+			break;
+		}
+			
+
 		// Botones NuevaCompraWindow
 		case "newComAdd": {
 
@@ -843,7 +911,7 @@ public class Controller implements ActionListener {
 			}
 
 			String cantidadStr = mw.getCnp().getTxtCantidad().getText();
-			String precioStr = mw.getCnp().getTxtPrecio().getText();
+			String costoStr = mw.getCnp().getTxtPrecio().getText();
 
 			// Validar que la cantidad no esté vacía
 			if (cantidadStr.isEmpty()) {
@@ -852,12 +920,11 @@ public class Controller implements ActionListener {
 			}
 
 			// Validar que el precio no esté vacío
-			if (precioStr.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "El campo de precio no puede estar vacío.");
+			if (costoStr.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "El campo de costo no puede estar vacío.");
 				return;
 			}
 
-			// Validar que la cantidad sea un número válido
 			try {
 				float cantidad = Float.parseFloat(cantidadStr);
 				if (cantidad <= 0) {
@@ -869,9 +936,8 @@ public class Controller implements ActionListener {
 				return;
 			}
 
-			// Validar que el precio sea un número válido
 			try {
-				float precio = Float.parseFloat(precioStr);
+				float precio = Float.parseFloat(costoStr);
 				if (precio <= 0) {
 					JOptionPane.showMessageDialog(null, "El precio debe ser un número mayor a cero.");
 					return;
@@ -881,16 +947,41 @@ public class Controller implements ActionListener {
 				return;
 			}
 
-			float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(precioStr);
+			float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(costoStr);
 
-			dcDao.create(cantidadStr, precioStr, String.valueOf(subTotal), "3", String.valueOf(idCompra));
+			String idProdcuto = mw.getCnp().getTxtProducto().getText().split(" - ")[0];
 
-			mw.getCnp().getModel().addRow(new Object[] { producto, cantidadStr, precioStr, subTotal });
+			dcDao.create(cantidadStr, costoStr, String.valueOf(subTotal), idProdcuto, String.valueOf(idCompra));
+
+			mw.getCnp().getModel().addRow(new Object[] { producto, cantidadStr, costoStr, subTotal });
 
 			break;
 		}
 		case "newComDone":
+			float totalCompra = comDao.getTotalByCompraId(idCompra);
+			comDao.updateTotalCompraById(idCompra, totalCompra);
+			comDao.readAll();
 
+			CompraDTO c = comDao.getCompras().get(comDao.getCompras().size() - 1);
+			mw.getCp().getModel().addRow(
+					new Object[] { c.getidCompra(), c.getfechaCompra(), c.gethoraCompra(), c.gettotalCompra() });
+
+			mw.getCnp().setVisible(false);
+
+			dcDao.readById(idCompra);
+
+			for (DetalleCompraDTO dc : dcDao.getDcs()) {
+				int idProducto = dc.getIdProductoDC();
+				int newStock = producDao.getStockById(idProducto) + dc.getCantidadDC();
+				producDao.updateStockById(idProducto, newStock);
+
+			}
+
+			mw.getCnp().getTxtPrecio().setText("");
+			mw.getCnp().getTxtCantidad().setText("");
+			mw.getCnp().getTxtProducto().setText("");
+
+			mw.getCnp().getModel().setRowCount(0);
 			break;
 
 		case "newComBack": {
@@ -910,6 +1001,8 @@ public class Controller implements ActionListener {
 			mw.getGnw().setVisible(true);
 			break;
 		}
+		
+
 
 		// Botones GastoNuevoWindow
 
@@ -919,7 +1012,6 @@ public class Controller implements ActionListener {
 		}
 
 		case "gnwAdd": {
-			System.out.println("pene");
 			String descripcion = mw.getGnw().getTxtDescripcion().getText();
 			String valor = mw.getGnw().getTxtValor().getText();
 

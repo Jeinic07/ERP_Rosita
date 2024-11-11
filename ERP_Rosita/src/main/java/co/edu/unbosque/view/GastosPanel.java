@@ -58,6 +58,8 @@ public class GastosPanel extends JPanel{
 		btnAdd.setContentAreaFilled(false);
 		btnAdd.setBorderPainted(true);
 
+
+		
 		btnInfo= new JButton();
 		btnInfo.setBounds(734, 547, 36, 36);
 		btnInfo.setContentAreaFilled(false);
@@ -221,5 +223,5 @@ public class GastosPanel extends JPanel{
 	public void setScroll(JScrollPane scroll) {
 		this.scroll = scroll;
 	}
-	
+
 }
