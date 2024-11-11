@@ -49,8 +49,9 @@ public class DetalleVentaDTO {
 	
 	
 
-	public DetalleVentaDTO(String nombreProducto, int cantidadDV, float precioUnitarioDV, float subtotalDV) {
+	public DetalleVentaDTO(String nombreProducto, int cantidadDV, float precioUnitarioDV, float subtotalDV, int idProducto) {
 		super();
+		this.idProductoDV = idProducto;
 		this.nombreProducto = nombreProducto;
 		this.cantidadDV = cantidadDV;
 		this.precioUnitarioDV = precioUnitarioDV;

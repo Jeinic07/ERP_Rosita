@@ -57,7 +57,7 @@ public class CompraNuevaWindow extends JFrame {
 
 		customBorder = new LineBorder(Color.decode("#FFC581"), 2, true);
 
-		String[] columnNames = { "Producto", "Cantidad", "Precio", "SubTotal" };
+		String[] columnNames = { "Producto", "Cantidad", "Costo", "SubTotal" };
 		model = new DefaultTableModel(columnNames, 0);
 
 		tableNuevaCompra = new JTable(model);

@@ -65,6 +65,7 @@ public class CompraDAO {
 		return 0;
 	}
 	public int create2(float total) {
+		
 	    int idCompra = -1;  
 	    CompraDTO newCompra = new CompraDTO(LocalDate.now(), LocalTime.now().truncatedTo(ChronoUnit.SECONDS), total);
 
@@ -98,12 +99,54 @@ public class CompraDAO {
 	    compras.add(newCompra);
 	    return idCompra;  // Devolver el ID de la venta generada
 	}
-	public String readAll() {
-		compras.clear();
+	
+	public int updateTotalCompraById(int id, float newTotalCompra) {
+		dbcon.initConnection();
 
 		try {
+			dbcon.setPrepareStatement(
+					dbcon.getConnect().prepareStatement("UPDATE Compra SET totalCompra = ? WHERE idCompra = ?"));
+			dbcon.getPrepareStatement().setFloat(1, newTotalCompra);
+			dbcon.getPrepareStatement().setInt(2, id);
+
+			dbcon.getPrepareStatement().executeUpdate();
+			dbcon.closeConnection();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return 0; 
+	}
+	
+	public float getTotalByCompraId(int idCompra) {
+	    dbcon.initConnection();
+	    float totalSubtotal = 0;
+
+	    try {
+	        dbcon.setPrepareStatement(dbcon.getConnect()
+	                .prepareStatement("SELECT SUM(subTotalDC) AS totalSubtotal FROM DetalleCompra WHERE idCompraDC = ?"));
+	        dbcon.getPrepareStatement().setInt(1, idCompra);
+
+	        ResultSet rs = dbcon.getPrepareStatement().executeQuery();
+	        if (rs.next()) {
+	            totalSubtotal = rs.getFloat("totalSubtotal"); 
+	        }
+	        dbcon.closeConnection();
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return totalSubtotal; 
+	}
+	public String readAll() {
+		compras.clear();
+		
+		dbcon.initConnection();
+		try {
 			dbcon.setStatement(dbcon.getConnect().createStatement());
-			dbcon.setResultSet(dbcon.getStatement().executeQuery("SELECT * FROM Compra;"));
+			dbcon.setResultSet(dbcon.getStatement().executeQuery("SELECT * FROM Compra WHERE totalCompra != 0"));
 
 			while (dbcon.getResultSet().next()) {
 				int id = dbcon.getResultSet().getInt("idCompra");

@@ -30,6 +30,7 @@ public class MainWindow extends JFrame {
 	private JButton minimizeButton;
 	private JButton closeButton;
 	private VentaEnDetalle ved;
+	private CompraEnDetalle ced;
 	
 
 	public MainWindow() {
@@ -53,6 +54,7 @@ public class MainWindow extends JFrame {
 		cnp = new CompraNuevaWindow();
 		gnw = new GastoNuevoWindow();
 		ved = new VentaEnDetalle();
+		ced = new CompraEnDetalle();
 
 		setTitle("sisas");
 		setSize(800, 600);
@@ -322,6 +324,16 @@ public class MainWindow extends JFrame {
 	public void setVed(VentaEnDetalle ved) {
 		this.ved = ved;
 	}
+
+	public CompraEnDetalle getCed() {
+		return ced;
+	}
+
+	public void setCed(CompraEnDetalle ced) {
+		this.ced = ced;
+	}
+
+
 	
 	
 

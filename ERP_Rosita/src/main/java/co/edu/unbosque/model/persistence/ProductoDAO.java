@@ -105,7 +105,58 @@ public class ProductoDAO implements OperationsDAO {
 	    return 0;
 	}
 
-	
+	public int updateStockById(int id, int newStock) {
+	    dbcon.initConnection();
+	    int result = 0;
+
+	    try {
+	        dbcon.setPrepareStatement(dbcon.getConnect().prepareStatement(
+	                "UPDATE Producto SET stockProducto = ? WHERE idProducto = ?"));
+	        dbcon.getPrepareStatement().setInt(1, newStock);
+	        dbcon.getPrepareStatement().setInt(2, id);
+
+	        result = dbcon.getPrepareStatement().executeUpdate();
+
+	        if (result > 0) {
+	            System.out.println("Stock actualizado correctamente.");
+	        } else {
+	            System.out.println("No se encontró el producto con el ID especificado.");
+	        }
+	        
+	        dbcon.closeConnection();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return result;
+	}
+
+	public int getStockById(int idProducto) {
+	    dbcon.initConnection();
+	    int stock = -1;  // Valor predeterminado para indicar que el producto no se encontró.
+
+	    try {
+	        dbcon.setPrepareStatement(dbcon.getConnect().prepareStatement(
+	                "SELECT stockProducto FROM Producto WHERE idProducto = ?"));
+	        dbcon.getPrepareStatement().setInt(1, idProducto);
+
+	        ResultSet rs = dbcon.getPrepareStatement().executeQuery();
+	        
+	        if (rs.next()) {
+	            stock = rs.getInt("stockProducto");  // Obtener el stock del producto.
+	        } else {
+	            System.out.println("Producto con ID " + idProducto + " no encontrado.");
+	        }
+	        
+	        dbcon.closeConnection();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return stock;  // Devolver el stock encontrado o -1 si no se encontró.
+	}
+
 
 	@Override
 	public String readAll() {
