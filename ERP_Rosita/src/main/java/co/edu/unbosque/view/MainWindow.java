@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+
 public class MainWindow extends JFrame {
 
 	private LoginPanel lp;
@@ -31,9 +32,11 @@ public class MainWindow extends JFrame {
 	private JButton closeButton;
 	private VentaEnDetalle ved;
 	private CompraEnDetalle ced;
+	private Sonido sound;
 
 	public MainWindow() {
 
+		sound = new Sonido();
 		op = new OptionPanel();
 		ip = new InventarioPanel();
 		ipi = new InventarioPanelInfo();
@@ -139,6 +142,30 @@ public class MainWindow extends JFrame {
 		titleBar.add(closeButton);
 		add(titleBar);
 	}
+	
+
+	
+	
+	public void setupGame() {
+		playMusica(0);
+	}
+	  
+     public void playMusica(int i) {
+  		
+		sound.setFile(i);
+		sound.play();
+		sound.loop();
+	}
+ 
+      public void stopMusic() {
+	   sound.stop();
+ }
+      
+      public void playSE(int i) {
+    	  sound.setFile(i);
+    	  sound.play();
+    	  
+      }
 
 	public InventarioPanelInfo getIpi() {
 		return ipi;

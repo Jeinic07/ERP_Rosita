@@ -9,7 +9,8 @@ public class LoginPanel extends JFrame {
 
 	private JPanel panel, titleBar;
 	private JButton btnIngresar, btnOlvidoContra, closeButton, minimizeButton;
-	private JTextField txtUser, txtContra;
+	private JTextField txtUser;
+	private JPasswordField txtContra;
 	private Image imageBg;
 
 	public LoginPanel() {
@@ -48,9 +49,9 @@ public class LoginPanel extends JFrame {
 		txtUser.setBounds(307, 256, 185, 36);
 		txtUser.addFocusListener(new PlaceholderFocusListener(txtUser, "Usuario"));
 
-		txtContra = new JTextField("Contraseña");
+		txtContra = new JPasswordField();
 		txtContra.setBounds(307, 310, 185, 36);
-		txtContra.addFocusListener(new PlaceholderFocusListener(txtContra, "Contraseña"));
+		txtContra.setEchoChar('*');
 
 		panel.add(btnIngresar);
 		panel.add(btnOlvidoContra);
@@ -227,11 +228,14 @@ public class LoginPanel extends JFrame {
 		this.txtUser = txtUser;
 	}
 
-	public JTextField getTxtContra() {
+	public JPasswordField getTxtContra() {
 		return txtContra;
 	}
 
-	public void setTxtContra(JTextField txtContra) {
+	public void setTxtContra(JPasswordField txtContra) {
 		this.txtContra = txtContra;
 	}
+
+	
+
 }

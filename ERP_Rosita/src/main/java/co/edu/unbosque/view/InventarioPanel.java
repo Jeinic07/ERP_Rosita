@@ -10,7 +10,7 @@ public class InventarioPanel extends JPanel {
 
 	private Image imageBg;
 	private JPanel panel;
-	private JButton btnBack, btnProveedores, btnX, btnAdd, btnMinus, btnPreg, btnBusqueda;
+	private JButton btnBack, btnProveedores, btnX, btnAdd, btnMinus, btnPreg, btnBusqueda, btnS;
 	private JTable tableInventario;
 	private JTableHeader header;
 	private JScrollPane scroll;
@@ -62,6 +62,12 @@ public class InventarioPanel extends JPanel {
         btnBack.setBorderPainted(false);
         btnBack.setFocusPainted(false);
         
+        btnS = new JButton();
+        btnS.setBounds(39, 108, 36, 36);
+        btnS.setContentAreaFilled(false);
+        btnS.setBorderPainted(false);
+        btnS.setFocusPainted(false);
+        
         btnPreg = new JButton();
 		btnPreg.setBounds(734, 550, 36, 36);
 		btnPreg.setContentAreaFilled(false);
@@ -91,6 +97,7 @@ public class InventarioPanel extends JPanel {
 		txtBusqueda.setBorder(customBorder);
 		txtBusqueda.setBackground(Color.decode("#FFF9F3"));
 
+		panel.add(btnS);
 		panel.add(txtBusqueda);
         panel.add(btnBusqueda);
         panel.add(btnAdd);
@@ -164,8 +171,25 @@ public class InventarioPanel extends JPanel {
 			g.drawImage(imageBg, 0, 0, getWidth(), getHeight(), this);
 		}
 	}
+	
 
-    public JTableHeader getHeader() {
+    public JButton getBtnS() {
+		return btnS;
+	}
+
+	public void setBtnS(JButton btnS) {
+		this.btnS = btnS;
+	}
+
+	public LineBorder getCustomBorder() {
+		return customBorder;
+	}
+
+	public void setCustomBorder(LineBorder customBorder) {
+		this.customBorder = customBorder;
+	}
+
+	public JTableHeader getHeader() {
 		return header;
 	}
 

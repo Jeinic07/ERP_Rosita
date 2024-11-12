@@ -29,6 +29,7 @@ import co.edu.unbosque.model.persistence.VentaDAO;
 import co.edu.unbosque.view.LoginPanel;
 import co.edu.unbosque.view.LoginPreguntaPanel;
 import co.edu.unbosque.view.MainWindow;
+import co.edu.unbosque.view.Sonido;
 
 public class Controller implements ActionListener {
 
@@ -43,9 +44,11 @@ public class Controller implements ActionListener {
 	private GastoDAO gdao;
 	private Login l;
 	private LoginPreguntaPanel lpp;
+	private Sonido sound;
 
 	public Controller() {
 
+		sound = new Sonido();
 		l = new Login();
 		lp = new LoginPanel();
 		lpp = new LoginPreguntaPanel();
@@ -105,6 +108,9 @@ public class Controller implements ActionListener {
 
 		mw.getIp().getBtnBusqueda().addActionListener(this);
 		mw.getIp().getBtnBusqueda().setActionCommand("invBus");
+
+		mw.getIp().getBtnS().addActionListener(this);
+		mw.getIp().getBtnS().setActionCommand("magia");
 
 		// boton Info
 
@@ -246,8 +252,9 @@ public class Controller implements ActionListener {
 		case "Ingresar": {
 
 			String userName = lp.getTxtUser().getText();
-			String contraseña = lp.getTxtContra().getText();
-
+			char[] passwordChars = lp.getTxtContra().getPassword();
+		    String contraseña = new String(passwordChars);
+		    
 			if (Login.validarCredenciales(userName, contraseña)) {
 				JOptionPane.showMessageDialog(null, "Ingreso exitoso");
 				mw.setVisible(true);
@@ -355,7 +362,11 @@ public class Controller implements ActionListener {
 			}
 			break;
 		}
-		
+		case "magia":{
+			
+			mw.playMusica(0);
+			
+		}
 		case "gasBus": {
 		    String fechaBuscar = mw.getGp().getTxtBusqueda().getText();
 
@@ -1193,6 +1204,8 @@ public class Controller implements ActionListener {
 			mw.getGnw().setVisible(false);
 			break;
 		}
+		
+		
 
 		case "gnwAdd": {
 		    String descripcion = mw.getGnw().getTxtDescripcion().getText();
@@ -1222,4 +1235,10 @@ public class Controller implements ActionListener {
 		}
 	}
 
+	public void playMusica(int i) {
+
+		sound.setFile(i);
+		sound.play();
+		sound.loop();
+	}
 }
