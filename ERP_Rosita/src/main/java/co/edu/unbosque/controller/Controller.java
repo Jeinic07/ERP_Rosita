@@ -214,6 +214,9 @@ public class Controller implements ActionListener {
 		mw.getGp().getBtnBack().addActionListener(this);
 		mw.getGp().getBtnBack().setActionCommand("gasBack");
 
+		mw.getGp().getBtnBusqueda().addActionListener(this);
+		mw.getGp().getBtnBusqueda().setActionCommand("gasBus");
+
 		mw.getGp().getBtnAdd().addActionListener(this);
 		mw.getGp().getBtnAdd().setActionCommand("gasAdd");
 
@@ -238,7 +241,6 @@ public class Controller implements ActionListener {
 		// TODO Auto-generated method stub
 
 		switch (e.getActionCommand()) {
-
 		// Botones Login
 
 		case "Ingresar": {
@@ -265,12 +267,12 @@ public class Controller implements ActionListener {
 		// Botones LoginPanelPregunta
 
 		case "Validar": {
-			String respuestaUsuario = lpp.getTxtRta().getText(); // Obtener la respuesta ingresada
+			String respuestaUsuario = lpp.getTxtRta().getText();
 
 			if (Login.validarRespuestaSeguridad(respuestaUsuario)) {
 				JOptionPane.showMessageDialog(null, "Respuesta correcta");
-				mw.setVisible(true); // Puede ser la siguiente pantalla o acción a realizar
-				lp.setVisible(false); // Ocultamos la pantalla de ingreso
+				mw.setVisible(true); 
+				lp.setVisible(false); 
 			} else {
 				JOptionPane.showMessageDialog(null, "Respuesta incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
 			}
@@ -353,6 +355,40 @@ public class Controller implements ActionListener {
 			}
 			break;
 		}
+		
+		case "gasBus": {
+		    String fechaBuscar = mw.getGp().getTxtBusqueda().getText();
+
+		    TableModel modelGastos = mw.getGp().getTableGastos().getModel();
+		    TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelGastos);
+		    mw.getGp().getTableGastos().setRowSorter(sorter);
+
+		    if (fechaBuscar.isEmpty()) {
+		        sorter.setRowFilter(null);
+		        JOptionPane.showMessageDialog(null, 
+		            "Para buscar por fecha, ingrese la fecha en el formato año-mes-día (ejemplo: 2024-11-09).",
+		            "Información de búsqueda",
+		            JOptionPane.INFORMATION_MESSAGE);
+		    } else {
+		        if (!fechaBuscar.matches("\\d{4}-\\d{2}-\\d{2}")) {
+		            JOptionPane.showMessageDialog(null, 
+		                "Formato de fecha incorrecto. Solo se permite el carácter '-' y números.\n" +
+		                "Ejemplo de formato: año-mes-día (por ejemplo, 2024-11-09)", 
+		                "Error de formato", 
+		                JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
+
+		        int columnaFecha = 1;
+		        RowFilter<TableModel, Object> rf = RowFilter.regexFilter(fechaBuscar, columnaFecha);
+		        sorter.setRowFilter(rf);
+		    }
+
+		    break;
+		}
+
+
+
 
 		case "Consulta": {
 			mw.getOpi().setVisible(true);
@@ -409,27 +445,25 @@ public class Controller implements ActionListener {
 			break;
 		}
 		case "invBus": {
-			System.out.println("pepepepenenneneen");
-			String textoBuscar = mw.getIp().getTxtBusqueda().getText().toLowerCase();
-			// Convertir el texto a minúsculas para que la búsqueda sea insensible al caso
+		    System.out.println("pepepepenenneneen");
+		    String textoBuscar = mw.getIp().getTxtBusqueda().getText().toLowerCase();
 
-			if (textoBuscar.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "Por favor, ingresa un nombre para buscar.");
-				return;
-			}
+		    TableModel modelInventario = mw.getIp().getTableInventario().getModel();
+		    TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelInventario);
+		    mw.getIp().getTableInventario().setRowSorter(sorter);
 
-			// Obtener el modelo de la tabla de proveedores
-			TableModel modelInventario = mw.getIp().getTableInventario().getModel();
+		    if (textoBuscar.isEmpty()) {
+		        sorter.setRowFilter(null);
+		        JOptionPane.showMessageDialog(null, 
+		            "Para buscar un producto específico, ingrese el nombre del producto en el campo de búsqueda.",
+		            "Información de búsqueda",
+		            JOptionPane.INFORMATION_MESSAGE);
+		    } else {
+		        RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + textoBuscar, 1);
+		        sorter.setRowFilter(rf);
+		    }
 
-			// Filtrar las filas de la tabla
-			TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelInventario);
-			mw.getIp().getTableInventario().setRowSorter(sorter);
-
-			// Configuración del filtro
-			RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + textoBuscar, 1); // 1 es el índice de la
-																								// columna "Nombre"
-			sorter.setRowFilter(rf);
-			break;
+		    break;
 		}
 
 		case "invProveedores": {
@@ -447,17 +481,23 @@ public class Controller implements ActionListener {
 		}
 
 		case "invAdd": {
-			mw.getPnw().setVisible(true);
+		    provDao.readAll();
 
-			provDao.readAll();
-			System.out.println(producDao.getProductos().toString());
-			for (ProveedorDTO p : provDao.getProveedores()) {
-				mw.getPnw().getItems().add(p.getIdProveedor() + " - " + p.getNombreProveedor());
-			}
-			mw.getPnw().getTxtProveedor().setSuggestions(mw.getPnw().getItems());
+		    if (provDao.getProveedores().isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "No hay proveedores registrados. Por favor, agrega un proveedor primero.", "Error", JOptionPane.ERROR_MESSAGE);
+		        return;
+		    }
 
-			break;
+		    mw.getPnw().setVisible(true);
+
+		    for (ProveedorDTO p : provDao.getProveedores()) {
+		        mw.getPnw().getItems().add(p.getIdProveedor() + " - " + p.getNombreProveedor());
+		    }
+		    mw.getPnw().getTxtProveedor().setSuggestions(mw.getPnw().getItems());
+
+		    break;
 		}
+
 
 		case "newProducBack": {
 			mw.getPnw().setVisible(false);
@@ -466,58 +506,96 @@ public class Controller implements ActionListener {
 
 		case "newProducAdd": {
 
-			String nombre = mw.getPnw().getTxtNombre().getText();
-			String marca = mw.getPnw().getTxtMarca().getText();
-			String costo = mw.getPnw().getTxtCosto().getText();
-			String precio = mw.getPnw().getTxtPrecio().getText();
-			String proveedor = mw.getPnw().getTxtProveedor().getText();
+		    String nombre = mw.getPnw().getTxtNombre().getText();
+		    String marca = mw.getPnw().getTxtMarca().getText();
+		    String costo = mw.getPnw().getTxtCosto().getText();
+		    String precio = mw.getPnw().getTxtPrecio().getText();
+		    String proveedor = mw.getPnw().getTxtProveedor().getText();
 
-			producDao.create2(nombre, marca, "0", costo, precio, proveedor.split(" - ")[1]);
+		    if (nombre.isEmpty() || marca.isEmpty() || costo.isEmpty() || precio.isEmpty() || proveedor.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "Todos los campos deben estar completos.", "Error", JOptionPane.ERROR_MESSAGE);
+		        return;
+		    }
 
-			producDao.readAll();
+		    try {
+		        Float.parseFloat(costo);
+		        Float.parseFloat(precio);
+		    } catch (NumberFormatException e1) {
+		        JOptionPane.showMessageDialog(null, "Costo y precio deben ser valores numéricos.", "Error", JOptionPane.ERROR_MESSAGE);
+		        return;
+		    }
 
-			ProductoDTO nuevoProducto = producDao.getProductos().get(producDao.getProductos().size() - 1);
-			System.out.println(nuevoProducto.toString());
-			mw.getIp().getModel()
-					.addRow(new Object[] { nuevoProducto.getIdProducto(), nuevoProducto.getNombreProducto(),
-							nuevoProducto.getMarcaProducto(), nuevoProducto.getStockProducto(),
-							nuevoProducto.getCostoProducto(), nuevoProducto.getPrecioProducto(),
-							nuevoProducto.getNombreProveedor() });
+		    if (!proveedor.contains(" - ")) {
+		        JOptionPane.showMessageDialog(null, "Por favor, selecciona un proveedor válido con el formato 'ID - Nombre'.", "Error", JOptionPane.ERROR_MESSAGE);
+		        return;
+		    }
 
-			mw.getPnw().getTxtNombre().setText("");
-			mw.getPnw().getTxtMarca().setText("");
-			mw.getPnw().getTxtCosto().setText("");
-			mw.getPnw().getTxtPrecio().setText("");
-			mw.getPnw().getTxtProveedor().setText("");
+		    String proveedorId = proveedor.split(" - ")[1]; 
 
-			break;
+		    boolean proveedorExiste = false;
+		    for (ProveedorDTO p : provDao.getProveedores()) {
+		        if (p.getNombreProveedor().equalsIgnoreCase(proveedorId)) {
+		            proveedorExiste = true;
+		            break;
+		        }
+		    }
+
+		    if (!proveedorExiste) {
+		        JOptionPane.showMessageDialog(null, "Por favor, selecciona un proveedor válido.", "Error", JOptionPane.ERROR_MESSAGE);
+		        return;
+		    }
+
+		    producDao.create2(nombre, marca, "0", costo, precio, proveedorId);
+		    producDao.readAll();
+
+		    ProductoDTO nuevoProducto = producDao.getProductos().get(producDao.getProductos().size() - 1);
+		    System.out.println(nuevoProducto.toString());
+
+		    mw.getIp().getModel().addRow(new Object[] { 
+		        nuevoProducto.getIdProducto(), 
+		        nuevoProducto.getNombreProducto(),
+		        nuevoProducto.getMarcaProducto(), 
+		        nuevoProducto.getStockProducto(),
+		        nuevoProducto.getCostoProducto(), 
+		        nuevoProducto.getPrecioProducto(),
+		        nuevoProducto.getNombreProveedor() 
+		    });
+
+		    mw.getPnw().getTxtNombre().setText("");
+		    mw.getPnw().getTxtMarca().setText("");
+		    mw.getPnw().getTxtCosto().setText("");
+		    mw.getPnw().getTxtPrecio().setText("");
+		    mw.getPnw().getTxtProveedor().setText("");
+
+		    break;
 		}
+
+
 
 		// Botones ProveedoresPanel
 
 		case "provBus": {
-			System.out.println("pepepepenenneneen");
-			String textoBuscar = mw.getPp().getTxtBusqueda().getText().toLowerCase();
-			// Convertir el texto a minúsculas para que la búsqueda sea insensible al caso
+		    System.out.println("pepepepenenneneen");
+		    String textoBuscar = mw.getPp().getTxtBusqueda().getText().toLowerCase();
 
-			if (textoBuscar.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "Por favor, ingresa un nombre para buscar.");
-				return;
-			}
+		    TableModel modelProveedores = mw.getPp().getTableProveedores().getModel();
+		    TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelProveedores);
+		    mw.getPp().getTableProveedores().setRowSorter(sorter);
 
-			// Obtener el modelo de la tabla de proveedores
-			TableModel modelProveedores = mw.getPp().getTableProveedores().getModel();
+		    if (textoBuscar.isEmpty()) {
+		        sorter.setRowFilter(null);
+		        JOptionPane.showMessageDialog(null, 
+		            "Para buscar un proveedor específico, ingrese el nombre del proveedor en el campo de búsqueda.",
+		            "Información de búsqueda",
+		            JOptionPane.INFORMATION_MESSAGE);
+		    } else {
+		        RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + textoBuscar, 1); // 1 es el índice de la columna "Nombre"
+		        sorter.setRowFilter(rf);
+		    }
 
-			// Filtrar las filas de la tabla
-			TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelProveedores);
-			mw.getPp().getTableProveedores().setRowSorter(sorter);
-
-			// Configuración del filtro
-			RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + textoBuscar, 1); // 1 es el índice de la
-																								// columna "Nombre"
-			sorter.setRowFilter(rf);
-			break;
+		    break;
 		}
+
 		case "provBack": {
 			mw.getPp().setVisible(false);
 			mw.getIp().setVisible(true);
@@ -560,7 +638,6 @@ public class Controller implements ActionListener {
 		case "provDelete": {
 			int selectedRow = mw.getPp().getTableProveedores().getSelectedRow();
 
-			// Verifica si se ha seleccionado alguna fila
 			if (selectedRow == -1) {
 				JOptionPane.showMessageDialog(mw, "No se ha seleccionado ningún proveedor para eliminar.", "Error",
 						JOptionPane.ERROR_MESSAGE);
@@ -663,27 +740,23 @@ public class Controller implements ActionListener {
 						JOptionPane.ERROR_MESSAGE);
 				break;
 			}
-			// Excepción para que el nombre solo contenga letras
 			if (!nombre.matches("[a-zA-Z\\s]+")) {
 				JOptionPane.showMessageDialog(null, "El nombre solo debe contener letras", "Error",
 						JOptionPane.ERROR_MESSAGE);
 				break;
 			}
 
-			// Excepción para que el documento solo contenga números
 			if (!documento.matches("\\d+")) {
 				JOptionPane.showMessageDialog(null, "El documento solo debe contener números", "Error",
 						JOptionPane.ERROR_MESSAGE);
 				break;
 			}
-			// Excepción para que el teléfono solo contenga números
 			if (!telefono.matches("\\d+")) {
 				JOptionPane.showMessageDialog(null, "El teléfono solo debe contener números", "Error",
 						JOptionPane.ERROR_MESSAGE);
 				break;
 			}
 
-			// Verificar si se ha realizado algún cambio
 			if (nombre.equals(nombreActual) && tipoDocumento.equals(tipoDocumentoActual)
 					&& documento.equals(documentoActual) && telefono.equals(telefonoActual)
 					&& direccion.equals(direccionActual)) {
@@ -718,135 +791,193 @@ public class Controller implements ActionListener {
 			break;
 		}
 		case "venView": {
-			int selectedRow = mw.getVp().getTableVentas().getSelectedRow();
+		    int selectedRow = mw.getVp().getTableVentas().getSelectedRow();
 
-			int id = (Integer) mw.getVp().getTableVentas().getValueAt(selectedRow, 0);
+		    if (selectedRow == -1) { 
+		        JOptionPane.showMessageDialog(null, "Por favor, selecciona una venta para ver los detalles.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+		        return;
+		    }
 
-			dvDao.readById(id);
-			for (DetalleVentaDTO dv : dvDao.getDvs()) {
-				Object row[] = { dv.getNombreProducto(), dv.getCantidadDV(), dv.getPrecioUnitarioDV(),
-						dv.getSubtotalDV() };
+		    int id = (Integer) mw.getVp().getTableVentas().getValueAt(selectedRow, 0);
 
-				mw.getVed().getModel().addRow(row);
-			}
-			mw.getVed().setVisible(true);
-			break;
+		    dvDao.readById(id);
+		    for (DetalleVentaDTO dv : dvDao.getDvs()) {
+		        Object row[] = { dv.getNombreProducto(), dv.getCantidadDV(), dv.getPrecioUnitarioDV(),
+		                dv.getSubtotalDV() };
+
+		        mw.getVed().getModel().addRow(row);
+		    }
+		    mw.getVed().setVisible(true);
+		    break;
 		}
+
 		case "venAdd": {
+		    producDao.readAll();
 
-			mw.getVw().setVisible(true);
+		    if (producDao.getProductos().isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "No hay productos registrados en el inventario. Por favor, agrega productos primero.", "Error", JOptionPane.ERROR_MESSAGE);
+		        return; 
+		    }
 
-			producDao.readAll();
-			for (ProductoDTO item : producDao.getProductos()) {
-				mw.getVw().getItems().add((item.getIdProducto() + " - " + item.getNombreProducto()));
-			}
-			mw.getVw().getTxtProducto().setSuggestions(mw.getVw().getItems());
+		    mw.getVw().setVisible(true);
 
-			idVenta = venDao.create2(0f);
+		    for (ProductoDTO item : producDao.getProductos()) {
+		        mw.getVw().getItems().add(item.getIdProducto() + " - " + item.getNombreProducto());
+		    }
+		    mw.getVw().getTxtProducto().setSuggestions(mw.getVw().getItems());
 
-			break;
+		    idVenta = venDao.create2(0f);
+
+		    break;
 		}
+
 
 		// Botones VentaNuevaWindow
 		case "newVenAdd": {
 
-			if (idVenta == -1) {
-				JOptionPane.showMessageDialog(null, "Error al crear la venta.");
-				return;
-			}
+		    if (idVenta == -1) {
+		        JOptionPane.showMessageDialog(null, "Error al crear la venta.");
+		        return;
+		    }
 
-			String producto = mw.getVw().getTxtProducto().getText();
-			if (producto.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "El campo de producto no puede estar vacío.");
-				return;
-			}
+		    String producto = mw.getVw().getTxtProducto().getText().trim();
+		    if (producto.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "El campo de producto no puede estar vacío.");
+		        return;
+		    }
 
-			String cantidadStr = mw.getVw().getTxtCantidad().getText();
-			String precioStr = mw.getVw().getTxtPrecio().getText();
+		    if (!producto.matches("^\\d+ - .+$")) {
+		        JOptionPane.showMessageDialog(null, "El formato del nombre del producto no es válido. Debe ser: 'ID - Nombre Producto'.");
+		        return;
+		    }
 
-			// Validar que la cantidad no esté vacía
-			if (cantidadStr.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "El campo de cantidad no puede estar vacío.");
-				return;
-			}
+		    String idProductoStr = producto.split(" - ")[0].trim();
+		    String nombreProductoIngresado = producto.split(" - ")[1].trim();
 
-			// Validar que el precio no esté vacío
-			if (precioStr.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "El campo de precio no puede estar vacío.");
-				return;
-			}
+		    int idProductoIngresado;
+		    try {
+		        idProductoIngresado = Integer.parseInt(idProductoStr);
+		    } catch (NumberFormatException e1) {
+		        JOptionPane.showMessageDialog(null, "La ID del producto debe ser un número válido.");
+		        return;
+		    }
 
-			// Validar que la cantidad sea un número válido
-			try {
-				float cantidad = Float.parseFloat(cantidadStr);
-				if (cantidad <= 0) {
-					JOptionPane.showMessageDialog(null, "La cantidad debe ser un número mayor a cero.");
-					return;
-				}
-			} catch (NumberFormatException e1) {
-				JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida (solo números).");
-				return;
-			}
+		    // Buscar el producto en la base de datos usando tanto ID como nombre
+		    ProductoDTO productoEnDb = null;
+		    for (ProductoDTO p : producDao.getProductos()) {
+		        if (p.getIdProducto() == idProductoIngresado && p.getNombreProducto().trim().equalsIgnoreCase(nombreProductoIngresado)) {
+		            productoEnDb = p;
+		            break;
+		        }
+		    }
 
-			// Validar que el precio sea un número válido
-			try {
-				float precio = Float.parseFloat(precioStr);
-				if (precio <= 0) {
-					JOptionPane.showMessageDialog(null, "El precio debe ser un número mayor a cero.");
-					return;
-				}
-			} catch (NumberFormatException e1) {
-				JOptionPane.showMessageDialog(null, "Ingrese un precio válido (solo números).");
-				return;
-			}
+		    // Verificar si el producto fue encontrado en la base de datos
+		    if (productoEnDb == null) {
+		        JOptionPane.showMessageDialog(null, 
+		            "No se encontró un producto con la combinación de ID y nombre ingresados. " +
+		            "Por favor, verifique que la ID y el nombre sean correctos.");
+		        return;
+		    }
 
-			float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(precioStr);
-			String idProdcuto = mw.getVw().getTxtProducto().getText().split(" - ")[0];
+		    String cantidadStr = mw.getVw().getTxtCantidad().getText();
+		    String precioStr = mw.getVw().getTxtPrecio().getText();
 
-			dvDao.create(cantidadStr, precioStr, String.valueOf(subTotal), idProdcuto, String.valueOf(idVenta));
+		    if (cantidadStr.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "El campo de cantidad no puede estar vacío.");
+		        return;
+		    }
 
-			mw.getVw().getModel().addRow(new Object[] { producto, cantidadStr, precioStr, subTotal });
+		    if (precioStr.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "El campo de precio no puede estar vacío.");
+		        return;
+		    }
 
-			mw.getVw().getTxtPrecio().setText("");
-			mw.getVw().getTxtCantidad().setText("");
-			mw.getVw().getTxtProducto().setText("");
+		    try {
+		        float cantidad = Float.parseFloat(cantidadStr);
+		        if (cantidad <= 0) {
+		            JOptionPane.showMessageDialog(null, "La cantidad debe ser un número mayor a cero.");
+		            return;
+		        }
+		    } catch (NumberFormatException e1) {
+		        JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida (solo números).");
+		        return;
+		    }
 
-			break;
+		    try {
+		        float precio = Float.parseFloat(precioStr);
+		        if (precio <= 0) {
+		            JOptionPane.showMessageDialog(null, "El precio debe ser un número mayor a cero.");
+		            return;
+		        }
+		    } catch (NumberFormatException e1) {
+		        JOptionPane.showMessageDialog(null, "Ingrese un precio válido (solo números).");
+		        return;
+		    }
+
+		    float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(precioStr);
+
+		    dvDao.create(cantidadStr, precioStr, String.valueOf(subTotal), String.valueOf(productoEnDb.getIdProducto()), String.valueOf(idVenta));
+
+		    mw.getVw().getModel().addRow(new Object[] { producto, cantidadStr, precioStr, subTotal });
+
+		    mw.getVw().getTxtPrecio().setText("");
+		    mw.getVw().getTxtCantidad().setText("");
+		    mw.getVw().getTxtProducto().setText("");
+
+		    break;
 		}
 
 		case "newVenDone": {
-			float totalVenta = venDao.getTotalByVentaId(idVenta);
-			venDao.updateTotalVentaById(idVenta, totalVenta);
-			venDao.readAll();
-			VentaDTO v = venDao.getVentas().get(venDao.getVentas().size() - 1);
-			mw.getVp().getModel()
-					.addRow(new Object[] { v.getIdVenta(), v.getFechaVenta(), v.getHoraVenta(), v.getTotalVenta() });
+		    if (dvDao.getDvs().isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "No hay información de venta. Debe realizar una venta primero.");
+		        return; 
+		    }
 
-			mw.getVw().setVisible(false);
+		    boolean hayStockSuficiente = true;  
 
-			dvDao.readById(idVenta);
-			producDao.readAll();
+		    for (DetalleVentaDTO dv : dvDao.getDvs()) {
+		        int idProducto = dv.getIdProductoDV();
+		        int newStock = (producDao.getStockById(idProducto)) - dv.getCantidadDV();
+		        if (newStock < 0) {
+		            hayStockSuficiente = false; 
+		            JOptionPane.showMessageDialog(null, "No hay stock suficiente para realizar la venta del producto ID: " + idProducto);
+		            break; 
+		        }
+		    }
 
-			for (DetalleVentaDTO dv : dvDao.getDvs()) {
-				int idProducto = dv.getIdProductoDV();
-				int newStock = (producDao.getStockById(idProducto)) - dv.getCantidadDV();
-				System.out.println(newStock);
+		    if (!hayStockSuficiente) {
+		        return;
+		    }
 
-				if (newStock < 0) {
-					JOptionPane.showMessageDialog(null, "No hay stock suficiente para realizar la venta");
-				} else {
-					producDao.updateStockById(idProducto, newStock);
-				}
+		    float totalVenta = venDao.getTotalByVentaId(idVenta);
+		    venDao.updateTotalVentaById(idVenta, totalVenta);
+		    venDao.readAll();
 
-			}
+		    VentaDTO v = venDao.getVentas().get(venDao.getVentas().size() - 1);
+		    mw.getVp().getModel()
+		            .addRow(new Object[] { v.getIdVenta(), v.getFechaVenta(), v.getHoraVenta(), v.getTotalVenta() });
 
-			mw.getVw().getTxtPrecio().setText("");
-			mw.getVw().getTxtCantidad().setText("");
-			mw.getVw().getTxtProducto().setText("");
+		    mw.getVw().setVisible(false);
 
-			mw.getVw().getModel().setRowCount(0);
-			break;
+		    dvDao.readById(idVenta);
+		    producDao.readAll();
+
+		    for (DetalleVentaDTO dv : dvDao.getDvs()) {
+		        int idProducto = dv.getIdProductoDV();
+		        int newStock = (producDao.getStockById(idProducto)) - dv.getCantidadDV();
+		        producDao.updateStockById(idProducto, newStock);
+		    }
+
+		    // Limpiar los campos y la tabla
+		    mw.getVw().getTxtPrecio().setText("");
+		    mw.getVw().getTxtCantidad().setText("");
+		    mw.getVw().getTxtProducto().setText("");
+
+		    mw.getVw().getModel().setRowCount(0);
+		    break;
 		}
+
+
 		case "newVenBack": {
 			mw.getVw().setVisible(false);
 			mw.getVw().getModel().setRowCount(0);
@@ -882,22 +1013,27 @@ public class Controller implements ActionListener {
 		}
 		case "comDetails": {
 
-			int selectedRow = mw.getCp().getTableVentas().getSelectedRow();
+		    int selectedRow = mw.getCp().getTableVentas().getSelectedRow();
 
-			int id = (Integer) mw.getCp().getTableVentas().getValueAt(selectedRow, 0);
+		    if (selectedRow == -1) {
+		        JOptionPane.showMessageDialog(null, "Por favor, seleccione una fila para ver los detalles de la compra.", "Error", JOptionPane.WARNING_MESSAGE);
+		        return;
+		    }
 
-			mw.getCed().setVisible(true);
+		    int id = (Integer) mw.getCp().getTableVentas().getValueAt(selectedRow, 0);
 
-			dcDao.readById(id);
+		    mw.getCed().setVisible(true);
 
-			for (DetalleCompraDTO dc : dcDao.getDcs()) {
-				Object row[] = { dc.getNombreProducto(), dc.getCantidadDC(), dc.getcostoUnitarioDC(),
-						dc.getSubtotalDC() };
-				mw.getCed().getModel().addRow(row);
-			}
+		    dcDao.readById(id);
 
-			break;
+		    for (DetalleCompraDTO dc : dcDao.getDcs()) {
+		        Object row[] = { dc.getNombreProducto(), dc.getCantidadDC(), dc.getcostoUnitarioDC(), dc.getSubtotalDC() };
+		        mw.getCed().getModel().addRow(row);
+		    }
+
+		    break;
 		}
+
 
 		// Botones CompraEnDetalle
 		case "cedOk": {
@@ -910,91 +1046,128 @@ public class Controller implements ActionListener {
 		// Botones NuevaCompraWindow
 		case "newComAdd": {
 
-			System.out.println("pene");
-			if (idCompra == -1) {
-				JOptionPane.showMessageDialog(null, "Error al crear la compra.");
-				return;
-			}
+		    if (idCompra == -1) {
+		        JOptionPane.showMessageDialog(null, "Error al crear la compra.");
+		        return;
+		    }
 
-			String producto = mw.getCnp().getTxtProducto().getText();
-			if (producto.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "El campo de producto no puede estar vacío.");
-				return;
-			}
+		    String producto = mw.getCnp().getTxtProducto().getText().trim();
+		    if (producto.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "El campo de producto no puede estar vacío.");
+		        return;
+		    }
 
-			String cantidadStr = mw.getCnp().getTxtCantidad().getText();
-			String costoStr = mw.getCnp().getTxtPrecio().getText();
+		    if (!producto.matches("^\\d+ - .+$")) {
+		        JOptionPane.showMessageDialog(null, "El formato del nombre del producto no es válido. Debe ser: 'ID - Nombre Producto'.");
+		        return;
+		    }
 
-			// Validar que la cantidad no esté vacía
-			if (cantidadStr.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "El campo de cantidad no puede estar vacío.");
-				return;
-			}
+		    String idProductoStr = producto.split(" - ")[0].trim();
+		    String nombreProductoIngresado = producto.split(" - ")[1].trim();
 
-			// Validar que el precio no esté vacío
-			if (costoStr.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "El campo de costo no puede estar vacío.");
-				return;
-			}
+		    int idProductoIngresado;
+		    try {
+		        idProductoIngresado = Integer.parseInt(idProductoStr);
+		    } catch (NumberFormatException e2) {
+		        JOptionPane.showMessageDialog(null, "La ID del producto debe ser un número válido.");
+		        return;
+		    }
 
-			try {
-				float cantidad = Float.parseFloat(cantidadStr);
-				if (cantidad <= 0) {
-					JOptionPane.showMessageDialog(null, "La cantidad debe ser un número mayor a cero.");
-					return;
-				}
-			} catch (NumberFormatException e1) {
-				JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida (solo números).");
-				return;
-			}
+		    ProductoDTO productoEnDb = null;
+		    for (ProductoDTO p : producDao.getProductos()) {
+		        if (p.getIdProducto() == idProductoIngresado && p.getNombreProducto().trim().equalsIgnoreCase(nombreProductoIngresado)) {
+		            productoEnDb = p;
+		            break;
+		        }
+		    }
 
-			try {
-				float precio = Float.parseFloat(costoStr);
-				if (precio <= 0) {
-					JOptionPane.showMessageDialog(null, "El precio debe ser un número mayor a cero.");
-					return;
-				}
-			} catch (NumberFormatException e1) {
-				JOptionPane.showMessageDialog(null, "Ingrese un precio válido (solo números).");
-				return;
-			}
+		    if (productoEnDb == null) {
+		        JOptionPane.showMessageDialog(null, 
+		            "No se encontró un producto con la combinación de ID y nombre ingresados. " +
+		            "Por favor, verifique que la ID y el nombre sean correctos.");
+		        return;
+		    }
 
-			float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(costoStr);
+		    String cantidadStr = mw.getCnp().getTxtCantidad().getText();
+		    String costoStr = mw.getCnp().getTxtPrecio().getText();
 
-			String idProdcuto = mw.getCnp().getTxtProducto().getText().split(" - ")[0];
+		    if (cantidadStr.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "El campo de cantidad no puede estar vacío.");
+		        return;
+		    }
 
-			dcDao.create(cantidadStr, costoStr, String.valueOf(subTotal), idProdcuto, String.valueOf(idCompra));
+		    if (costoStr.isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "El campo de costo no puede estar vacío.");
+		        return;
+		    }
 
-			mw.getCnp().getModel().addRow(new Object[] { producto, cantidadStr, costoStr, subTotal });
+		    try {
+		        float cantidad = Float.parseFloat(cantidadStr);
+		        if (cantidad <= 0) {
+		            JOptionPane.showMessageDialog(null, "La cantidad debe ser un número mayor a cero.");
+		            return;
+		        }
+		    } catch (NumberFormatException e1) {
+		        JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida (solo números).");
+		        return;
+		    }
 
-			break;
+		    try {
+		        float precio = Float.parseFloat(costoStr);
+		        if (precio <= 0) {
+		            JOptionPane.showMessageDialog(null, "El precio debe ser un número mayor a cero.");
+		            return;
+		        }
+		    } catch (NumberFormatException e1) {
+		        JOptionPane.showMessageDialog(null, "Ingrese un precio válido (solo números).");
+		        return;
+		    }
+
+		    float subTotal = Float.parseFloat(cantidadStr) * Float.parseFloat(costoStr);
+
+		    dcDao.create(cantidadStr, costoStr, String.valueOf(subTotal), String.valueOf(productoEnDb.getIdProducto()), String.valueOf(idCompra));
+
+		    mw.getCnp().getModel().addRow(new Object[] { producto, cantidadStr, costoStr, subTotal });
+
+		    mw.getCnp().getTxtProducto().setText("");
+		    mw.getCnp().getTxtCantidad().setText("");
+		    mw.getCnp().getTxtPrecio().setText("");
+
+		    break;
 		}
-		case "newComDone":
-			float totalCompra = comDao.getTotalByCompraId(idCompra);
-			comDao.updateTotalCompraById(idCompra, totalCompra);
-			comDao.readAll();
 
-			CompraDTO c = comDao.getCompras().get(comDao.getCompras().size() - 1);
-			mw.getCp().getModel().addRow(
-					new Object[] { c.getidCompra(), c.getfechaCompra(), c.gethoraCompra(), c.gettotalCompra() });
+		case "newComDone":{
+		    if (dcDao.getDcs().isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "No hay información de compra. Debe realizar una compra primero.");
+		        return; 
+		    }
 
-			mw.getCnp().setVisible(false);
+		    float totalCompra = comDao.getTotalByCompraId(idCompra);
+		    comDao.updateTotalCompraById(idCompra, totalCompra);
+		    comDao.readAll();
 
-			dcDao.readById(idCompra);
+		    CompraDTO c = comDao.getCompras().get(comDao.getCompras().size() - 1);
+		    mw.getCp().getModel().addRow(
+		            new Object[] { c.getidCompra(), c.getfechaCompra(), c.gethoraCompra(), c.gettotalCompra() });
 
-			for (DetalleCompraDTO dc : dcDao.getDcs()) {
-				int idProducto = dc.getIdProductoDC();
-				int newStock = producDao.getStockById(idProducto) + dc.getCantidadDC();
-				producDao.updateStockById(idProducto, newStock);
+		    mw.getCnp().setVisible(false);
 
-			}
+		    dcDao.readById(idCompra);
 
-			mw.getCnp().getTxtPrecio().setText("");
-			mw.getCnp().getTxtCantidad().setText("");
-			mw.getCnp().getTxtProducto().setText("");
+		    for (DetalleCompraDTO dc : dcDao.getDcs()) {
+		        int idProducto = dc.getIdProductoDC();
+		        int newStock = producDao.getStockById(idProducto) + dc.getCantidadDC();
+		        producDao.updateStockById(idProducto, newStock); 
+		    }
 
-			mw.getCnp().getModel().setRowCount(0);
-			break;
+		    mw.getCnp().getTxtPrecio().setText("");
+		    mw.getCnp().getTxtCantidad().setText("");
+		    mw.getCnp().getTxtProducto().setText("");
+
+		    mw.getCnp().getModel().setRowCount(0);
+		    break;
+
+		}
 
 		case "newComBack": {
 			mw.getCnp().setVisible(false);
@@ -1022,18 +1195,28 @@ public class Controller implements ActionListener {
 		}
 
 		case "gnwAdd": {
-			String descripcion = mw.getGnw().getTxtDescripcion().getText();
-			String valor = mw.getGnw().getTxtValor().getText();
+		    String descripcion = mw.getGnw().getTxtDescripcion().getText();
+		    String valor = mw.getGnw().getTxtValor().getText();
 
-			gdao.create(descripcion, valor);
-			gdao.readAll();
-			GastoDTO nuevoGasto = gdao.getGastos().get(gdao.getGastos().size() - 1);
+		    if (descripcion.trim().isEmpty()) {
+		        JOptionPane.showMessageDialog(null, "La descripción no puede estar vacía.", "Error", JOptionPane.ERROR_MESSAGE);
+		        return;
+		    }
 
-			mw.getGp().getModel().addRow(new Object[] { nuevoGasto.getIdGasto(), nuevoGasto.getFechaGasto(),
-					nuevoGasto.getHoraGasto(), nuevoGasto.getDescipcionGasto(), nuevoGasto.getValorGasto() });
-			System.out.println("Gasto añadido :D");
+		    if (!valor.matches("\\d+")) {
+		        JOptionPane.showMessageDialog(null, "El valor debe ser numérico.", "Error", JOptionPane.ERROR_MESSAGE);
+		        return;
+		    }
 
-			break;
+		    gdao.create(descripcion, valor);
+		    gdao.readAll();
+		    GastoDTO nuevoGasto = gdao.getGastos().get(gdao.getGastos().size() - 1);
+
+		    mw.getGp().getModel().addRow(new Object[] { nuevoGasto.getIdGasto(), nuevoGasto.getFechaGasto(),
+		            nuevoGasto.getHoraGasto(), nuevoGasto.getDescipcionGasto(), nuevoGasto.getValorGasto() });
+		    System.out.println("Gasto añadido :D");
+
+		    break;
 		}
 
 		}
