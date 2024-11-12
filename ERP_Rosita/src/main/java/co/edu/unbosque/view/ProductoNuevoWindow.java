@@ -81,7 +81,7 @@ public class ProductoNuevoWindow extends JFrame {
 		items = new ArrayList<>();
 
 		txtProveedor = new AutoTextField();
-		txtProveedor.setBounds(119, 296, 99, 35);
+		txtProveedor.setBounds(119, 296, 99, 50);
 		txtProveedor.setBorder(customBorder);
 
 		panel.add(btnBack);

@@ -96,7 +96,7 @@ public class CompraNuevaWindow extends JFrame {
 		items = new ArrayList<String>();
 
 		txtProducto = new AutoTextField();
-		txtProducto.setBounds(47, 88, 153, 27);
+		txtProducto.setBounds(47, 88, 153, 38);
 		txtProducto.setBorder(customBorder);
 		txtProducto.setBackground(Color.decode("#FFF9F3"));
 
