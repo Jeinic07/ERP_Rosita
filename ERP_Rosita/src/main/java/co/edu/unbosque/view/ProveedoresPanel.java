@@ -86,13 +86,13 @@ public class ProveedoresPanel extends JPanel {
 		btnAdd.setFocusPainted(false);
 
 		btnEdit = new JButton();
-		btnEdit.setBounds(340, 443, 133, 40);
+		btnEdit.setBounds(340, 464, 133, 40);
 		btnEdit.setContentAreaFilled(false);
 		btnEdit.setBorderPainted(false);
 		btnEdit.setFocusPainted(false);
 
 		btnDelete = new JButton();
-		btnDelete.setBounds(501, 443, 133, 40);
+		btnDelete.setBounds(501, 464, 133, 40);
 		btnDelete.setContentAreaFilled(false);
 		btnDelete.setBorderPainted(false);
 		btnDelete.setFocusPainted(false);
